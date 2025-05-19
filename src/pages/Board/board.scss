@@ -1,0 +1,44 @@
+.board {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  overflow-x: auto;
+  min-height: calc(100vh - 100px);
+  overscroll-behavior: none;
+
+  &__add-list {
+    min-height: 102px;
+    transition: all 0.2s ease;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed rgba(200, 200, 200, 0.7);
+    background-color: rgba(235, 236, 240, 0.3);
+    box-shadow: none;
+
+    &:hover {
+      background-color: rgba(235, 236, 240, 0.5);
+      border-color: rgba(150, 150, 150, 0.9);
+    }
+    &:not(:hover) {
+      color: #5e6c84;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    height: 14px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(200, 200, 200, 0.3);
+    border-radius: 7px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(100, 100, 100, 0.4);
+    border-radius: 7px;
+
+    &:hover {
+      background: rgba(80, 80, 80, 0.9);
+    }
+  }
+}
