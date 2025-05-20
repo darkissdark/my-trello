@@ -1,20 +1,24 @@
+@import '../../../../styles/variables';
+
 .card {
-    background: white;
-    border-radius: 3px;
-    padding: 8px;
-    margin-bottom: 8px;
-    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  background: #fff;
+  border-radius: $border-radius-sm;
+  padding: $spacing-sm;
+  box-shadow: $shadow-card;
+  transition: $transition-default;
+  cursor: grab;
 
-    &:hover {
-        background-color: #f4f5f7;
-    }
+  &:hover {
+    background-color: $color-card-hover;
+  }
 
-    &__title {
-        font-size: 14px;
-        color: #172b4d;
-        margin: 0;
-        word-break: break-word;
-    }
+  &:active {
+    cursor: grabbing;
+  }
+
+  &__title {
+    font-size: 14px;
+    color: $color-text;
+    word-break: break-word;
+  }
 }

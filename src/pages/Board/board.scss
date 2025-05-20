@@ -1,44 +1,40 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
 .board {
   display: flex;
-  padding: 20px;
-  gap: 20px;
+  padding: $spacing-xl;
+  gap: $spacing-xl;
   overflow-x: auto;
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 85px);
   overscroll-behavior: none;
 
   &__add-list {
     min-height: 102px;
-    transition: all 0.2s ease;
+    transition: $transition-default;
     align-items: center;
     justify-content: center;
-    border: 2px dashed rgba(200, 200, 200, 0.7);
-    background-color: rgba(235, 236, 240, 0.3);
+    border: 2px dashed $color-border-light;
+    background-color: $color-background-light;
     box-shadow: none;
 
     &:hover {
-      background-color: rgba(235, 236, 240, 0.5);
-      border-color: rgba(150, 150, 150, 0.9);
+      background-color: $color-background-light-hover;
+      border-color: $color-border-light-hover;
     }
+
     &:not(:hover) {
-      color: #5e6c84;
+      color: $color-text-secondary;
     }
   }
 
-  &::-webkit-scrollbar {
-    height: 14px;
-  }
+  //   @include mixins.mobile {
+  //     padding: variables.$spacing-md;
+  //     gap: variables.$spacing-md;
+  //   }
 
-  &::-webkit-scrollbar-track {
-    background: rgba(200, 200, 200, 0.3);
-    border-radius: 7px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(100, 100, 100, 0.4);
-    border-radius: 7px;
-
-    &:hover {
-      background: rgba(80, 80, 80, 0.9);
-    }
-  }
+  //   @include mixins.tablet {
+  //     padding: variables.$spacing-lg;
+  //     gap: variables.$spacing-lg;
+  //   }
 }

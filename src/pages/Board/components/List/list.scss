@@ -1,43 +1,41 @@
+@import '../../../../styles/variables';
+
 .list {
-  background: #ebecf0;
-  border-radius: 8px;
-  width: 300px;
-  padding: 8px;
+  background: $color-background;
+  border-radius: $border-radius-sm;
+  padding: $spacing-md;
   height: fit-content;
   display: flex;
   flex-direction: column;
+  box-shadow: $shadow-card;
   flex-shrink: 0;
-  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+  width: 300px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
 
   &__title {
     font-size: 16px;
     font-weight: 600;
-    margin: 0 0 8px 0;
-    padding: 8px;
-    color: #172b4d;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
+    margin-bottom: $spacing-md;
   }
 
   &__cards {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 0 4px;
+    gap: $spacing-md;
   }
 
   &__add-card {
-    margin-top: 8px;
-    padding: 8px;
-    border-radius: 3px;
-    color: #5e6c84;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    padding: $spacing-sm;
+    border-radius: $border-radius-sm;
+    color: $color-text-secondary;
+    margin: $spacing-md 0 0 0;
+    transition: $transition-default;
     align-self: flex-start;
 
     &:hover {
-      background-color: rgba(9, 30, 66, 0.08);
-      color: #172b4d;
+      background-color: $color-hover;
+      color: $color-text;
     }
   }
 }

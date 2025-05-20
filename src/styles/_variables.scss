@@ -1,0 +1,31 @@
+// Colors
+$color-primary: #0079bf;
+$color-background: #ebecf0;
+$color-text: #172b4d;
+$color-text-secondary: #5e6c84;
+$color-border: rgba(9, 30, 66, 0.25);
+$color-hover: rgba(9, 30, 66, 0.08);
+$color-card-hover: #f4f5f7;
+$color-border-light: rgba(200, 200, 200, 0.7);
+$color-border-light-hover: rgba(150, 150, 150, 0.9);
+$color-background-light: rgba(235, 236, 240, 0.3);
+$color-background-light-hover: rgba(235, 236, 240, 0.5);
+$color-gradient-start: #e3f2fd;
+$color-gradient-end: #bbdefb;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+
+// Border radius
+$border-radius-sm: 3px;
+$border-radius-md: 6px;
+
+// Shadows
+$shadow-card: 0 1px 0 rgba(9, 30, 66, 0.25);
+
+// Transitions
+$transition-default: all 0.2s ease;
