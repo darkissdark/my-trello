@@ -19,6 +19,7 @@
     position: relative;
     overflow: hidden;
     min-height: 62px;
+    word-break: break-all;
 
     &__line {
       content: '';

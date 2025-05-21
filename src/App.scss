@@ -3,3 +3,25 @@
 header {
   padding: variables.$spacing-xl variables.$spacing-xl 0;
 }
+
+.button {
+  border-radius: variables.$border-radius-md;
+  padding: variables.$spacing-sm variables.$spacing-md;
+  transition: background-color 0.3s ease;
+  &__add {
+    background-color: variables.$color-button-success;
+    color: variables.$color-text-secondary;
+
+    &:hover {
+      background-color: variables.$color-button-success-hover;
+    }
+  }
+  &__cancel {
+    background-color: variables.$color-button-cancel;
+    color: variables.$color-text;
+
+    &:hover {
+      background-color: variables.$color-button-cancel-hover;
+    }
+  }
+}
