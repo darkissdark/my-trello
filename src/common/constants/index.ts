@@ -1,4 +1,6 @@
 import api from './api';
 
 export { api };
-export default {};
+
+const constants = {};
+export default constants;
