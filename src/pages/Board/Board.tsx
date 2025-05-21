@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { List } from './components/List/List';
 import './board.scss';
 
-export const Board = () => {
+export function Board() {
+  const { boardId } = useParams();
   const [title] = useState('Моя тестова дошка');
   const [lists] = useState([
     {
@@ -32,7 +34,9 @@ export const Board = () => {
   return (
     <>
       <header>
-        <h1>{title}</h1>
+        <h1>
+          {title} (ID: {boardId})
+        </h1>
       </header>
       <main className="board">
         {lists.map((list) => (
@@ -42,4 +46,4 @@ export const Board = () => {
       </main>
     </>
   );
-};
+}

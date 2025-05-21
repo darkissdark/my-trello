@@ -1,14 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Board } from './pages/Board/Board';
+import { Home } from './pages/Home/Home';
 import './App.scss';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<div className="App">My Trello App</div>} />
-        <Route path="/board" element={<Board />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/board/:boardId" element={<Board />} />
       </Routes>
     </Router>
   );
