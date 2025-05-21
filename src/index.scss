@@ -12,6 +12,12 @@ button {
   cursor: pointer;
 }
 
+button[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+  color: grey !important;
+}
+
 a {
   text-decoration: none;
   color: inherit;
