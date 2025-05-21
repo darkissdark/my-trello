@@ -2,7 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://darkissdark.github.io/my-trello",
+  "homepage": "https://darkissdark.github.io/my-trello/",
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
     "@testing-library/dom": "^10.4.0",
