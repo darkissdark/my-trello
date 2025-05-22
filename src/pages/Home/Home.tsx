@@ -3,13 +3,10 @@ import './home.scss';
 import { Link } from 'react-router-dom';
 import api from '../../api/request';
 import { IBoard } from '../../common/interfaces/IBoard';
-import { Modal } from '../../components/Modal/Modal';
+import { CreateBoard } from '../Board/components/CreateBoard';
 
 export function Home() {
   const [boards, setBoards] = useState<IBoard[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [newBoardTitle, setNewBoardTitle] = useState('');
-  const [titleError, setTitleError] = useState('');
   const boardEndpoint = '/board';
 
   useEffect(() => {
@@ -22,54 +19,6 @@ export function Home() {
       setBoards(data.boards);
     } catch (error) {
       console.error('Error fetching boards:', error);
-    }
-  };
-
-  const validateTitle = (title: string): boolean => {
-    if (!title.trim()) {
-      setTitleError('Назва дошки не може бути порожньою');
-      return false;
-    }
-
-    const regex = /^[a-zA-Zа-яА-ЯґҐєЄіІїЇ0-9 ._-]+$/;
-    if (!regex.test(title)) {
-      setTitleError('Назва може містити тільки літери, цифри, пробіли, тире, крапки та нижні підкреслення');
-      return false;
-    }
-
-    setTitleError('');
-    return true;
-  };
-
-  const handleCreateBoard = async () => {
-    if (!validateTitle(newBoardTitle)) return;
-
-    const newBoard = {
-      title: newBoardTitle,
-      custom: {
-        background: 'blue',
-      },
-    };
-
-    try {
-      await api.post(boardEndpoint, newBoard);
-
-      await fetchBoards();
-
-      setNewBoardTitle('');
-      setShowModal(false);
-    } catch (error) {
-      console.error('Error creating board:', error);
-    }
-  };
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setNewBoardTitle(value);
-    if (value) {
-      validateTitle(value);
-    } else {
-      setTitleError('');
     }
   };
 
@@ -89,32 +38,8 @@ export function Home() {
             </Link>
           ))}
 
-        <button className="boards__button boards__card" onClick={() => setShowModal(true)}>
-          + Додати дошку
-        </button>
+        <CreateBoard onCardCreated={fetchBoards} />
       </main>
-
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <h2>Нова дошка</h2>
-        <div className="modal__content__input-group">
-          <input
-            type="text"
-            placeholder="Назва дошки"
-            value={newBoardTitle}
-            onChange={handleTitleChange}
-            className={titleError ? 'error' : ''}
-          />
-          {titleError && <div className="modal__content__error">{titleError}</div>}
-        </div>
-        <div className="modal__content__actions">
-          <button className="button__add" onClick={handleCreateBoard} disabled={!newBoardTitle || !!titleError}>
-            Створити
-          </button>
-          <button className="button__cancel" onClick={() => setShowModal(false)}>
-            Скасувати
-          </button>
-        </div>
-      </Modal>
     </>
   );
 }
