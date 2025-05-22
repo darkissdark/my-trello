@@ -10,19 +10,20 @@ export function Home() {
   const [showModal, setShowModal] = useState(false);
   const [newBoardTitle, setNewBoardTitle] = useState('');
   const [titleError, setTitleError] = useState('');
+  const boardEndpoint = '/board';
 
   useEffect(() => {
-    const fetchBoards = async () => {
-      try {
-        const { data } = await api.get('/board');
-        setBoards(data);
-      } catch (error) {
-        console.error('Error fetching boards:', error);
-      }
-    };
-
     fetchBoards();
   }, []);
+
+  const fetchBoards = async () => {
+    try {
+      const { data } = await api.get(boardEndpoint);
+      setBoards(data.boards);
+    } catch (error) {
+      console.error('Error fetching boards:', error);
+    }
+  };
 
   const validateTitle = (title: string): boolean => {
     if (!title.trim()) {
@@ -40,20 +41,26 @@ export function Home() {
     return true;
   };
 
-  const handleCreateBoard = () => {
+  const handleCreateBoard = async () => {
     if (!validateTitle(newBoardTitle)) return;
 
     const newBoard = {
-      id: Date.now(),
       title: newBoardTitle,
       custom: {
         background: 'blue',
       },
     };
 
-    setBoards((prev = []) => [...prev, newBoard]);
-    setNewBoardTitle('');
-    setShowModal(false);
+    try {
+      await api.post(boardEndpoint, newBoard);
+
+      await fetchBoards();
+
+      setNewBoardTitle('');
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error creating board:', error);
+    }
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +82,9 @@ export function Home() {
         {boards?.length > 0 &&
           boards.map((board) => (
             <Link key={board.id} to={`/board/${board.id}`} className="boards__card">
-              <span className="boards__card__line" style={{ background: board.custom.background }}></span>
+              {board?.custom?.background && (
+                <span className="boards__card__line" style={{ background: board.custom.background }}></span>
+              )}
               {board.title}
             </Link>
           ))}
