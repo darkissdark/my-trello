@@ -7,7 +7,7 @@ export function useTitleValidation(value: string, onValidationChange?: (isValid:
   useEffect(() => {
     const isValid = validate(value);
     onValidationChange?.(isValid);
-  }, [value]);
+  }, [value, onValidationChange]);
 
   const validate = (value: string, force = false): boolean => {
     if (!value.trim()) {
