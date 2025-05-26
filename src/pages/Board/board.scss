@@ -27,14 +27,27 @@
       color: $color-text-secondary;
     }
   }
+}
+.board__header {
+  .input-board-name {
+    position: relative;
 
-  //   @include mixins.mobile {
-  //     padding: variables.$spacing-md;
-  //     gap: variables.$spacing-md;
-  //   }
+    input {
+      max-width: 300px;
+      max-height: 38px;
+      font-size: 18px;
+      &.error {
+        border-color: $color-error;
+      }
+    }
+  }
 
-  //   @include mixins.tablet {
-  //     padding: variables.$spacing-lg;
-  //     gap: variables.$spacing-lg;
-  //   }
+  .input-board-error {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    color: $color-error;
+    font-size: 12px;
+    margin-top: 2px;
+  }
 }

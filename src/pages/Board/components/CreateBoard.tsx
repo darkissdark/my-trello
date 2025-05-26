@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Modal } from '../../../components/Modal/Modal';
 import api from '../../../api/request';
+import { BoardNameInput } from './common/BoardNameInput';
 
 interface CreateBoardProps {
   onCardCreated: () => void;
@@ -9,28 +10,10 @@ interface CreateBoardProps {
 export function CreateBoard({ onCardCreated }: CreateBoardProps) {
   const [showModal, setShowModal] = useState(false);
   const [newBoardTitle, setNewBoardTitle] = useState('');
-  const [titleError, setTitleError] = useState('');
+  const [isTitleValid, setIsTitleValid] = useState(false);
   const boardEndpoint = '/board';
 
-  const validateTitle = (title: string): boolean => {
-    if (!title.trim()) {
-      setTitleError('Назва дошки не може бути порожньою');
-      return false;
-    }
-
-    const regex = /^[a-zA-Zа-яА-ЯґҐєЄіІїЇ0-9 ._-]+$/;
-    if (!regex.test(title)) {
-      setTitleError('Назва може містити тільки літери, цифри, пробіли, тире, крапки та нижні підкреслення');
-      return false;
-    }
-
-    setTitleError('');
-    return true;
-  };
-
   const handleCreateBoard = async () => {
-    if (!validateTitle(newBoardTitle)) return;
-
     const newBoard = {
       title: newBoardTitle,
       custom: {
@@ -48,16 +31,6 @@ export function CreateBoard({ onCardCreated }: CreateBoardProps) {
     }
   };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setNewBoardTitle(value);
-    if (value) {
-      validateTitle(value);
-    } else {
-      setTitleError('');
-    }
-  };
-
   return (
     <>
       <button className="boards__button boards__card" onClick={() => setShowModal(true)}>
@@ -67,17 +40,16 @@ export function CreateBoard({ onCardCreated }: CreateBoardProps) {
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <h2>Нова дошка</h2>
         <div className="modal__content__input-group">
-          <input
-            type="text"
-            placeholder="Назва дошки"
+          <BoardNameInput
             value={newBoardTitle}
-            onChange={handleTitleChange}
-            className={titleError ? 'error' : ''}
+            onChange={setNewBoardTitle}
+            onValidationChange={setIsTitleValid}
+            onSubmit={handleCreateBoard}
+            placeholder="Назва дошки"
           />
-          {titleError && <div className="modal__content__error">{titleError}</div>}
         </div>
         <div className="modal__content__actions">
-          <button className="button__add" onClick={handleCreateBoard} disabled={!newBoardTitle || !!titleError}>
+          <button className="button__add" onClick={handleCreateBoard} disabled={!isTitleValid}>
             Створити
           </button>
           <button className="button__cancel" onClick={() => setShowModal(false)}>

@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { List } from './components/List/List';
+import api from '../../api/request';
 import './board.scss';
+import { IBoard } from '../../common/interfaces/IBoard';
+import { List } from './components/List/List';
+import { BoardNameInput } from './components/common/BoardNameInput';
 
 export function Board() {
   const { boardId } = useParams();
-  const [title] = useState('Моя тестова дошка');
+  const [board, setBoard] = useState<IBoard | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState('');
   const [lists] = useState([
     {
       id: 1,
@@ -31,13 +36,50 @@ export function Board() {
     },
   ]);
 
+  useEffect(() => {
+    fetchBoard();
+  }, [boardId]);
+
+  const fetchBoard = async () => {
+    try {
+      const { data } = await api.get(`/board/${boardId}`);
+      setBoard(data);
+      setTitle(data.title);
+    } catch (error) {
+      console.error('Error fetching board:', error);
+    }
+  };
+
+  const updateBoardTitle = async () => {
+    try {
+      await api.put(`/board/${boardId}`, {
+        title,
+        custom: board?.custom,
+      });
+      await fetchBoard();
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating title:', error);
+    }
+  };
+
   return (
     <>
-      <header>
-        <h1>
-          {title} (ID: {boardId})
-        </h1>
+      <header className="board__header">
+        {isEditing ? (
+          <BoardNameInput
+            value={title}
+            onChange={setTitle}
+            onSubmit={updateBoardTitle}
+            onBlur={updateBoardTitle}
+            onCancel={() => setIsEditing(false)}
+            autoFocus
+          />
+        ) : (
+          <h1 onClick={() => setIsEditing(true)}>{board?.title}</h1>
+        )}
       </header>
+
       <main className="board">
         {lists.map((list) => (
           <List key={list.id} title={list.title} cards={list.cards} />

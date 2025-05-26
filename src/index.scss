@@ -33,3 +33,16 @@ body {
   color: $color-text;
   min-height: 100vh;
 }
+
+input {
+  width: 100%;
+  padding: $modal-input-padding;
+  border: 1px solid $color-border-light;
+  border-radius: $modal-input-border-radius;
+  font-size: 14px;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}

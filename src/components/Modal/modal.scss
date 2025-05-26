@@ -31,16 +31,7 @@
     }
 
     input {
-      width: 100%;
-      padding: $modal-input-padding;
-      border: 1px solid $color-border-light;
-      border-radius: $modal-input-border-radius;
       font-size: 14px;
-
-      &:focus {
-        outline: none;
-        border-color: $color-primary;
-      }
 
       &.error {
         border-color: $color-error;
@@ -51,7 +42,7 @@
       }
     }
 
-    &__error {
+    .input-board-error {
       max-width: 260px;
       color: $color-error;
       font-size: $modal-error-font-size;
