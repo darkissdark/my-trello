@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../../api/request';
 import './board.scss';
@@ -36,11 +36,7 @@ export function Board() {
     },
   ]);
 
-  useEffect(() => {
-    fetchBoard();
-  }, [boardId]);
-
-  const fetchBoard = async () => {
+  const fetchBoard = useCallback(async () => {
     try {
       const { data } = await api.get(`/board/${boardId}`);
       setBoard(data);
@@ -48,7 +44,11 @@ export function Board() {
     } catch (error) {
       console.error('Error fetching board:', error);
     }
-  };
+  }, [boardId]);
+
+  useEffect(() => {
+    fetchBoard();
+  }, [fetchBoard]);
 
   const updateBoardTitle = async () => {
     try {
