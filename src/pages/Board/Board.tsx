@@ -79,7 +79,14 @@ export function Board() {
 
       <main className="board">
         {lists.map((list) => (
-          <List key={list.id} title={list.title} cards={list.cards} />
+          <List
+            key={list.id}
+            id={list.id}
+            boardId={boardId!}
+            title={list.title}
+            cards={list.cards}
+            onListUpdated={fetchBoard}
+          />
         ))}
         <button className="board__add-list list" onClick={() => setShowAddListModal(true)}>
           + Додати список
@@ -102,7 +109,6 @@ export function Board() {
           value={newListTitle}
           onChange={setNewListTitle}
           onSubmit={handleAddList}
-          onBlur={() => setShowAddListModal(false)}
           onValidationChange={setIsTitleValid}
           onCancel={() => {
             setShowAddListModal(false);

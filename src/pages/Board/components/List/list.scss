@@ -1,41 +1,43 @@
 @import '../../../../styles/variables';
 
 .list {
-    background: $color-background;
-    border-radius: $border-radius-sm;
-    padding: $spacing-md;
-    height: fit-content;
+  background: $color-background;
+  border-radius: $border-radius-sm;
+  padding: $spacing-md;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  box-shadow: $shadow-card;
+  flex-shrink: 0;
+  width: 300px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+    margin-top: 3px;
+    display: inline-block;
+  }
+
+  &__cards {
     display: flex;
     flex-direction: column;
-    box-shadow: $shadow-card;
-    flex-shrink: 0;
-    width: 300px;
-    max-height: calc(100vh - 140px);
-    overflow-y: auto;
+    gap: $spacing-md;
+  }
 
-    &__title {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: $spacing-md;
+  &__add-card {
+    padding: $spacing-sm;
+    border-radius: $border-radius-sm;
+    color: $color-text-secondary;
+    margin: $spacing-md 0 0 0;
+    transition: $transition-default;
+    align-self: flex-start;
+
+    &:hover {
+      background-color: $color-hover;
+      color: $color-text;
     }
-
-    &__cards {
-        display: flex;
-        flex-direction: column;
-        gap: $spacing-md;
-    }
-
-    &__add-card {
-        padding: $spacing-sm;
-        border-radius: $border-radius-sm;
-        color: $color-text-secondary;
-        margin: $spacing-md 0 0 0;
-        transition: $transition-default;
-        align-self: flex-start;
-
-        &:hover {
-            background-color: $color-hover;
-            color: $color-text;
-        }
-    }
+  }
 }
