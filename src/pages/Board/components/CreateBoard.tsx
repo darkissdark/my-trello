@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Modal } from '../../../components/Modal/Modal';
 import api from '../../../api/request';
 import { BoardNameInput } from './common/BoardNameInput';
+import { ActionModal } from '../../../components/ActionModal/ActionModal';
 
 interface CreateBoardProps {
   onCardCreated: () => void;
@@ -37,26 +37,22 @@ export function CreateBoard({ onCardCreated }: CreateBoardProps) {
         + Додати дошку
       </button>
 
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <h2>Нова дошка</h2>
-        <div className="modal__content__input-group">
-          <BoardNameInput
-            value={newBoardTitle}
-            onChange={setNewBoardTitle}
-            onValidationChange={setIsTitleValid}
-            onSubmit={handleCreateBoard}
-            placeholder="Назва дошки"
-          />
-        </div>
-        <div className="modal__content__actions">
-          <button className="button__add" onClick={handleCreateBoard} disabled={!isTitleValid}>
-            Створити
-          </button>
-          <button className="button__cancel" onClick={() => setShowModal(false)}>
-            Скасувати
-          </button>
-        </div>
-      </Modal>
+      <ActionModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title="Нова дошка"
+        primaryButtonText="Створити"
+        onPrimaryAction={handleCreateBoard}
+        isPrimaryButtonDisabled={!isTitleValid}
+      >
+        <BoardNameInput
+          value={newBoardTitle}
+          onChange={setNewBoardTitle}
+          onValidationChange={setIsTitleValid}
+          onSubmit={handleCreateBoard}
+          placeholder="Назва дошки"
+        />
+      </ActionModal>
     </>
   );
 }
