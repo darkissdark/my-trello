@@ -19,6 +19,10 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
   // const [isTitleValid, setIsTitleValid] = useState(true);
 
   const handleUpdateTitle = async () => {
+    if (listTitle.trim() === title) {
+      setIsEditing(false);
+      return;
+    }
     try {
       await api.put(`/board/${boardId}/list/${id}`, {
         title: listTitle,

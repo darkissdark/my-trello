@@ -34,6 +34,10 @@ export function Board() {
   }, [fetchBoard]);
 
   const updateBoardTitle = async () => {
+    if (board?.title === title) {
+      setIsEditing(false);
+      return;
+    }
     try {
       await api.put(`/board/${boardId}`, {
         title,
