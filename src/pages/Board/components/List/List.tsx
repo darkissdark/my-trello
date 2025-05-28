@@ -16,7 +16,7 @@ interface ListProps {
 export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [listTitle, setListTitle] = useState(title);
-  const [isTitleValid, setIsTitleValid] = useState(true);
+  // const [isTitleValid, setIsTitleValid] = useState(true);
 
   const handleUpdateTitle = async () => {
     try {
@@ -42,7 +42,7 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
             setIsEditing(false);
             setListTitle(title);
           }}
-          onValidationChange={setIsTitleValid}
+          // onValidationChange={setIsTitleValid}
           autoFocus
         />
       ) : (
