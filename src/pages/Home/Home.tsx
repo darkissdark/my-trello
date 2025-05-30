@@ -32,7 +32,7 @@ export function Home() {
           boards.map((board) => (
             <Link key={board.id} to={`/board/${board.id}`} className="boards__card">
               {board?.custom?.background && (
-                <span className="boards__card__line" style={{ background: board.custom.background }}></span>
+                <span className="boards__card__line" style={{ background: board.custom.background[1] }}></span>
               )}
               {board.title}
             </Link>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ICard } from '../../../../common/interfaces/ICard';
 import { Card } from '../Card/Card';
+import { AddCard } from '../Card/AddCard';
 import { BoardNameInput } from '../common/BoardNameInput';
 import api from '../../../../api/request';
 import './list.scss';
@@ -56,10 +57,10 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
       )}
       <div className="list__cards">
         {cards.map((card) => (
-          <Card key={card.id} card={card} />
+          <Card key={card.id} card={card} boardId={boardId} onCardUpdated={onListUpdated} />
         ))}
+        <AddCard listId={id} boardId={boardId} position={cards.length} onCardAdded={onListUpdated} />
       </div>
-      <button className="list__add-card">+ Додати картку</button>
     </section>
   );
 };
