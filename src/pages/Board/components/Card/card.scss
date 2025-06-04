@@ -6,20 +6,30 @@
   padding: $spacing-sm;
   box-shadow: $shadow-card;
   transition: $transition-default;
-  cursor: grab;
+  user-select: none;
+  cursor: pointer;
 
   &:hover {
     background-color: $color-card-hover;
   }
 
-  &:active {
-    cursor: grabbing;
+  &--dragging {
+    // transform: rotate(3deg);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0.8;
+  }
+
+  &--slot {
+    background: #f4f5f7;
+    border: 2px dashed #dfe1e6;
+    box-shadow: none;
+    height: 40px;
+    margin: 4px 0;
   }
 
   &__title {
     font-size: 14px;
     color: $color-text;
     word-break: break-word;
-    cursor: pointer;
   }
 }

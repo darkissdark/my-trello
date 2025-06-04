@@ -30,8 +30,22 @@ export function Card({ card, boardId, onCardUpdated }: CardProps) {
     }
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData('text/plain', JSON.stringify(card));
+    e.currentTarget.classList.add('card--dragging');
+  };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    e.currentTarget.classList.remove('card--dragging');
+  };
+
   return (
-    <div className="card">
+    <div
+      className="card"
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       {isEditing ? (
         <BoardNameInput
           value={cardTitle}
