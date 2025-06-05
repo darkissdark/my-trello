@@ -19,7 +19,6 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
   const [isEditing, setIsEditing] = useState(false);
   const [listTitle, setListTitle] = useState(title);
   const [dragOverCardId, setDragOverCardId] = useState<number | null>(null);
-  const [isDraggingOver, setIsDraggingOver] = useState(false);
   const listRef = useRef<HTMLElement>(null);
 
   const handleUpdateTitle = async () => {
@@ -63,7 +62,6 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
 
   const handleDragLeave = () => {
     setDragOverCardId(null);
-    setIsDraggingOver(false);
   };
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
@@ -117,7 +115,6 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
     }
 
     setDragOverCardId(null);
-    setIsDraggingOver(false);
   };
 
   const sortedCards = [...cards].sort((a, b) => a.position - b.position);
