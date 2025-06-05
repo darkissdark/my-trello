@@ -149,8 +149,8 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
           </>
         ))}
         {dragOverCardId === cards.length && <CardSlot position={cards.length} />}
-        <AddCard listId={id} boardId={boardId} position={cards.length} onCardAdded={onListUpdated} />
       </div>
+      <AddCard listId={id} boardId={boardId} position={cards.length} onCardAdded={onListUpdated} />
     </section>
   );
 };
