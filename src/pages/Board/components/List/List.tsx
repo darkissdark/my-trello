@@ -143,12 +143,12 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
       )}
       <div className="list__cards" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
         {sortedCards.map((card, index) => (
-          <>
-            {dragOverCardId === index && <CardSlot position={index} />}
+          <div key={`card-container-${card.id}`}>
+            {dragOverCardId === index && <CardSlot key={`slot-${index}`} position={index} />}
             <Card key={card.id} card={card} boardId={boardId} onCardUpdated={onListUpdated} />
-          </>
+          </div>
         ))}
-        {dragOverCardId === cards.length && <CardSlot position={cards.length} />}
+        {dragOverCardId === cards.length && <CardSlot key={`slot-${cards.length}`} position={cards.length} />}
       </div>
       <AddCard listId={id} boardId={boardId} position={cards.length} onCardAdded={onListUpdated} />
     </section>
