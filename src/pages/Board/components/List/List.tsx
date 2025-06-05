@@ -44,13 +44,11 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
     const rect = cardsContainer.getBoundingClientRect();
     const y = e.clientY - rect.top;
 
-    // If dragging over the bottom area of the list
     if (y > rect.height - 50) {
       setDragOverCardId(cards.length);
       return;
     }
 
-    // Find the card being dragged over
     const cardElements = cardsContainer.getElementsByClassName('card');
     for (let i = 0; i < cardElements.length; i++) {
       const cardRect = cardElements[i].getBoundingClientRect();
@@ -77,11 +75,42 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
     }
 
     try {
-      await api.put(`/board/${boardId}/card/${cardData.id}`, {
-        list_id: id,
-        position: dragOverCardId ?? cards.length,
-      });
+      const updatePayload = [
+        {
+          id: cardData.id,
+          list_id: id,
+          position: dragOverCardId ?? cards.length,
+        },
+      ];
 
+      if (cardData.list_id === id) {
+        const oldPosition = cardData.position;
+        const newPosition = dragOverCardId ?? cards.length;
+
+        cards.forEach((card) => {
+          if (card.id !== cardData.id) {
+            if (oldPosition < newPosition) {
+              if (card.position > oldPosition && card.position <= newPosition) {
+                updatePayload.push({
+                  id: card.id,
+                  list_id: id,
+                  position: card.position - 1,
+                });
+              }
+            } else {
+              if (card.position >= newPosition && card.position < oldPosition) {
+                updatePayload.push({
+                  id: card.id,
+                  list_id: id,
+                  position: card.position + 1,
+                });
+              }
+            }
+          }
+        });
+      }
+
+      await api.put(`/board/${boardId}/card`, updatePayload);
       onListUpdated();
     } catch (error) {
       console.error('Error updating card position:', error);
@@ -112,13 +141,7 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
           {title}
         </h2>
       )}
-      <div
-        className="list__cards"
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        key={id}
-      >
+      <div className="list__cards" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
         {sortedCards.map((card, index) => (
           <>
             {dragOverCardId === index && <CardSlot position={index} />}
