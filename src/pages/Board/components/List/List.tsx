@@ -121,28 +121,21 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
 
   return (
     <section className="list" ref={listRef}>
-      {isEditing ? (
-        <BoardNameInput
-          value={listTitle}
-          onChange={setListTitle}
-          onSubmit={handleUpdateTitle}
-          onBlur={handleUpdateTitle}
-          onCancel={() => {
-            setIsEditing(false);
-            setListTitle(title);
-          }}
-          autoFocus
-        />
-      ) : (
-        <h2 className="list__title" onClick={() => setIsEditing(true)}>
-          {title}
-        </h2>
-      )}
+      <BoardNameInput
+        value={listTitle}
+        onChange={setListTitle}
+        onSubmit={handleUpdateTitle}
+        onBlur={handleUpdateTitle}
+        onCancel={() => {
+          setIsEditing(false);
+          setListTitle(title);
+        }}
+      />
       <div className="list__cards" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
         {sortedCards.map((card, index) => (
           <div key={`card-container-${card.id}`}>
             {dragOverCardId === index && <CardSlot key={`slot-${index}`} position={index} />}
-            <Card key={card.id} card={card} boardId={boardId} onCardUpdated={onListUpdated} />
+            <Card key={card.id} card={card} boardId={boardId} />
           </div>
         ))}
         {dragOverCardId === cards.length && <CardSlot key={`slot-${cards.length}`} position={cards.length} />}

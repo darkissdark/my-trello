@@ -8,8 +8,8 @@
   overflow-x: auto;
   min-height: calc(100vh - 85px);
   overscroll-behavior: none;
+
   &__header {
-    text-shadow: 0 0 10px #fff;
     padding-right: 150px;
   }
 
@@ -41,17 +41,20 @@
     }
   }
 }
-.board__header {
-  h1 {
-    display: inline-block;
-  }
-  .input-board-name {
-    position: relative;
 
+.board__header {
+  .input-board-name {
     input {
-      max-width: 300px;
       max-height: 38px;
-      font-size: 18px;
+      font-size: 2em;
+      font-weight: 600;
+      margin-left: -8px;
+      text-shadow: 0 0 10px #fff;
+      background: none;
+      &:not(:focus) {
+        border-color: transparent;
+      }
+
       &.error {
         border-color: $color-error;
       }

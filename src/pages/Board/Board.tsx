@@ -3,21 +3,23 @@ import { useParams } from 'react-router-dom';
 import api from '../../api/request';
 import './board.scss';
 import { IBoard } from '../../common/interfaces/IBoard';
+import { ICard } from '../../common/interfaces/ICard';
 import { List } from './components/List/List';
 import { IList } from '../../common/interfaces/IList';
 import { BoardNameInput } from './components/common/BoardNameInput';
 import { ActionModal } from '../../components/ActionModal/ActionModal';
 import { BackgroundSettings } from '../../components/BackgroundSettings/BackgroundSettings';
+import { CardDetails } from './components/Card/CardDetails';
 
 export function Board() {
-  const { boardId } = useParams();
+  const { boardId, cardId } = useParams();
   const [board, setBoard] = useState<IBoard | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState('');
   const [lists, setLists] = useState<IList[]>([]);
   const [showAddListModal, setShowAddListModal] = useState(false);
   const [newListTitle, setNewListTitle] = useState('');
   const [isTitleValid, setIsTitleValid] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<ICard | null>(null);
 
   const handleBackgroundChange = async (imageUrl: string[]) => {
     if (!board) return;
@@ -46,69 +48,62 @@ export function Board() {
     fetchBoard();
   }, [fetchBoard]);
 
+  useEffect(() => {
+    if (cardId && lists.length > 0) {
+      for (const list of lists) {
+        const card = list.cards.find((c) => c.id === parseInt(cardId));
+        if (card) {
+          setSelectedCard({
+            ...card,
+            list_id: list.id,
+          });
+          break;
+        }
+      }
+    } else {
+      setSelectedCard(null);
+    }
+  }, [cardId, lists]);
+
+  const backgroundStyle = useMemo(() => {
+    if (!board?.custom?.background) return {};
+    return {
+      backgroundImage: `url(${board.custom.background[0]})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    };
+  }, [board?.custom?.background]);
+
   const updateBoardTitle = async () => {
-    if (board?.title === title) {
-      setIsEditing(false);
+    if (title.trim() === '' || board?.title === title.trim()) {
       return;
     }
+
     try {
-      await api.put(`/board/${boardId}`, {
-        title,
-        custom: board?.custom,
-      });
-      await fetchBoard();
-      setIsEditing(false);
+      await api.put(`/board/${boardId}`, { title });
+      setBoard((prev) => (prev ? { ...prev, title } : null));
     } catch (error) {
-      console.error('Error updating title:', error);
+      console.error('Error updating board title:', error);
     }
   };
 
   const handleAddList = async () => {
+    if (newListTitle.trim() === '') return;
+
     try {
-      await api.post(`/board/${boardId}/list`, {
-        title: newListTitle,
-        position: lists.length,
-      });
-      setNewListTitle('');
+      await api.post(`/board/${boardId}/list`, { title: newListTitle });
+      fetchBoard();
       setShowAddListModal(false);
-      await fetchBoard();
+      setNewListTitle('');
     } catch (error) {
       console.error('Error adding list:', error);
     }
   };
 
-  const backgroundStyle = useMemo(() => {
-    if (!board?.custom?.background) return {};
-
-    const [imageUrl, color] = board.custom.background;
-    if (imageUrl) {
-      return {
-        background: `url(${imageUrl}) center center / cover no-repeat fixed`,
-      };
-    }
-    if (color) {
-      return {
-        background: color,
-      };
-    }
-    return {};
-  }, [board?.custom?.background]);
-
   return (
     <>
       <header className="board__header">
-        {isEditing ? (
-          <BoardNameInput
-            value={title}
-            onChange={setTitle}
-            onSubmit={updateBoardTitle}
-            onBlur={updateBoardTitle}
-            onCancel={() => setIsEditing(false)}
-            autoFocus
-          />
-        ) : (
-          <h1 onClick={() => setIsEditing(true)}>{board?.title}</h1>
-        )}
+        <BoardNameInput value={title} onChange={setTitle} onSubmit={updateBoardTitle} onBlur={updateBoardTitle} />
       </header>
 
       <main className="board">
@@ -154,6 +149,8 @@ export function Board() {
           autoFocus
         />
       </ActionModal>
+
+      {selectedCard && <CardDetails card={selectedCard} boardId={boardId!} onCardUpdated={fetchBoard} />}
     </>
   );
 }

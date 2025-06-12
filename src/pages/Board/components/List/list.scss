@@ -13,12 +13,18 @@
   max-height: calc(100vh - 140px);
   overflow-y: auto;
 
-  &__title {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: $spacing-md;
-    margin-top: 3px;
+  .input-board-name {
     display: inline-block;
+    margin: -8px -8px 0;
+    input {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: $spacing-md;
+      &:not(:focus) {
+        border-color: transparent;
+        background-color: transparent;
+      }
+    }
   }
 
   &__cards {
