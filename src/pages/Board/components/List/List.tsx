@@ -16,14 +16,12 @@ interface ListProps {
 }
 
 export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) => {
-  const [isEditing, setIsEditing] = useState(false);
   const [listTitle, setListTitle] = useState(title);
   const [dragOverCardId, setDragOverCardId] = useState<number | null>(null);
   const listRef = useRef<HTMLElement>(null);
 
   const handleUpdateTitle = async () => {
     if (listTitle.trim() === title) {
-      setIsEditing(false);
       return;
     }
     try {
@@ -31,7 +29,6 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
         title: listTitle,
       });
       onListUpdated();
-      setIsEditing(false);
     } catch (error) {
       console.error('Error updating list title:', error);
     }
@@ -127,7 +124,6 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
         onSubmit={handleUpdateTitle}
         onBlur={handleUpdateTitle}
         onCancel={() => {
-          setIsEditing(false);
           setListTitle(title);
         }}
       />

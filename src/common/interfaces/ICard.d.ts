@@ -7,4 +7,6 @@ export interface ICard {
   custom?: {
     deadline?: string;
   };
+  color?: string;
+  users?: number[];
 }

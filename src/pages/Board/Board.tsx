@@ -20,6 +20,7 @@ export function Board() {
   const [newListTitle, setNewListTitle] = useState('');
   const [isTitleValid, setIsTitleValid] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ICard | null>(null);
+  const [currentUserId] = useState<number>(1);
 
   const handleBackgroundChange = async (imageUrl: string[]) => {
     if (!board) return;
@@ -150,7 +151,9 @@ export function Board() {
         />
       </ActionModal>
 
-      {selectedCard && <CardDetails card={selectedCard} boardId={boardId!} onCardUpdated={fetchBoard} />}
+      {selectedCard && (
+        <CardDetails card={selectedCard} boardId={boardId!} onCardUpdated={fetchBoard} currentUserId={currentUserId} />
+      )}
     </>
   );
 }
