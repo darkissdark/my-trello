@@ -22,10 +22,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [showMoveCardDropdown, setShowMoveCardDropdown] = useState(false);
   const [lists, setLists] = useState<IList[]>([]);
-  const [selectedColor, setSelectedColor] = useState(card.color || '');
   const modalRef = useRef<HTMLDivElement>(null);
-
-  const availableColors = ['#F44336', '#4CAF50', '#2196F3']; // Red, Green, Blue
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -99,7 +96,6 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         title: title.trim(),
         description: card.description || '',
         list_id: card.list_id,
-        color: selectedColor,
       });
 
       if (response.data.result === 'Updated') {
@@ -122,7 +118,6 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         title: card.title,
         description: description.trim(),
         list_id: card.list_id,
-        color: selectedColor,
       });
 
       if (response.data.result === 'Updated') {
@@ -132,21 +127,6 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
     } catch (error) {
       console.error('Error updating card description:', error);
       setDescription(card.description || '');
-    }
-  };
-
-  const handleColorUpdate = async (color: string) => {
-    try {
-      const response = await api.put(`/board/${boardId}/card/${card.id}`, {
-        color: color,
-      });
-
-      if (response.data.result === 'Updated') {
-        setSelectedColor(color);
-        onCardUpdated();
-      }
-    } catch (error) {
-      console.error('Error updating card color:', error);
     }
   };
 
@@ -177,7 +157,6 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         list_id: card.list_id,
         position: card.position + 1,
         description: card.description,
-        color: card.color,
         custom: card.custom,
       });
 
@@ -250,33 +229,18 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
             onBlur={handleTitleUpdate}
             onKeyDown={(e) => e.key === 'Enter' && handleTitleUpdate()}
           />
-
+          <div>В колонці: {lists.find((list) => list.id === card.list_id)?.title || ''}</div>
           <div className="card-details-participants">
             <h3>Учасники</h3>
             <div className="card-details-participant-list">
               {cardUsers.map((user) => (
-                <div key={user.id} className="card-details-participant-avatar" style={{ backgroundColor: card.color }}>
+                <div key={user.id} className="card-details-participant-avatar">
                   {user.username.charAt(0).toUpperCase()}
                 </div>
               ))}
               <button className="card-details-join-button" onClick={handleJoinCard}>
                 Приєднатися
               </button>
-            </div>
-          </div>
-
-          <div className="card-details-color-picker">
-            <h3>Колір</h3>
-            <div className="card-details-color-options">
-              {availableColors.map((color) => (
-                <div
-                  key={color}
-                  className={`card-details-color-circle ${selectedColor === color ? 'selected' : ''}`}
-                  style={{ backgroundColor: color }}
-                  onClick={() => handleColorUpdate(color)}
-                ></div>
-              ))}
-              <div className="card-details-color-circle card-details-color-circle--add">+</div>
             </div>
           </div>
 
