@@ -22,18 +22,31 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [showMoveCardDropdown, setShowMoveCardDropdown] = useState(false);
   const [lists, setLists] = useState<IList[]>([]);
+
   const modalRef = useRef<HTMLDivElement>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        if (isEditingTitle || isEditingDescription || showMoveCardDropdown) {
+        if (isEditingTitle) {
           setTitle(card.title);
-          setDescription(card.description || '');
           setIsEditingTitle(false);
+          titleInputRef.current?.blur();
+        }
+
+        if (isEditingDescription) {
+          setDescription(card.description || '');
           setIsEditingDescription(false);
+          descriptionRef.current?.blur();
+        }
+
+        if (showMoveCardDropdown) {
           setShowMoveCardDropdown(false);
-        } else {
+        }
+
+        if (!isEditingTitle && !isEditingDescription && !showMoveCardDropdown) {
           navigate(`/board/${boardId}`);
         }
       }
@@ -47,12 +60,11 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
 
     document.addEventListener('keydown', handleEscape);
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [boardId, card.title, card.description, isEditingTitle, isEditingDescription, showMoveCardDropdown, navigate]);
+  }, [boardId, navigate, isEditingTitle, isEditingDescription, showMoveCardDropdown, card.title, card.description]);
 
   useEffect(() => {
     const fetchLists = async () => {
@@ -80,13 +92,13 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
   }, [boardId, card.users]);
 
   const handleTitleUpdate = async () => {
-    if (title.trim() === '') {
-      setTitle(card.title);
+    if (title.trim() === card.title) {
       setIsEditingTitle(false);
       return;
     }
 
-    if (title.trim() === card.title) {
+    if (title.trim() === '') {
+      setTitle(card.title);
       setIsEditingTitle(false);
       return;
     }
@@ -113,6 +125,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
       setIsEditingDescription(false);
       return;
     }
+
     try {
       const response = await api.put(`/board/${boardId}/card/${card.id}`, {
         title: card.title,
@@ -131,9 +144,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
   };
 
   const handleJoinCard = async () => {
-    if (cardUsers.some((user) => user.id === currentUserId)) {
-      return;
-    }
+    if (cardUsers.some((user) => user.id === currentUserId)) return;
 
     try {
       const response = await api.put(`/board/${boardId}/card/${card.id}/users`, {
@@ -164,7 +175,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         onCardUpdated();
         navigate(`/board/${boardId}`);
         iziToast.success({
-          title: 'Картку успішно скопійовано',
+          title: 'Картку скопійовано',
           position: 'topRight',
         });
       }
@@ -181,7 +192,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         onCardUpdated();
         navigate(`/board/${boardId}`);
         iziToast.success({
-          title: 'Картку успішно архівовано',
+          title: 'Картку архівовано',
           position: 'topRight',
         });
       }
@@ -196,7 +207,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         {
           id: card.id,
           list_id: newListId,
-          position: lists.find((list) => list.id === newListId)?.cards.length || 0,
+          position: lists.find((l) => l.id === newListId)?.cards.length || 0,
         },
       ]);
 
@@ -204,13 +215,14 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         onCardUpdated();
         navigate(`/board/${boardId}`);
         iziToast.success({
-          title: 'Картку успішно переміщено',
+          title: 'Картку переміщено',
           position: 'topRight',
         });
       }
     } catch (error) {
       console.error('Error moving card:', error);
     }
+
     setShowMoveCardDropdown(false);
   };
 
@@ -223,13 +235,16 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
 
         <div className="card-details-content">
           <input
+            ref={titleInputRef}
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onBlur={handleTitleUpdate}
+            onFocus={() => setIsEditingTitle(true)}
             onKeyDown={(e) => e.key === 'Enter' && handleTitleUpdate()}
           />
-          <div>В колонці: {lists.find((list) => list.id === card.list_id)?.title || ''}</div>
+          <div>В колонці: {lists.find((list) => list.id === card.list_id)?.title}</div>
+
           <div className="card-details-participants">
             <h3>Учасники</h3>
             <div className="card-details-participant-list">
@@ -245,25 +260,27 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
           </div>
 
           <div className="card-details-description">
-            <h3>Описание</h3>
+            <h3>Опис</h3>
             <textarea
+              ref={descriptionRef}
               value={description}
+              onFocus={() => setIsEditingDescription(true)}
               onChange={(e) => setDescription(e.target.value)}
               onBlur={handleDescriptionUpdate}
-              placeholder="Add a more detailed description..."
+              placeholder="Додайте докладніший опис..."
             />
           </div>
         </div>
 
         <div className="card-details-actions">
           <h3>Дії</h3>
-          <button className="card-details-action-button" onClick={handleCopyCard}>
+          <button onClick={handleCopyCard} className="card-details-action-button">
             Копіювати
           </button>
           <div className="card-details-move-button-wrapper">
             <button
-              className="card-details-action-button"
               onClick={() => setShowMoveCardDropdown(!showMoveCardDropdown)}
+              className="card-details-action-button"
             >
               Переміщення
             </button>
@@ -281,7 +298,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
             className="card-details-action-button card-details-action-button--archive"
             onClick={handleArchiveCard}
           >
-            Архівація
+            Архівувати
           </button>
         </div>
       </div>
