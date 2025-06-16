@@ -131,7 +131,7 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
         {sortedCards.map((card, index) => (
           <div key={`card-container-${card.id}`}>
             {dragOverCardId === index && <CardSlot key={`slot-${index}`} position={index} />}
-            <Card key={card.id} card={card} boardId={boardId} />
+            <Card key={card.id} card={card} boardId={boardId} listId={id} />
           </div>
         ))}
         {dragOverCardId === cards.length && <CardSlot key={`slot-${cards.length}`} position={cards.length} />}

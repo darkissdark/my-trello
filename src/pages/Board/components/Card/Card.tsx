@@ -1,14 +1,18 @@
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { ICard } from '../../../../common/interfaces/ICard';
+import { openModal } from '../../../../store/slices/modalSlice';
 import './card.scss';
 
 interface CardProps {
   card: ICard;
   boardId: string;
+  listId: number;
 }
 
-export function Card({ card, boardId }: CardProps) {
+export function Card({ card, boardId, listId }: CardProps) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData('text/plain', JSON.stringify(card));
@@ -20,6 +24,7 @@ export function Card({ card, boardId }: CardProps) {
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
+    dispatch(openModal({ ...card, list_id: listId }));
     navigate(`/board/${boardId}/card/${card.id}`);
   };
 

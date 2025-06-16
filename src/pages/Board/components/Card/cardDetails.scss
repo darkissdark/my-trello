@@ -91,6 +91,7 @@
     border: 2px solid transparent;
     border-radius: 3px;
     resize: none;
+    overflow: hidden;
 
     &:focus {
       border-color: #0079bf;

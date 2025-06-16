@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { ICard } from '../../../../common/interfaces/ICard';
 import api from '../../../../api/request';
 import './cardDetails.scss';
 import { IList, IUser } from '../../../../common/interfaces/IList';
 import iziToast from 'izitoast';
+import { closeModal, openModal } from '../../../../store/slices/modalSlice';
 
 interface CardDetailsProps {
   card: ICard;
@@ -15,6 +17,7 @@ interface CardDetailsProps {
 
 export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: CardDetailsProps) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [title, setTitle] = useState(card.title);
   const [description, setDescription] = useState(card.description || '');
   const [cardUsers, setCardUsers] = useState<IUser[]>([]);
@@ -26,6 +29,17 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
   const modalRef = useRef<HTMLDivElement>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustTextareaHeight = (element: HTMLTextAreaElement) => {
+    element.style.height = 'auto';
+    element.style.height = `${element.scrollHeight}px`;
+  };
+
+  useEffect(() => {
+    if (descriptionRef.current) {
+      adjustTextareaHeight(descriptionRef.current);
+    }
+  }, [description]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -47,6 +61,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         }
 
         if (!isEditingTitle && !isEditingDescription && !showMoveCardDropdown) {
+          dispatch(closeModal());
           navigate(`/board/${boardId}`);
         }
       }
@@ -54,6 +69,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
 
     const handleClickOutside = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        dispatch(closeModal());
         navigate(`/board/${boardId}`);
       }
     };
@@ -64,7 +80,16 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [boardId, navigate, isEditingTitle, isEditingDescription, showMoveCardDropdown, card.title, card.description]);
+  }, [
+    boardId,
+    navigate,
+    isEditingTitle,
+    isEditingDescription,
+    showMoveCardDropdown,
+    card.title,
+    card.description,
+    dispatch,
+  ]);
 
   useEffect(() => {
     const fetchLists = async () => {
@@ -213,7 +238,8 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
 
       if (response.data.result === 'Updated') {
         onCardUpdated();
-        navigate(`/board/${boardId}`);
+        dispatch(openModal({ ...card, list_id: newListId }));
+        // navigate(`/board/${boardId}/card/${card.id}`);
         iziToast.success({
           title: 'Картку переміщено',
           position: 'topRight',
@@ -222,14 +248,19 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
     } catch (error) {
       console.error('Error moving card:', error);
     }
-
     setShowMoveCardDropdown(false);
   };
 
   return (
     <div className="card-details-overlay">
       <div className="card-details-modal" ref={modalRef}>
-        <button className="card-details-close" onClick={() => navigate(`/board/${boardId}`)}>
+        <button
+          className="card-details-close"
+          onClick={() => {
+            dispatch(closeModal());
+            navigate(`/board/${boardId}`);
+          }}
+        >
           ×
         </button>
 
@@ -265,7 +296,10 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
               ref={descriptionRef}
               value={description}
               onFocus={() => setIsEditingDescription(true)}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                setDescription(e.target.value);
+                adjustTextareaHeight(e.target);
+              }}
               onBlur={handleDescriptionUpdate}
               placeholder="Додайте докладніший опис..."
             />

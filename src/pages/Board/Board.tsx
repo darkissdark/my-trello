@@ -1,26 +1,28 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import api from '../../api/request';
 import './board.scss';
 import { IBoard } from '../../common/interfaces/IBoard';
-import { ICard } from '../../common/interfaces/ICard';
 import { List } from './components/List/List';
 import { IList } from '../../common/interfaces/IList';
 import { BoardNameInput } from './components/common/BoardNameInput';
 import { ActionModal } from '../../components/ActionModal/ActionModal';
 import { BackgroundSettings } from '../../components/BackgroundSettings/BackgroundSettings';
 import { CardDetails } from './components/Card/CardDetails';
+import { RootState } from '../../store';
 
 export function Board() {
-  const { boardId, cardId } = useParams();
+  const { boardId } = useParams();
   const [board, setBoard] = useState<IBoard | null>(null);
   const [title, setTitle] = useState('');
   const [lists, setLists] = useState<IList[]>([]);
   const [showAddListModal, setShowAddListModal] = useState(false);
   const [newListTitle, setNewListTitle] = useState('');
   const [isTitleValid, setIsTitleValid] = useState(false);
-  const [selectedCard, setSelectedCard] = useState<ICard | null>(null);
   const [currentUserId] = useState<number>(1);
+
+  const { isOpen, card: selectedCard } = useSelector((state: RootState) => state.modal);
 
   const handleBackgroundChange = async (imageUrl: string[]) => {
     if (!board) return;
@@ -48,23 +50,6 @@ export function Board() {
   useEffect(() => {
     fetchBoard();
   }, [fetchBoard]);
-
-  useEffect(() => {
-    if (cardId && lists.length > 0) {
-      for (const list of lists) {
-        const card = list.cards.find((c) => c.id === parseInt(cardId));
-        if (card) {
-          setSelectedCard({
-            ...card,
-            list_id: list.id,
-          });
-          break;
-        }
-      }
-    } else {
-      setSelectedCard(null);
-    }
-  }, [cardId, lists]);
 
   const backgroundStyle = useMemo(() => {
     if (!board?.custom?.background) return {};
@@ -151,7 +136,7 @@ export function Board() {
         />
       </ActionModal>
 
-      {selectedCard && (
+      {isOpen && selectedCard && (
         <CardDetails card={selectedCard} boardId={boardId!} onCardUpdated={fetchBoard} currentUserId={currentUserId} />
       )}
     </>
