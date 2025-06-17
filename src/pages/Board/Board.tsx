@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, Suspense, lazy } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import api from '../../api/request';
@@ -9,8 +9,9 @@ import { IList } from '../../common/interfaces/IList';
 import { BoardNameInput } from './components/common/BoardNameInput';
 import { ActionModal } from '../../components/ActionModal/ActionModal';
 import { BackgroundSettings } from '../../components/BackgroundSettings/BackgroundSettings';
-import { CardDetails } from './components/Card/CardDetails';
 import { RootState } from '../../store';
+
+const CardDetails = lazy(() => import('./components/Card/CardDetails').then(module => ({ default: module.CardDetails })));
 
 export function Board() {
   const { boardId } = useParams();
@@ -137,7 +138,9 @@ export function Board() {
       </ActionModal>
 
       {isOpen && selectedCard && (
-        <CardDetails card={selectedCard} boardId={boardId!} onCardUpdated={fetchBoard} currentUserId={currentUserId} />
+        <Suspense fallback={<div className="card-details-loading">Loading...</div>}>
+          <CardDetails card={selectedCard} boardId={boardId!} onCardUpdated={fetchBoard} currentUserId={currentUserId} />
+        </Suspense>
       )}
     </>
   );

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { Modal } from '../Modal/Modal';
 import './action-modal.scss';
@@ -15,6 +15,8 @@ interface ActionModalProps {
   onSecondaryAction?: () => void;
 }
 
+const ActionModalContent = lazy(() => import('./ActionModalContent'));
+
 export function ActionModal({
   isOpen,
   onClose,
@@ -30,16 +32,18 @@ export function ActionModal({
 
   const modalContent = (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <h2>{title}</h2>
-      <div className="modal__content__input-group">{children}</div>
-      <div className="modal__content__actions">
-        <button className="button__add" onClick={onPrimaryAction} disabled={isPrimaryButtonDisabled}>
-          {primaryButtonText}
-        </button>
-        <button className="button__cancel" onClick={onSecondaryAction || onClose}>
-          {secondaryButtonText}
-        </button>
-      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ActionModalContent
+          title={title}
+          primaryButtonText={primaryButtonText}
+          onPrimaryAction={onPrimaryAction}
+          isPrimaryButtonDisabled={isPrimaryButtonDisabled}
+          secondaryButtonText={secondaryButtonText}
+          onSecondaryAction={onSecondaryAction || onClose}
+        >
+          {children}
+        </ActionModalContent>
+      </Suspense>
     </Modal>
   );
 

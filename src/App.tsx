@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { Board } from './pages/Board/Board';
@@ -9,7 +9,7 @@ import './App.scss';
 function App() {
   return (
     <Provider store={store}>
-      <Router>
+      <Router basename="/my-trello">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/board/:boardId" element={<Board />} />
