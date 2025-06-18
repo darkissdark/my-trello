@@ -10,8 +10,11 @@ import { BoardNameInput } from './components/common/BoardNameInput';
 import { ActionModal } from '../../components/ActionModal/ActionModal';
 import { BackgroundSettings } from '../../components/BackgroundSettings/BackgroundSettings';
 import { RootState } from '../../store';
+import { Link } from 'react-router-dom';
 
-const CardDetails = lazy(() => import('./components/Card/CardDetails').then(module => ({ default: module.CardDetails })));
+const CardDetails = lazy(() =>
+  import('./components/Card/CardDetails').then((module) => ({ default: module.CardDetails }))
+);
 
 export function Board() {
   const { boardId } = useParams();
@@ -90,6 +93,21 @@ export function Board() {
   return (
     <>
       <header className="board__header">
+        <Link to={'/'} className="board_back-link">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="38"
+            height="38"
+            fill="currentColor"
+            className="bi bi-arrow-left"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M15 8a.5.5 0 0 1-.5.5H3.707l4.147 4.146a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708.708L3.707 7.5H14.5a.5.5 0 0 1 .5.5z"
+            />
+          </svg>
+        </Link>
         <BoardNameInput value={title} onChange={setTitle} onSubmit={updateBoardTitle} onBlur={updateBoardTitle} />
       </header>
 
@@ -139,7 +157,12 @@ export function Board() {
 
       {isOpen && selectedCard && (
         <Suspense fallback={<div className="card-details-loading">Loading...</div>}>
-          <CardDetails card={selectedCard} boardId={boardId!} onCardUpdated={fetchBoard} currentUserId={currentUserId} />
+          <CardDetails
+            card={selectedCard}
+            boardId={boardId!}
+            onCardUpdated={fetchBoard}
+            currentUserId={currentUserId}
+          />
         </Suspense>
       )}
     </>

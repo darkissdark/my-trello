@@ -43,6 +43,10 @@
 }
 
 .board__header {
+  display: flex;
+  .board_back-link {
+    margin-right: 18px;
+  }
   .input-board-name {
     input {
       max-height: 38px;
