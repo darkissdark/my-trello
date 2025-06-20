@@ -1,15 +1,24 @@
-import { useState } from 'react';
-import { ActionModal } from '../ActionModal/ActionModal';
-import './background-settings.scss';
+import { useEffect, useState } from 'react';
+import { LazyModal } from '../Modal/LazyModal';
+import React from 'react';
+import css from './BackgroundSettings.module.scss';
+
+const BackgroundSettingsModalContent = React.lazy(() => import('./BackgroundSettingsModalContent'));
 
 interface BackgroundSettingsProps {
   onBackgroundChange: (background: string[]) => void;
+  currentBackgroundColor: string;
+  currentImageUrl: string;
 }
 
-export function BackgroundSettings({ onBackgroundChange }: BackgroundSettingsProps) {
+export function BackgroundSettings({
+  onBackgroundChange,
+  currentBackgroundColor,
+  currentImageUrl,
+}: BackgroundSettingsProps) {
   const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
-  const [isUrlValid, setIsUrlValid] = useState(false);
+  const [isUrlValid, setIsUrlValid] = useState(true);
   const [backgroundColor, setBackgroundColor] = useState('#ffffff');
 
   const validateUrl = (url: string): boolean => {
@@ -20,6 +29,12 @@ export function BackgroundSettings({ onBackgroundChange }: BackgroundSettingsPro
       return false;
     }
   };
+
+  useEffect(() => {
+    setImageUrl(currentImageUrl);
+    setBackgroundColor(currentBackgroundColor);
+    setIsUrlValid(validateUrl(currentImageUrl));
+  }, [currentImageUrl, currentBackgroundColor]);
 
   const handleUrlChange = (url: string): void => {
     setImageUrl(url);
@@ -34,67 +49,30 @@ export function BackgroundSettings({ onBackgroundChange }: BackgroundSettingsPro
 
   const resetModalState = (): void => {
     setShowModal(false);
-    setImageUrl('');
   };
 
   return (
     <>
-      <button className="background-settings__button" onClick={() => setShowModal(true)}>
+      <button className={css.buttonAdditionalStyles} onClick={() => setShowModal(true)}>
         Змінити фон
       </button>
 
-      <ActionModal
+      <LazyModal
         isOpen={showModal}
         onClose={resetModalState}
-        title="Змінити фон"
-        primaryButtonText="Застосувати"
-        onPrimaryAction={handleApplyBackground}
-        isPrimaryButtonDisabled={!isUrlValid && !backgroundColor}
-        onSecondaryAction={resetModalState}
-      >
-        <div className="background-settings__input-group">
-          <ImageUrlInput imageUrl={imageUrl} isUrlValid={isUrlValid} onUrlChange={handleUrlChange} />
-          <ColorPicker backgroundColor={backgroundColor} onColorChange={setBackgroundColor} />
-        </div>
-      </ActionModal>
+        component={BackgroundSettingsModalContent}
+        componentProps={{
+          imageUrl,
+          setImageUrl,
+          isUrlValid,
+          setIsUrlValid,
+          backgroundColor,
+          setBackgroundColor,
+          handleUrlChange,
+          handleApplyBackground,
+          onClose: resetModalState,
+        }}
+      />
     </>
   );
 }
-
-interface ImageUrlInputProps {
-  imageUrl: string;
-  isUrlValid: boolean;
-  onUrlChange: (url: string) => void;
-}
-
-const ImageUrlInput = ({ imageUrl, isUrlValid, onUrlChange }: ImageUrlInputProps) => (
-  <>
-    <input
-      type="text"
-      value={imageUrl}
-      onChange={(e) => onUrlChange(e.target.value)}
-      placeholder="URL зображення (jpg, png, gif)"
-      className={!isUrlValid && imageUrl ? 'error' : ''}
-    />
-    {!isUrlValid && imageUrl && <div className="input-board-error">Будь ласка, введіть коректний URL зображення</div>}
-  </>
-);
-
-interface ColorPickerProps {
-  backgroundColor: string;
-  onColorChange: (color: string) => void;
-}
-
-const ColorPicker = ({ backgroundColor, onColorChange }: ColorPickerProps) => (
-  <div className="background-settings__color-picker">
-    <label className="background-settings__color-picker-label">
-      Виберіть колір:
-      <input
-        className="background-settings__color-picker-input"
-        type="color"
-        value={backgroundColor}
-        onChange={(e) => onColorChange(e.target.value)}
-      />
-    </label>
-  </div>
-);

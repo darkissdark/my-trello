@@ -1,5 +1,6 @@
-import { ReactNode, Suspense } from 'react';
-import './modal.scss';
+import { ReactNode } from 'react';
+import ReactDOM from 'react-dom';
+import css from './modal.module.scss';
 
 interface ModalProps {
   isOpen: boolean;
@@ -8,14 +9,16 @@ interface ModalProps {
   fallback?: ReactNode;
 }
 
-export function Modal({ isOpen, onClose, children, fallback = <div>Loading...</div> }: ModalProps) {
+export function Modal({ isOpen, onClose, children }: ModalProps) {
   if (!isOpen) return null;
 
-  return (
-    <div className="modal" onClick={onClose}>
-      <div className="modal__content" onClick={(e) => e.stopPropagation()}>
-        <Suspense fallback={fallback}>{children}</Suspense>
+  const modalContent = (
+    <div className={css.modal} onClick={onClose}>
+      <div className={css.content} onClick={(e) => e.stopPropagation()}>
+        {children}
       </div>
     </div>
   );
+
+  return ReactDOM.createPortal(modalContent, document.body);
 }

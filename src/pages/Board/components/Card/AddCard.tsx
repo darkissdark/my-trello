@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { BoardNameInput } from '../common/BoardNameInput';
-import { ActionModal } from '../../../../components/ActionModal/ActionModal';
 import api from '../../../../api/request';
+import { LazyModal } from '../../../../components/Modal/LazyModal';
 import './card.scss';
+import React from 'react';
+
+const AddCardModalContent = React.lazy(() => import('./AddCardModalContent'));
 
 interface AddCardProps {
   listId: number;
@@ -37,27 +39,19 @@ export function AddCard({ listId, boardId, position, onCardAdded }: AddCardProps
         + Додати картку
       </button>
 
-      <ActionModal
+      <LazyModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        title="Нова картка"
-        primaryButtonText="Додати"
-        onPrimaryAction={handleAddCard}
-        isPrimaryButtonDisabled={!isTitleValid}
-        onSecondaryAction={() => {
-          setShowModal(false);
-          setCardTitle('');
+        component={AddCardModalContent}
+        componentProps={{
+          cardTitle,
+          setCardTitle,
+          isTitleValid,
+          setIsTitleValid,
+          handleAddCard,
+          onClose: () => setShowModal(false),
         }}
-      >
-        <BoardNameInput
-          value={cardTitle}
-          onChange={setCardTitle}
-          onSubmit={handleAddCard}
-          onValidationChange={setIsTitleValid}
-          placeholder="Назва картки"
-          autoFocus
-        />
-      </ActionModal>
+      />
     </>
   );
 }

@@ -1,0 +1,8 @@
+@import '../../../../styles/variables';
+
+.error {
+  max-width: 260px;
+  color: $color-error;
+  font-size: $modal-error-font-size;
+  margin-top: $modal-error-margin-top;
+}

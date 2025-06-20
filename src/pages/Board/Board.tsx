@@ -7,14 +7,16 @@ import { IBoard } from '../../common/interfaces/IBoard';
 import { List } from './components/List/List';
 import { IList } from '../../common/interfaces/IList';
 import { BoardNameInput } from './components/common/BoardNameInput';
-import { ActionModal } from '../../components/ActionModal/ActionModal';
 import { BackgroundSettings } from '../../components/BackgroundSettings/BackgroundSettings';
 import { RootState } from '../../store';
 import { Link } from 'react-router-dom';
+import { LazyModal } from '../../components/Modal/LazyModal';
+import React from 'react';
 
 const CardDetails = lazy(() =>
   import('./components/Card/CardDetails').then((module) => ({ default: module.CardDetails }))
 );
+const AddListModalContent = React.lazy(() => import('./components/common/AddListModalContent'));
 
 export function Board() {
   const { boardId } = useParams();
@@ -126,34 +128,27 @@ export function Board() {
           + Додати список
         </button>
 
-        <BackgroundSettings onBackgroundChange={handleBackgroundChange} />
+        <BackgroundSettings
+          onBackgroundChange={handleBackgroundChange}
+          currentImageUrl={board?.custom?.background?.[0] ?? ''}
+          currentBackgroundColor={board?.custom?.background?.[1] ?? '#ffffff'}
+        />
         <div className="board__background" style={backgroundStyle}></div>
       </main>
 
-      <ActionModal
+      <LazyModal
         isOpen={showAddListModal}
         onClose={() => setShowAddListModal(false)}
-        title="Новий список"
-        primaryButtonText="Додати"
-        onPrimaryAction={handleAddList}
-        onSecondaryAction={() => {
-          setShowAddListModal(false);
-          setNewListTitle('');
+        component={AddListModalContent}
+        componentProps={{
+          newListTitle,
+          setNewListTitle,
+          isTitleValid,
+          setIsTitleValid,
+          handleAddList,
+          onClose: () => setShowAddListModal(false),
         }}
-        isPrimaryButtonDisabled={!isTitleValid}
-      >
-        <BoardNameInput
-          value={newListTitle}
-          onChange={setNewListTitle}
-          onSubmit={handleAddList}
-          onValidationChange={setIsTitleValid}
-          onCancel={() => {
-            setShowAddListModal(false);
-            setNewListTitle('');
-          }}
-          autoFocus
-        />
-      </ActionModal>
+      />
 
       {isOpen && selectedCard && (
         <Suspense fallback={<div className="card-details-loading">Loading...</div>}>

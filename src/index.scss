@@ -45,4 +45,12 @@ input {
     outline: none;
     border-color: $color-primary;
   }
+
+  &.error {
+    border-color: $color-error;
+
+    &:focus {
+      border-color: $color-error;
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import { useTitleValidation } from '../../../../hooks/useTitleValidation';
+import css from './BoardNameInput.module.scss';
 
 interface BoardNameInputProps {
   value: string;
@@ -52,7 +53,7 @@ export function BoardNameInput({
         placeholder={placeholder}
         autoFocus={autoFocus}
       />
-      {error && <div className="input-board-error">{error}</div>}
+      {error && <div className={css.error}>{error}</div>}
     </div>
   );
 }

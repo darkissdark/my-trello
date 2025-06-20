@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import api from '../../../api/request';
-import { BoardNameInput } from './common/BoardNameInput';
-import { ActionModal } from '../../../components/ActionModal/ActionModal';
+import { LazyModal } from '../../../components/Modal/LazyModal';
+import React from 'react';
+
+const CreateBoardModalContent = React.lazy(() => import('./CreateBoardModalContent'));
 
 interface CreateBoardProps {
   onCardCreated: () => void;
@@ -37,22 +39,19 @@ export function CreateBoard({ onCardCreated }: CreateBoardProps) {
         + Додати дошку
       </button>
 
-      <ActionModal
+      <LazyModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        title="Нова дошка"
-        primaryButtonText="Створити"
-        onPrimaryAction={handleCreateBoard}
-        isPrimaryButtonDisabled={!isTitleValid}
-      >
-        <BoardNameInput
-          value={newBoardTitle}
-          onChange={setNewBoardTitle}
-          onValidationChange={setIsTitleValid}
-          onSubmit={handleCreateBoard}
-          placeholder="Назва дошки"
-        />
-      </ActionModal>
+        component={CreateBoardModalContent}
+        componentProps={{
+          newBoardTitle,
+          setNewBoardTitle,
+          isTitleValid,
+          setIsTitleValid,
+          handleCreateBoard,
+          onClose: () => setShowModal(false),
+        }}
+      />
     </>
   );
 }
