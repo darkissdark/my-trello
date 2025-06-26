@@ -1,5 +1,27 @@
 @use './styles/variables';
 
 header {
-    padding: variables.$spacing-xl variables.$spacing-xl 0;
+  padding: variables.$spacing-xl variables.$spacing-xl 0;
+}
+
+.button {
+  padding: variables.$spacing-sm variables.$spacing-md;
+  border-radius: variables.$border-radius-sm;
+  font-size: 14px;
+  transition: variables.$transition-default;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &.logOut {
+    position: fixed;
+    top: variables.$spacing-xl;
+    right: variables.$spacing-xl;
+  }
+
+  &.blue {
+    background-color: variables.$color-primary;
+    color: #fff;
+    &:hover {
+      background-color: variables.$color-primary-hover;
+    }
+  }
 }

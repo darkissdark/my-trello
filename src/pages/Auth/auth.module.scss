@@ -1,0 +1,122 @@
+@import '../../styles/variables';
+
+.auth-container {
+  background: #fff;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-card;
+  padding: 40px 32px 32px 32px;
+  max-width: 400px;
+  margin: 60px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.auth-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: $spacing-lg;
+}
+
+.auth-label {
+  font-size: 1rem;
+  margin-bottom: 4px;
+  color: $color-text-secondary;
+  display: block;
+}
+
+.auth-input {
+  width: 100%;
+  padding: $modal-input-padding;
+  border: 1px solid $color-border-light;
+  border-radius: $modal-input-border-radius;
+  font-size: 1rem;
+  margin-bottom: $spacing-md;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &.error {
+    border-color: $color-error;
+  }
+}
+
+.auth-error {
+  color: $color-error;
+  font-size: 0.95rem;
+  margin-bottom: $spacing-md;
+  margin-top: -$spacing-sm;
+}
+
+.auth-password-strength {
+  display: flex;
+  gap: 4px;
+  margin-bottom: $spacing-md;
+  height: 6px;
+}
+
+.auth-password-bar {
+  flex: 1;
+  border-radius: 2px;
+  background: $color-border-light;
+  transition: background 0.3s;
+}
+
+.filled {
+  background: currentColor;
+}
+
+.auth-password-strength.weak {
+  color: rgb(229, 113, 113);
+}
+
+.auth-password-strength.fair {
+  color: #ffb74d;
+}
+
+.auth-password-strength.medium {
+  color: #fff176;
+}
+
+.auth-password-strength.good {
+  color: #81c784;
+}
+
+.auth-password-strength.strong {
+  color: #388e3c;
+}
+
+.auth-button {
+  width: 100%;
+  background: $color-primary;
+  color: #fff;
+  border: none;
+  border-radius: $modal-button-border-radius;
+  padding: $modal-button-padding;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: $spacing-md;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $color-primary-hover;
+  }
+}
+
+.auth-link-row {
+  text-align: center;
+  color: $color-text-secondary;
+  font-size: 1rem;
+}
+
+.auth-link {
+  color: $color-primary;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+  margin-left: 4px;
+}

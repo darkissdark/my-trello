@@ -274,7 +274,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
             onFocus={() => setIsEditingTitle(true)}
             onKeyDown={(e) => e.key === 'Enter' && handleTitleUpdate()}
           />
-          <div>В колонці: {lists.find((list) => list.id === card.list_id)?.title}</div>
+          <div className="break-word">В колонці: {lists.find((list) => list.id === card.list_id)?.title}</div>
 
           <div className="card-details-participants">
             <h3>Учасники</h3>
@@ -312,19 +312,23 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
             Копіювати
           </button>
           <div className="card-details-move-button-wrapper">
-            <button
-              onClick={() => setShowMoveCardDropdown(!showMoveCardDropdown)}
-              className="card-details-action-button"
-            >
-              Переміщення
-            </button>
+            {lists.filter((list) => list.id !== card.list_id).length > 0 && (
+              <button
+                onClick={() => setShowMoveCardDropdown(!showMoveCardDropdown)}
+                className="card-details-action-button"
+              >
+                Переміщення
+              </button>
+            )}
             {showMoveCardDropdown && (
               <div className="card-details-move-dropdown">
-                {lists.map((list) => (
-                  <button key={list.id} onClick={() => handleMoveCard(list.id)}>
-                    {list.title}
-                  </button>
-                ))}
+                {lists
+                  .filter((list) => list.id !== card.list_id)
+                  .map((list) => (
+                    <button key={list.id} onClick={() => handleMoveCard(list.id)}>
+                      {list.title}
+                    </button>
+                  ))}
               </div>
             )}
           </div>

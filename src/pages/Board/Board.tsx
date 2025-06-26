@@ -83,7 +83,8 @@ export function Board() {
     if (newListTitle.trim() === '') return;
 
     try {
-      await api.post(`/board/${boardId}/list`, { title: newListTitle });
+      const position = lists.length;
+      await api.post(`/board/${boardId}/list`, { title: newListTitle, position });
       fetchBoard();
       setShowAddListModal(false);
       setNewListTitle('');
@@ -110,7 +111,13 @@ export function Board() {
             />
           </svg>
         </Link>
-        <BoardNameInput value={title} onChange={setTitle} onSubmit={updateBoardTitle} onBlur={updateBoardTitle} />
+        <BoardNameInput
+          as="textarea"
+          value={title}
+          onChange={setTitle}
+          onSubmit={updateBoardTitle}
+          onBlur={updateBoardTitle}
+        />
       </header>
 
       <main className="board">
@@ -163,3 +170,5 @@ export function Board() {
     </>
   );
 }
+
+export default Board;

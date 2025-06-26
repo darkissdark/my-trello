@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { ICard } from '../../../../common/interfaces/ICard';
 import { Card } from '../Card/Card';
 import { CardSlot } from '../Card/CardSlot';
@@ -18,7 +18,6 @@ interface ListProps {
 export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) => {
   const [listTitle, setListTitle] = useState(title);
   const [dragOverCardId, setDragOverCardId] = useState<number | null>(null);
-  const listRef = useRef<HTMLElement>(null);
 
   const handleUpdateTitle = async () => {
     if (listTitle.trim() === title) {
@@ -117,8 +116,9 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
   const sortedCards = [...cards].sort((a, b) => a.position - b.position);
 
   return (
-    <section className="list" ref={listRef}>
+    <section className="list">
       <BoardNameInput
+        as="textarea"
         value={listTitle}
         onChange={setListTitle}
         onSubmit={handleUpdateTitle}

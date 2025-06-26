@@ -3,18 +3,7 @@
 .buttonAdditionalStyles {
   position: fixed;
   top: $spacing-xl;
-  right: $spacing-xl;
-  background-color: $color-primary;
-  color: #fff;
-  padding: $spacing-sm $spacing-md;
-  border-radius: $border-radius-sm;
-  font-size: 14px;
-  transition: $transition-default;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    background-color: $color-primary-hover;
-  }
+  right: $spacing-xl * 5;
 }
 
 .inputGroup {

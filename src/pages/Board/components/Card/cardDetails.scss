@@ -1,3 +1,5 @@
+@import '../../../../styles/mixins';
+
 .card-details-overlay {
   position: fixed;
   top: 0;
@@ -8,8 +10,12 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 50px;
+  padding-top: 5vh;
   z-index: 1000;
+}
+
+.break-word {
+  word-break: break-word;
 }
 
 .card-details-modal {
@@ -22,9 +28,14 @@
   position: relative;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   display: flex;
-  flex-wrap: wrap;
   padding: 15px;
   gap: 15px;
+  @include mobile {
+    flex-wrap: wrap;
+  }
+  @include tablet {
+    flex-wrap: wrap;
+  }
 }
 
 .card-details-close {
@@ -155,7 +166,13 @@
 }
 
 .card-details-actions {
-  margin-top: 52.5px;
+  min-width: 115px;
+  @include desktop {
+    margin-top: 52.5px;
+  }
+  @include large-desktop {
+    margin-top: 52.5px;
+  }
   h3 {
     font-size: 14px;
     color: #5e6c84;
