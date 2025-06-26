@@ -12,20 +12,23 @@ export function Home() {
   const boardEndpoint = '/board';
   const dispatch = useDispatch();
 
-  const fetchBoards = useCallback(async () => {
-    dispatch(setLoading(true));
-    try {
-      const { data } = await api.get(boardEndpoint);
-      setBoards(data.boards);
-    } catch (error) {
-      console.error('Error fetching boards:', error);
-    } finally {
-      dispatch(setLoading(false));
-    }
-  }, [dispatch, boardEndpoint]);
+  const fetchBoards = useCallback(
+    async (showLoader: boolean = false) => {
+      dispatch(setLoading(showLoader));
+      try {
+        const { data } = await api.get(boardEndpoint);
+        setBoards(data.boards);
+      } catch (error) {
+        console.error('Error fetching boards:', error);
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+    [dispatch, boardEndpoint]
+  );
 
   useEffect(() => {
-    fetchBoards();
+    fetchBoards(true);
   }, [fetchBoards]);
 
   return (

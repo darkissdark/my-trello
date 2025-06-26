@@ -44,22 +44,25 @@ export function Board() {
     }
   };
 
-  const fetchBoard = useCallback(async () => {
-    dispatch(setLoading(true));
-    try {
-      const { data } = await api.get(`/board/${boardId}`);
-      setBoard(data);
-      setTitle(data.title);
-      setLists(data.lists || []);
-    } catch (error) {
-      console.error('Error fetching board:', error);
-    } finally {
-      dispatch(setLoading(false));
-    }
-  }, [boardId, dispatch]);
+  const fetchBoard = useCallback(
+    async (showLoader: boolean = false) => {
+      dispatch(setLoading(showLoader));
+      try {
+        const { data } = await api.get(`/board/${boardId}`);
+        setBoard(data);
+        setTitle(data.title);
+        setLists(data.lists || []);
+      } catch (error) {
+        console.error('Error fetching board:', error);
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+    [boardId, dispatch]
+  );
 
   useEffect(() => {
-    fetchBoard();
+    fetchBoard(true);
   }, [fetchBoard]);
 
   const backgroundStyle = useMemo(() => {
