@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './store';
 import { logout } from './store/slices/authSlice';
@@ -33,9 +33,10 @@ function LogoutButton() {
 export default function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const isLoading = useSelector((state: RootState) => state.loading.isLoading);
+  const { isOpen } = useSelector((state: RootState) => state.modal);
   return (
-    <Router basename="/my-trello">
-      {isLoading && <Loader />}
+    <Router>
+      {isLoading && !isOpen && <Loader />}
       {isAuthenticated && <LogoutButton />}
       <Routes>
         <Route path="/auth/*" element={<AuthRoutes />} />
