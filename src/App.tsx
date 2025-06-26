@@ -6,6 +6,7 @@ import { logout } from './store/slices/authSlice';
 import AuthRoutes from './pages/Auth';
 import Home from './pages/Home/Home';
 import Board from './pages/Board/Board';
+import Loader from './components/Loader';
 import './App.scss';
 
 function PrivateRoute() {
@@ -31,8 +32,10 @@ function LogoutButton() {
 
 export default function App() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const isLoading = useSelector((state: RootState) => state.loading.isLoading);
   return (
     <Router basename="/my-trello">
+      {isLoading && <Loader />}
       {isAuthenticated && <LogoutButton />}
       <Routes>
         <Route path="/auth/*" element={<AuthRoutes />} />

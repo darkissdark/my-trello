@@ -33,6 +33,12 @@ jobs:
         env:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
+      - name: List root directory
+        run: ls -la
+
+      - name: List build directory
+        run: ls -la build
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

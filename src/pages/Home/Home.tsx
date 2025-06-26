@@ -1,26 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './home.scss';
 import { Link } from 'react-router-dom';
 import api from '../../api/request';
 import { IBoard } from '../../common/interfaces/IBoard';
 import { CreateBoard } from '../Board/components/CreateBoard';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '../../store/slices/loadingSlice';
 
 export function Home() {
   const [boards, setBoards] = useState<IBoard[]>([]);
   const boardEndpoint = '/board';
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    fetchBoards();
-  }, []);
-
-  const fetchBoards = async () => {
+  const fetchBoards = useCallback(async () => {
+    dispatch(setLoading(true));
     try {
       const { data } = await api.get(boardEndpoint);
       setBoards(data.boards);
     } catch (error) {
       console.error('Error fetching boards:', error);
+    } finally {
+      dispatch(setLoading(false));
     }
-  };
+  }, [dispatch, boardEndpoint]);
+
+  useEffect(() => {
+    fetchBoards();
+  }, [fetchBoards]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, Suspense, lazy } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import api from '../../api/request';
 import './board.scss';
 import { IBoard } from '../../common/interfaces/IBoard';
@@ -12,6 +12,7 @@ import { RootState } from '../../store';
 import { Link } from 'react-router-dom';
 import { LazyModal } from '../../components/Modal/LazyModal';
 import React from 'react';
+import { setLoading } from '../../store/slices/loadingSlice';
 
 const CardDetails = lazy(() =>
   import('./components/Card/CardDetails').then((module) => ({ default: module.CardDetails }))
@@ -29,6 +30,7 @@ export function Board() {
   const [currentUserId] = useState<number>(1);
 
   const { isOpen, card: selectedCard } = useSelector((state: RootState) => state.modal);
+  const dispatch = useDispatch();
 
   const handleBackgroundChange = async (imageUrl: string[]) => {
     if (!board) return;
@@ -43,6 +45,7 @@ export function Board() {
   };
 
   const fetchBoard = useCallback(async () => {
+    dispatch(setLoading(true));
     try {
       const { data } = await api.get(`/board/${boardId}`);
       setBoard(data);
@@ -50,8 +53,10 @@ export function Board() {
       setLists(data.lists || []);
     } catch (error) {
       console.error('Error fetching board:', error);
+    } finally {
+      dispatch(setLoading(false));
     }
-  }, [boardId]);
+  }, [boardId, dispatch]);
 
   useEffect(() => {
     fetchBoard();
