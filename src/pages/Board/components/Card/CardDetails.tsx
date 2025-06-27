@@ -236,16 +236,15 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
     setShowMoveCardDropdown(false);
   };
 
+  const handleClose = () => {
+    navigate(`/board/${boardId}`);
+    dispatch(closeModal());
+  };
+
   return (
     <div className="card-details-overlay">
       <div className="card-details-modal" ref={modalRef}>
-        <button
-          className="card-details-close"
-          onClick={() => {
-            dispatch(closeModal());
-            navigate(`/board/${boardId}`);
-          }}
-        >
+        <button className="card-details-close" onClick={handleClose}>
           ×
         </button>
 
@@ -261,31 +260,32 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
               autoFocus={false}
             />
           </div>
-          <div className="break-word">В колонці: {lists.find((list) => list.id === card.list_id)?.title}</div>
-
-          <div className="card-details-participants">
-            <h3>Учасники</h3>
-            <div className="card-details-participant-list">
-              {cardUsers.map((user) => (
-                <div key={user.id} className="card-details-participant-avatar">
-                  {user.username.charAt(0).toUpperCase()}
-                </div>
-              ))}
-              <button className="card-details-join-button" onClick={handleJoinCard}>
-                Приєднатися
-              </button>
+          <div className="card-details-scroll-wrapper">
+            <div className="break-word">В колонці: {lists.find((list) => list.id === card.list_id)?.title}</div>
+            <div className="card-details-participants">
+              <h3>Учасники</h3>
+              <div className="card-details-participant-list">
+                {cardUsers.map((user) => (
+                  <div key={user.id} className="card-details-participant-avatar">
+                    {user.username.charAt(0).toUpperCase()}
+                  </div>
+                ))}
+                <button className="card-details-join-button" onClick={handleJoinCard}>
+                  Приєднатися
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div className="card-details-description">
-            <h3>Опис</h3>
-            <BoardNameInput
-              value={description}
-              onChange={setDescription}
-              onBlur={handleDescriptionUpdate}
-              placeholder="Додайте докладніший опис..."
-              as="textarea"
-            />
+            <div className="card-details-description">
+              <h3>Опис</h3>
+              <BoardNameInput
+                value={description}
+                onChange={setDescription}
+                onBlur={handleDescriptionUpdate}
+                placeholder="Додайте докладніший опис..."
+                as="textarea"
+                disableValidation={true}
+              />
+            </div>
           </div>
         </div>
 

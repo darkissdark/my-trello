@@ -201,6 +201,11 @@
     }
   }
 
+  .card-details-scroll-wrapper {
+    overflow-y: auto;
+    max-height: 90%;
+  }
+
   .card-details-move-button-wrapper {
     position: relative;
     margin-bottom: 8px;

@@ -12,6 +12,7 @@ interface BoardNameInputProps {
   placeholder?: string;
   autoFocus?: boolean;
   as?: 'input' | 'textarea';
+  disableValidation?: boolean;
 }
 
 export function BoardNameInput({
@@ -24,9 +25,13 @@ export function BoardNameInput({
   placeholder,
   autoFocus,
   as = 'input',
+  disableValidation = false,
 }: BoardNameInputProps) {
-  const { error, validate, markTouched } = useTitleValidation(value, onValidationChange);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const validation = useTitleValidation(value, onValidationChange);
+  const error = disableValidation ? undefined : validation.error;
+  const validate = disableValidation ? () => true : validation.validate;
+  const markTouched = disableValidation ? () => {} : validation.markTouched;
 
   const adjustTextareaHeight = (element: HTMLTextAreaElement) => {
     element.style.height = 'auto';
@@ -40,7 +45,7 @@ export function BoardNameInput({
   }, [value, as]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (!value) markTouched();
+    if (!disableValidation && !value) markTouched();
     onChange(e.target.value);
     if (as === 'textarea' && e.target instanceof HTMLTextAreaElement) {
       adjustTextareaHeight(e.target);
@@ -48,15 +53,24 @@ export function BoardNameInput({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && validate(value, true) && as === 'input') {
-      onSubmit?.();
+    if (e.key === 'Enter') {
+      if (as === 'input' && validate(value, true)) {
+        onSubmit?.();
+      } else if (as === 'textarea' && !e.shiftKey) {
+        e.preventDefault();
+        if (disableValidation || validate(value, true)) {
+          if (textareaRef.current) {
+            textareaRef.current.blur();
+          }
+        }
+      }
     } else if (e.key === 'Escape') {
       onCancel?.();
     }
   };
 
   const handleBlur = () => {
-    if (validate(value, true)) {
+    if (disableValidation || validate(value, true)) {
       onBlur?.();
     }
   };
@@ -87,7 +101,7 @@ export function BoardNameInput({
           autoFocus={autoFocus}
         />
       )}
-      {error && <div className={css.error}>{error}</div>}
+      {!disableValidation && error && <div className={css.error}>{error}</div>}
     </div>
   );
 }

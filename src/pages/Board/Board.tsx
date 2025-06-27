@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import { LazyModal } from '../../components/Modal/LazyModal';
 import React from 'react';
 import { setLoading } from '../../store/slices/loadingSlice';
+import { openModal, closeModal } from '../../store/slices/modalSlice';
 
 const CardDetails = lazy(() =>
   import('./components/Card/CardDetails').then((module) => ({ default: module.CardDetails }))
@@ -20,7 +21,7 @@ const CardDetails = lazy(() =>
 const AddListModalContent = React.lazy(() => import('./components/common/AddListModalContent'));
 
 export function Board() {
-  const { boardId } = useParams();
+  const { boardId, cardId } = useParams();
   const [board, setBoard] = useState<IBoard | null>(null);
   const [title, setTitle] = useState('');
   const [lists, setLists] = useState<IList[]>([]);
@@ -64,6 +65,17 @@ export function Board() {
   useEffect(() => {
     fetchBoard(true);
   }, [fetchBoard]);
+
+  useEffect(() => {
+    if (cardId && lists.length > 0) {
+      const card = lists.flatMap((list) => list.cards).find((card) => String(card.id) === String(cardId));
+      if (card && (!isOpen || !selectedCard || String(selectedCard.id) !== String(cardId))) {
+        dispatch(openModal({ ...card }));
+      }
+    } else if (!cardId && isOpen) {
+      dispatch(closeModal());
+    }
+  }, [cardId, lists, isOpen, selectedCard, dispatch]);
 
   const backgroundStyle = useMemo(() => {
     if (!board?.custom?.background) return {};
