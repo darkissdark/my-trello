@@ -4,12 +4,17 @@
   background: #fff;
   border-radius: $border-radius-md;
   box-shadow: $shadow-card;
-  padding: 40px 32px 32px 32px;
+  padding: 32px;
   max-width: 400px;
-  margin: 60px auto;
+  width: calc(100% - $spacing-lg * 2);
+  margin: $spacing-lg;
+}
+
+.auth-wrap {
+  flex: 1;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  justify-content: center;
+  align-items: center;
 }
 
 .auth-title {
@@ -20,28 +25,13 @@
 
 .auth-label {
   font-size: 1rem;
-  margin-bottom: 4px;
+  margin-bottom: $spacing-xs;
   color: $color-text-secondary;
   display: block;
 }
 
 .auth-input {
-  width: 100%;
-  padding: $modal-input-padding;
-  border: 1px solid $color-border-light;
-  border-radius: $modal-input-border-radius;
-  font-size: 1rem;
   margin-bottom: $spacing-md;
-  transition: border-color 0.2s;
-
-  &:focus {
-    outline: none;
-    border-color: $color-primary;
-  }
-
-  &.error {
-    border-color: $color-error;
-  }
 }
 
 .auth-error {
@@ -53,9 +43,9 @@
 
 .auth-password-strength {
   display: flex;
-  gap: 4px;
+  gap: $spacing-xs;
   margin-bottom: $spacing-md;
-  height: 6px;
+  height: $spacing-sm;
 }
 
 .auth-password-bar {
@@ -91,20 +81,8 @@
 
 .auth-button {
   width: 100%;
-  background: $color-primary;
-  color: #fff;
-  border: none;
-  border-radius: $modal-button-border-radius;
-  padding: $modal-button-padding;
-  font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: $spacing-md;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover {
-    background: $color-primary-hover;
-  }
 }
 
 .auth-link-row {
@@ -116,7 +94,6 @@
 .auth-link {
   color: $color-primary;
   text-decoration: underline;
-  cursor: pointer;
   font-weight: 500;
-  margin-left: 4px;
+  margin-left: $spacing-xs;
 }

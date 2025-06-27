@@ -1,4 +1,5 @@
 @import './styles/variables';
+@import './styles/mixins';
 
 * {
   margin: 0;
@@ -33,10 +34,17 @@ body {
   background: linear-gradient(135deg, #e3f2fd, #bbdefb);
   color: $color-text;
   min-height: 100vh;
+  @include desktop {
+    overscroll-behavior: none;
+  }
+  @include large-desktop {
+    overscroll-behavior: none;
+  }
 }
 
 textarea {
   resize: none;
+  overflow: hidden;
 }
 
 input,
@@ -46,6 +54,7 @@ textarea {
   border: 1px solid $color-border-light;
   border-radius: $modal-input-border-radius;
   font-size: 14px;
+  transition: border-color 0.2s;
 
   &:focus {
     outline: none;

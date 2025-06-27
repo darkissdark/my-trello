@@ -27,43 +27,45 @@ export default function Login() {
   };
 
   return (
-    <div className={css['auth-container']}>
-      <h2 className={css['auth-title']}>Вхід</h2>
-      <form onSubmit={handleSubmit}>
-        <label className={css['auth-label']} htmlFor="email">
-          Email
-        </label>
-        <input
-          id="email"
-          className={css['auth-input']}
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <label className={css['auth-label']} htmlFor="password">
-          Пароль
-        </label>
-        <input
-          id="password"
-          className={css['auth-input']}
-          type="password"
-          placeholder="Пароль"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        {error && touched && <div className={css['auth-error']}>{error}</div>}
-        <button className={css['auth-button']} type="submit">
-          Увійти
-        </button>
-      </form>
-      <div className={css['auth-link-row']}>
-        Вперше у нас?
-        <Link className={css['auth-link']} to="/auth/register">
-          Зареєструватися
-        </Link>
+    <div className={css['auth-wrap']}>
+      <div className={css['auth-container']}>
+        <h2 className={css['auth-title']}>Вхід</h2>
+        <form onSubmit={handleSubmit}>
+          <label className={css['auth-label']} htmlFor="email">
+            Email
+          </label>
+          <input
+            id="email"
+            className={css['auth-input']}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <label className={css['auth-label']} htmlFor="password">
+            Пароль
+          </label>
+          <input
+            id="password"
+            className={css['auth-input']}
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {error && touched && <div className={css['auth-error']}>{error}</div>}
+          <button className={`${css['auth-button']} button blue`} type="submit">
+            Увійти
+          </button>
+        </form>
+        <div className={css['auth-link-row']}>
+          Вперше у нас?
+          <Link className={css['auth-link']} to="/auth/register">
+            Зареєструватися
+          </Link>
+        </div>
       </div>
     </div>
   );

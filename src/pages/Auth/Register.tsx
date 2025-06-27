@@ -49,70 +49,72 @@ export default function Register() {
   );
 
   return (
-    <div className={css['auth-container']}>
-      <h2 className={css['auth-title']}>Реєстрація</h2>
+    <div className={css['auth-wrap']}>
+      <div className={css['auth-container']}>
+        <h2 className={css['auth-title']}>Реєстрація</h2>
 
-      <form onSubmit={handleSubmit} noValidate>
-        <label htmlFor="email" className={css['auth-label']}>
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          className={css['auth-input']}
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <form onSubmit={handleSubmit} noValidate>
+          <label htmlFor="email" className={css['auth-label']}>
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            className={css['auth-input']}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <label htmlFor="password" className={css['auth-label']}>
-          Пароль
-        </label>
-        <input
-          id="password"
-          type="password"
-          className={css['auth-input']}
-          placeholder="Пароль"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <label htmlFor="password" className={css['auth-label']}>
+            Пароль
+          </label>
+          <input
+            id="password"
+            type="password"
+            className={css['auth-input']}
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <div className={`${css['auth-password-strength']} ${barClass}`}>
-          {bars.map((i) => (
-            <div key={i} className={`${css['auth-password-bar']} ${passwordStrength > i ? css.filled : ''}`} />
-          ))}
+          <div className={`${css['auth-password-strength']} ${barClass}`}>
+            {bars.map((i) => (
+              <div key={i} className={`${css['auth-password-bar']} ${passwordStrength > i ? css.filled : ''}`} />
+            ))}
+          </div>
+
+          <label htmlFor="confirm" className={css['auth-label']}>
+            Повторіть пароль
+          </label>
+          <input
+            id="confirm"
+            type="password"
+            placeholder="Підтвердіть пароль"
+            className={`${css['auth-input']} ${touched && password !== confirmPassword ? css.error : ''}`}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onBlur={() => setTouched(true)}
+            required
+          />
+
+          {touched && password !== confirmPassword && <div className={css['auth-error']}>Паролі не співпадають!</div>}
+
+          {error && <div className={css['auth-error']}>{error}</div>}
+
+          <button className={`${css['auth-button']} button blue`} type="submit">
+            Зареєструватися
+          </button>
+        </form>
+
+        <div className={css['auth-link-row']}>
+          Вже є акаунт?
+          <Link className={css['auth-link']} to="/auth/login">
+            Увійти
+          </Link>
         </div>
-
-        <label htmlFor="confirm" className={css['auth-label']}>
-          Повторіть пароль
-        </label>
-        <input
-          id="confirm"
-          type="password"
-          placeholder="Підтвердіть пароль"
-          className={`${css['auth-input']} ${touched && password !== confirmPassword ? css.error : ''}`}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          onBlur={() => setTouched(true)}
-          required
-        />
-
-        {touched && password !== confirmPassword && <div className={css['auth-error']}>Паролі не співпадають!</div>}
-
-        {error && <div className={css['auth-error']}>{error}</div>}
-
-        <button className={css['auth-button']} type="submit">
-          Зареєструватися
-        </button>
-      </form>
-
-      <div className={css['auth-link-row']}>
-        Вже є акаунт?
-        <Link className={css['auth-link']} to="/auth/login">
-          Увійти
-        </Link>
       </div>
     </div>
   );
