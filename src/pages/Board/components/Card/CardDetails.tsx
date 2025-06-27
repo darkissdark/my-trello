@@ -7,6 +7,7 @@ import './cardDetails.scss';
 import { IList, IUser } from '../../../../common/interfaces/IList';
 import iziToast from 'izitoast';
 import { closeModal, openModal } from '../../../../store/slices/modalSlice';
+import { BoardNameInput } from '../common/BoardNameInput';
 
 interface CardDetailsProps {
   card: ICard;
@@ -27,19 +28,6 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
   const [lists, setLists] = useState<IList[]>([]);
 
   const modalRef = useRef<HTMLDivElement>(null);
-  const titleInputRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
-
-  const adjustTextareaHeight = (element: HTMLTextAreaElement) => {
-    element.style.height = 'auto';
-    element.style.height = `${element.scrollHeight}px`;
-  };
-
-  useEffect(() => {
-    if (descriptionRef.current) {
-      adjustTextareaHeight(descriptionRef.current);
-    }
-  }, [description]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -47,13 +35,11 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         if (isEditingTitle) {
           setTitle(card.title);
           setIsEditingTitle(false);
-          titleInputRef.current?.blur();
         }
 
         if (isEditingDescription) {
           setDescription(card.description || '');
           setIsEditingDescription(false);
-          descriptionRef.current?.blur();
         }
 
         if (showMoveCardDropdown) {
@@ -239,7 +225,6 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
       if (response.data.result === 'Updated') {
         onCardUpdated();
         dispatch(openModal({ ...card, list_id: newListId }));
-        // navigate(`/board/${boardId}/card/${card.id}`);
         iziToast.success({
           title: 'Картку переміщено',
           position: 'topRight',
@@ -265,15 +250,17 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
         </button>
 
         <div className="card-details-content">
-          <input
-            ref={titleInputRef}
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            onBlur={handleTitleUpdate}
-            onFocus={() => setIsEditingTitle(true)}
-            onKeyDown={(e) => e.key === 'Enter' && handleTitleUpdate()}
-          />
+          <div className="card-details-title">
+            <BoardNameInput
+              as="textarea"
+              value={title}
+              onChange={setTitle}
+              onBlur={handleTitleUpdate}
+              onSubmit={handleTitleUpdate}
+              placeholder="Назва картки"
+              autoFocus={false}
+            />
+          </div>
           <div className="break-word">В колонці: {lists.find((list) => list.id === card.list_id)?.title}</div>
 
           <div className="card-details-participants">
@@ -292,16 +279,12 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUserId }: Car
 
           <div className="card-details-description">
             <h3>Опис</h3>
-            <textarea
-              ref={descriptionRef}
+            <BoardNameInput
               value={description}
-              onFocus={() => setIsEditingDescription(true)}
-              onChange={(e) => {
-                setDescription(e.target.value);
-                adjustTextareaHeight(e.target);
-              }}
+              onChange={setDescription}
               onBlur={handleDescriptionUpdate}
               placeholder="Додайте докладніший опис..."
+              as="textarea"
             />
           </div>
         </div>

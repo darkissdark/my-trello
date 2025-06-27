@@ -70,7 +70,7 @@ export function BoardNameInput({
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
-          className={error ? 'error' : ''}
+          className={`${error ? 'error' : ''} input-board-element`}
           placeholder={placeholder}
           autoFocus={autoFocus}
           rows={1}
@@ -82,7 +82,7 @@ export function BoardNameInput({
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
-          className={error ? 'error' : ''}
+          className={`${error ? 'error' : ''} input-board-element`}
           placeholder={placeholder}
           autoFocus={autoFocus}
         />

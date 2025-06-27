@@ -30,9 +30,11 @@
   display: flex;
   padding: 15px;
   gap: 15px;
+
   @include mobile {
     flex-wrap: wrap;
   }
+
   @include tablet {
     flex-wrap: wrap;
   }
@@ -58,19 +60,23 @@
 .card-details-content {
   flex-grow: 1;
   font-size: 14px;
-  input[type='text'] {
-    width: 100%;
-    margin: 0 0 10px -10px;
-    padding: 8px;
+}
+
+.input-board-name {
+  margin: 0 0 10px -10px;
+}
+.input-board-element {
+  &:not(:focus):not(.error) {
+    border-color: transparent;
+  }
+}
+.card-details-title {
+  .input-board-element {
     font-weight: 600;
     font-size: 20px;
-    border: 2px solid transparent;
-    border-radius: 3px;
-    flex-grow: 1;
 
-    &:focus {
-      outline: none;
-      border-color: #0079bf;
+    + div {
+      max-width: 100%;
     }
   }
 }
@@ -91,22 +97,6 @@
 
     &:hover {
       background-color: #ebecf0;
-    }
-  }
-
-  textarea {
-    margin: 0 0 0 -8px;
-    width: 100%;
-    min-height: 80px;
-    padding: 8px;
-    border: 2px solid transparent;
-    border-radius: 3px;
-    resize: none;
-    overflow: hidden;
-
-    &:focus {
-      border-color: #0079bf;
-      outline: none;
     }
   }
 }
@@ -167,12 +157,19 @@
 
 .card-details-actions {
   min-width: 115px;
+
   @include desktop {
     margin-top: 52.5px;
+    position: sticky;
+    top: 0;
   }
+
   @include large-desktop {
     margin-top: 52.5px;
+    position: sticky;
+    top: 0;
   }
+
   h3 {
     font-size: 14px;
     color: #5e6c84;
