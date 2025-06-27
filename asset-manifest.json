@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/my-trello/static/css/main.27c5d334.css",
-    "main.js": "/my-trello/static/js/main.9428249a.js",
+    "main.js": "/my-trello/static/js/main.a63abe00.js",
     "static/js/499.e1975fde.chunk.js": "/my-trello/static/js/499.e1975fde.chunk.js",
-    "static/css/193.548d9303.chunk.css": "/my-trello/static/css/193.548d9303.chunk.css",
-    "static/js/193.b06735cb.chunk.js": "/my-trello/static/js/193.b06735cb.chunk.js",
+    "static/css/193.aca0240e.chunk.css": "/my-trello/static/css/193.aca0240e.chunk.css",
+    "static/js/193.09a3fb07.chunk.js": "/my-trello/static/js/193.09a3fb07.chunk.js",
     "static/js/668.e26dbe49.chunk.js": "/my-trello/static/js/668.e26dbe49.chunk.js",
     "static/js/903.5d2ee392.chunk.js": "/my-trello/static/js/903.5d2ee392.chunk.js",
     "static/js/654.6ce1ac27.chunk.js": "/my-trello/static/js/654.6ce1ac27.chunk.js",
     "static/js/453.ed3810f9.chunk.js": "/my-trello/static/js/453.ed3810f9.chunk.js",
     "index.html": "/my-trello/index.html",
     "main.27c5d334.css.map": "/my-trello/static/css/main.27c5d334.css.map",
-    "main.9428249a.js.map": "/my-trello/static/js/main.9428249a.js.map",
+    "main.a63abe00.js.map": "/my-trello/static/js/main.a63abe00.js.map",
     "499.e1975fde.chunk.js.map": "/my-trello/static/js/499.e1975fde.chunk.js.map",
-    "193.548d9303.chunk.css.map": "/my-trello/static/css/193.548d9303.chunk.css.map",
-    "193.b06735cb.chunk.js.map": "/my-trello/static/js/193.b06735cb.chunk.js.map",
+    "193.aca0240e.chunk.css.map": "/my-trello/static/css/193.aca0240e.chunk.css.map",
+    "193.09a3fb07.chunk.js.map": "/my-trello/static/js/193.09a3fb07.chunk.js.map",
     "668.e26dbe49.chunk.js.map": "/my-trello/static/js/668.e26dbe49.chunk.js.map",
     "903.5d2ee392.chunk.js.map": "/my-trello/static/js/903.5d2ee392.chunk.js.map",
     "654.6ce1ac27.chunk.js.map": "/my-trello/static/js/654.6ce1ac27.chunk.js.map",
@@ -22,6 +22,6 @@
   },
   "entrypoints": [
     "static/css/main.27c5d334.css",
-    "static/js/main.9428249a.js"
+    "static/js/main.a63abe00.js"
   ]
 }
