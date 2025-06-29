@@ -38,7 +38,7 @@ export default function Register() {
       }
 
       try {
-        await api.post('/user', { email, password });
+        await api.post('/user', { email, password, username: email.split('@')[0] });
         navigate('/auth/login');
       } catch (err: any) {
         const message = err.response?.data?.message || 'Помилка реєстрації';

@@ -18,6 +18,11 @@
   word-break: break-word;
 }
 
+.card-details-scroll-wrapper {
+  overflow-y: auto;
+  max-height: 90%;
+}
+
 .card-details-modal {
   background: white;
   border-radius: 3px;
@@ -199,11 +204,6 @@
         background-color: #d64736;
       }
     }
-  }
-
-  .card-details-scroll-wrapper {
-    overflow-y: auto;
-    max-height: 90%;
   }
 
   .card-details-move-button-wrapper {

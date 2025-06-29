@@ -19,7 +19,25 @@ export default function Login() {
     setError('');
     try {
       const { data } = await api.post('/login', { email, password });
-      dispatch(login({ token: data.token, refreshToken: data.refreshToken }));
+      const userResponse = await api.get(`/user?emailOrUsername=${encodeURIComponent(email)}`, {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      });
+
+      const userData = userResponse.data[0];
+
+      const loginData = {
+        token: data.token,
+        refreshToken: data.refreshToken,
+        user: {
+          id: userData.id,
+          email: userData.email,
+          username: userData.username,
+        },
+      };
+
+      dispatch(login(loginData));
       navigate('/');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Користувач з таким email або паролем не знайдений');

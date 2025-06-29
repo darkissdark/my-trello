@@ -70,12 +70,12 @@
     @include mobile {
       margin: 50px 0 0 -56px;
     }
-    input,
     textarea {
       font-size: 2em;
       font-weight: 600;
       margin: -8px 0 0 -8px;
       background: none;
+      text-shadow: 1px 1px 5px #fff;
 
       &:not(:focus) {
         border-color: transparent;

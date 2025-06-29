@@ -91,7 +91,21 @@ async function handleResponseError(error: AxiosError) {
     try {
       const { data } = await axios.post(`${api.baseURL}/refresh`, { refreshToken });
 
-      store.dispatch(login({ token: data.token, refreshToken: data.refreshToken }));
+      const currentUser = store.getState().auth.user;
+
+      if (currentUser) {
+        store.dispatch(
+          login({
+            token: data.token,
+            refreshToken: data.refreshToken,
+            user: currentUser,
+          })
+        );
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('refreshToken', data.refreshToken);
+
       processQueue(null, data.token);
 
       if (originalRequest.headers) {

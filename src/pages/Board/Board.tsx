@@ -28,9 +28,9 @@ export function Board() {
   const [showAddListModal, setShowAddListModal] = useState(false);
   const [newListTitle, setNewListTitle] = useState('');
   const [isTitleValid, setIsTitleValid] = useState(false);
-  const [currentUserId] = useState<number>(1);
 
   const { isOpen, card: selectedCard } = useSelector((state: RootState) => state.modal);
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const handleBackgroundChange = async (imageUrl: string[]) => {
@@ -116,21 +116,23 @@ export function Board() {
   return (
     <>
       <header className="board__header">
-        <Link to={'/'} className="board_back-link">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="38"
-            height="38"
-            fill="currentColor"
-            className="bi bi-arrow-left"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M15 8a.5.5 0 0 1-.5.5H3.707l4.147 4.146a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708.708L3.707 7.5H14.5a.5.5 0 0 1 .5.5z"
-            />
-          </svg>
-        </Link>
+        <div>
+          <Link to={'/'} className="board_back-link">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="38"
+              height="38"
+              fill="currentColor"
+              className="bi bi-arrow-left"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M15 8a.5.5 0 0 1-.5.5H3.707l4.147 4.146a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708.708L3.707 7.5H14.5a.5.5 0 0 1 .5.5z"
+              />
+            </svg>
+          </Link>
+        </div>
         <BoardNameInput
           as="textarea"
           value={title}
@@ -179,12 +181,7 @@ export function Board() {
 
       {isOpen && selectedCard && (
         <Suspense fallback={<div className="card-details-loading">Loading...</div>}>
-          <CardDetails
-            card={selectedCard}
-            boardId={boardId!}
-            onCardUpdated={fetchBoard}
-            currentUserId={currentUserId}
-          />
+          <CardDetails card={selectedCard} boardId={boardId!} onCardUpdated={fetchBoard} currentUser={user} />
         </Suspense>
       )}
     </>
