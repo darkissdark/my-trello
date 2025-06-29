@@ -156,6 +156,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
     try {
       const response = await api.put(`/board/${boardId}/card/${card.id}/users`, {
         add: [currentUser.id],
+        remove: [],
       });
 
       if (response.data.result === 'Updated') {
@@ -172,6 +173,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
 
     try {
       const response = await api.put(`/board/${boardId}/card/${card.id}/users`, {
+        add: [],
         remove: [currentUser.id],
       });
 
