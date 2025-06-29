@@ -70,7 +70,10 @@ export function Board() {
     if (cardId && lists.length > 0) {
       const card = lists.flatMap((list) => list.cards).find((card) => String(card.id) === String(cardId));
       if (card && (!isOpen || !selectedCard || String(selectedCard.id) !== String(cardId))) {
-        dispatch(openModal({ ...card }));
+        const listContainingCard = lists.find((list) => list.cards.some((c) => String(c.id) === String(cardId)));
+        if (listContainingCard) {
+          dispatch(openModal({ ...card, list_id: listContainingCard.id }));
+        }
       }
     } else if (!cardId && isOpen) {
       dispatch(closeModal());

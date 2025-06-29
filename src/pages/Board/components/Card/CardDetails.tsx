@@ -264,7 +264,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
             />
           </div>
           <div>
-            В колонці:
+            В колонці:{' '}
             {lists.length === 0
               ? 'Завантаження...'
               : lists.find((list) => list.id === card.list_id)?.title || 'Невідомо'}

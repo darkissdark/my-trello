@@ -12,7 +12,8 @@ export function Card({ card, boardId, listId }: CardProps) {
   const navigate = useNavigate();
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    e.dataTransfer.setData('text/plain', JSON.stringify(card));
+    const cardWithListId = { ...card, list_id: listId };
+    e.dataTransfer.setData('text/plain', JSON.stringify(cardWithListId));
     e.currentTarget.classList.add('card--dragging');
   };
 
