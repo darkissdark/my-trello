@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/my-trello/static/css/main.27c5d334.css",
-    "main.js": "/my-trello/static/js/main.a63abe00.js",
+    "main.css": "/my-trello/static/css/main.e6997869.css",
+    "main.js": "/my-trello/static/js/main.6454c55d.js",
     "static/js/499.e1975fde.chunk.js": "/my-trello/static/js/499.e1975fde.chunk.js",
-    "static/css/193.aca0240e.chunk.css": "/my-trello/static/css/193.aca0240e.chunk.css",
-    "static/js/193.09a3fb07.chunk.js": "/my-trello/static/js/193.09a3fb07.chunk.js",
+    "static/css/193.abd1472d.chunk.css": "/my-trello/static/css/193.abd1472d.chunk.css",
+    "static/js/193.69f01270.chunk.js": "/my-trello/static/js/193.69f01270.chunk.js",
     "static/js/668.e26dbe49.chunk.js": "/my-trello/static/js/668.e26dbe49.chunk.js",
     "static/js/903.5d2ee392.chunk.js": "/my-trello/static/js/903.5d2ee392.chunk.js",
     "static/js/654.6ce1ac27.chunk.js": "/my-trello/static/js/654.6ce1ac27.chunk.js",
     "static/js/453.ed3810f9.chunk.js": "/my-trello/static/js/453.ed3810f9.chunk.js",
     "index.html": "/my-trello/index.html",
-    "main.27c5d334.css.map": "/my-trello/static/css/main.27c5d334.css.map",
-    "main.a63abe00.js.map": "/my-trello/static/js/main.a63abe00.js.map",
+    "main.e6997869.css.map": "/my-trello/static/css/main.e6997869.css.map",
+    "main.6454c55d.js.map": "/my-trello/static/js/main.6454c55d.js.map",
     "499.e1975fde.chunk.js.map": "/my-trello/static/js/499.e1975fde.chunk.js.map",
-    "193.aca0240e.chunk.css.map": "/my-trello/static/css/193.aca0240e.chunk.css.map",
-    "193.09a3fb07.chunk.js.map": "/my-trello/static/js/193.09a3fb07.chunk.js.map",
+    "193.abd1472d.chunk.css.map": "/my-trello/static/css/193.abd1472d.chunk.css.map",
+    "193.69f01270.chunk.js.map": "/my-trello/static/js/193.69f01270.chunk.js.map",
     "668.e26dbe49.chunk.js.map": "/my-trello/static/js/668.e26dbe49.chunk.js.map",
     "903.5d2ee392.chunk.js.map": "/my-trello/static/js/903.5d2ee392.chunk.js.map",
     "654.6ce1ac27.chunk.js.map": "/my-trello/static/js/654.6ce1ac27.chunk.js.map",
     "453.ed3810f9.chunk.js.map": "/my-trello/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.27c5d334.css",
-    "static/js/main.a63abe00.js"
+    "static/css/main.e6997869.css",
+    "static/js/main.6454c55d.js"
   ]
 }
