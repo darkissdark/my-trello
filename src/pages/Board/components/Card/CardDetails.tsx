@@ -253,85 +253,89 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
         <button className="card-details-close" onClick={handleClose}>
           ×
         </button>
-        <div className="card-details-content">
-          <div className="card-details-title">
-            <BoardNameInput
-              as="textarea"
-              value={title}
-              onChange={setTitle}
-              onBlur={handleTitleUpdate}
-              onSubmit={handleTitleUpdate}
-              placeholder="Назва картки"
-              autoFocus={false}
-            />
-          </div>
-          <div>
-            В колонці:{' '}
-            {lists.length === 0
-              ? 'Завантаження...'
-              : lists.find((list) => list.id === card.list_id)?.title || 'Невідомо'}
-          </div>
-          <div className="card-details-participants">
-            <h3>Учасники</h3>
-            <div className="card-details-participant-list">
-              {cardUsers.map((user) => (
-                <div key={user.id} className="card-details-participant-avatar">
-                  {user.username.charAt(0).toUpperCase()}
+        <div className="mobile-scroll-wrapper">
+          <div className="card-details-content">
+            <div className="card-details-title">
+              <BoardNameInput
+                as="textarea"
+                value={title}
+                onChange={setTitle}
+                onBlur={handleTitleUpdate}
+                onSubmit={handleTitleUpdate}
+                placeholder="Назва картки"
+                autoFocus={false}
+              />
+            </div>
+            <div className="card-details-scroll-wrapper">
+              <div>
+                В колонці:{' '}
+                {lists.length === 0
+                  ? 'Завантаження...'
+                  : lists.find((list) => list.id === card.list_id)?.title || 'Невідомо'}
+              </div>
+              <div className="card-details-participants">
+                <h3>Учасники</h3>
+                <div className="card-details-participant-list">
+                  {cardUsers.map((user) => (
+                    <div key={user.id} className="card-details-participant-avatar">
+                      {user.username.charAt(0).toUpperCase()}
+                    </div>
+                  ))}
+                  <button
+                    className="card-details-join-button"
+                    onClick={cardUsers.some((user) => user.id === currentUserId) ? handleLeaveCard : handleJoinCard}
+                  >
+                    {cardUsers.some((user) => user.id === currentUserId) ? 'Покинути' : 'Приєднатися'}
+                  </button>
                 </div>
-              ))}
-              <button
-                className="card-details-join-button"
-                onClick={cardUsers.some((user) => user.id === currentUserId) ? handleLeaveCard : handleJoinCard}
-              >
-                {cardUsers.some((user) => user.id === currentUserId) ? 'Покинути' : 'Приєднатися'}
-              </button>
+              </div>
+              <div className="card-details-description">
+                <h3>Опис</h3>
+                <BoardNameInput
+                  value={description}
+                  onChange={setDescription}
+                  onBlur={handleDescriptionUpdate}
+                  placeholder="Додайте опис..."
+                  as="textarea"
+                  disableValidation={true}
+                />
+              </div>
             </div>
           </div>
-          <div className="card-details-description">
-            <h3>Опис</h3>
-            <BoardNameInput
-              value={description}
-              onChange={setDescription}
-              onBlur={handleDescriptionUpdate}
-              placeholder="Додайте опис..."
-              as="textarea"
-              disableValidation={true}
-            />
-          </div>
-        </div>
 
-        <div className="card-details-actions">
-          <h3>Дії</h3>
-          <button onClick={handleCopyCard} className="card-details-action-button">
-            Копіювати
-          </button>
-          {lists.filter((list) => list.id !== card.list_id).length > 0 && (
-            <div className="card-details-move-button-wrapper">
-              <button
-                onClick={() => setShowMoveCardDropdown(!showMoveCardDropdown)}
-                className="card-details-action-button"
-              >
-                Переміщення
-              </button>
-              {showMoveCardDropdown && (
-                <div className="card-details-move-dropdown">
-                  {lists
-                    .filter((list) => list.id !== card.list_id)
-                    .map((list) => (
-                      <button key={list.id} onClick={() => handleMoveCard(list.id)}>
-                        {list.title}
-                      </button>
-                    ))}
-                </div>
-              )}
-            </div>
-          )}
-          <button
-            onClick={handleArchiveCard}
-            className="card-details-action-button card-details-action-button--archive"
-          >
-            Архівувати
-          </button>
+          <div className="card-details-actions">
+            <h3>Дії</h3>
+            <button onClick={handleCopyCard} className="card-details-action-button">
+              Копіювати
+            </button>
+            {lists.filter((list) => list.id !== card.list_id).length > 0 && (
+              <div className="card-details-move-button-wrapper">
+                <button
+                  onClick={() => setShowMoveCardDropdown(!showMoveCardDropdown)}
+                  className="card-details-action-button"
+                >
+                  Переміщення
+                </button>
+                {showMoveCardDropdown && (
+                  <div className="card-details-move-dropdown">
+                    {lists
+                      .filter((list) => list.id !== card.list_id)
+                      .map((list) => (
+                        <button key={list.id} onClick={() => handleMoveCard(list.id)}>
+                          {list.title}
+                        </button>
+                      ))}
+                  </div>
+                )}
+              </div>
+            )}
+            <button
+              onClick={handleArchiveCard}
+              className="card-details-action-button card-details-action-button--archive"
+            >
+              Архівувати
+            </button>
+          </div>
         </div>
       </div>
     </div>
