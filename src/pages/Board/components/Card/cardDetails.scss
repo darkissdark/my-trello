@@ -70,15 +70,23 @@
 }
 
 .mobile-scroll-wrapper {
+  flex-grow: 1;
+  display: flex;
   @include mobile {
     overflow-y: auto;
-    max-height: calc(90vh - 30px);
+    max-height: calc(90vh - 70px);
     width: 100%;
+    display: block;
+    padding-right: 15px;
+    margin-top: 40px;
   }
   @include tablet {
     overflow-y: auto;
-    max-height: calc(90vh - 30px);
+    max-height: calc(90vh - 70px);
     width: 100%;
+    display: block;
+    padding-right: 15px;
+    margin-top: 40px;
   }
 }
 
