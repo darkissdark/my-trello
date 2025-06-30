@@ -6,9 +6,3 @@ export interface IList {
   title: string;
   cards: ICard[];
 }
-
-export interface IUser {
-  id: number;
-  email: string;
-  username: string;
-}
