@@ -12,6 +12,10 @@
   align-items: flex-start;
   padding-top: 5vh;
   z-index: 1000;
+
+  .input-board-name {
+    margin: 0 10px 10px -10px;
+  }
 }
 
 .break-word {
@@ -19,9 +23,16 @@
 }
 
 .card-details-scroll-wrapper {
-  overflow-y: auto;
-  padding: 0 10px;
-  margin-left: -10px;
+  @include desktop {
+    overflow-y: auto;
+    padding: 0 10px;
+    margin-left: -10px;
+  }
+  @include large-desktop {
+    overflow-y: auto;
+    padding: 0 10px;
+    margin-left: -10px;
+  }
 }
 
 .card-details-modal {
@@ -74,14 +85,20 @@
 .mobile-scroll-wrapper {
   flex-grow: 1;
   display: flex;
-  padding: 0 10px;
-  margin-left: -10px;
+  @include tablet {
+    padding: 0 10px;
+    margin-left: -10px;
+  }
+  @include mobile {
+    padding: 0 10px;
+    margin-left: -10px;
+  }
   @include mobile {
     overflow-y: auto;
     max-height: calc(90vh - 70px);
     width: 100%;
     display: block;
-    padding-right: 15px;
+    padding-right: 0;
     margin-top: 40px;
   }
   @include tablet {
@@ -89,13 +106,9 @@
     max-height: calc(90vh - 70px);
     width: 100%;
     display: block;
-    padding-right: 15px;
+    padding-right: 0;
     margin-top: 40px;
   }
-}
-
-.input-board-name {
-  margin: 0 0 10px -10px;
 }
 .input-board-element {
   &:not(:focus):not(.error) {
