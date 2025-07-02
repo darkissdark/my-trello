@@ -20,6 +20,8 @@
 
 .card-details-scroll-wrapper {
   overflow-y: auto;
+  padding: 0 10px;
+  margin-left: -10px;
 }
 
 .card-details-modal {
@@ -72,6 +74,8 @@
 .mobile-scroll-wrapper {
   flex-grow: 1;
   display: flex;
+  padding: 0 10px;
+  margin-left: -10px;
   @include mobile {
     overflow-y: auto;
     max-height: calc(90vh - 70px);
