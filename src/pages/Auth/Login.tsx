@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../../store/slices/authSlice';
@@ -6,41 +6,47 @@ import api from '../../api/request';
 import css from './auth.module.scss';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [touched, setTouched] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setTouched(true);
-    setError('');
+    setHasSubmitted(true);
+    setErrorMessage('');
+
     try {
       const { data } = await api.post('/login', { email, password });
-      const userResponse = await api.get(`/user?emailOrUsername=${encodeURIComponent(email)}`, {
-        headers: {
-          Authorization: `Bearer ${data.token}`,
-        },
+
+      const userRes = await api.get(`/user?emailOrUsername=${encodeURIComponent(email)}`, {
+        headers: { Authorization: `Bearer ${data.token}` },
       });
 
-      const userData = userResponse.data[0];
+      const user = userRes.data[0];
 
-      const loginData = {
-        token: data.token,
-        refreshToken: data.refreshToken,
-        user: {
-          id: userData.id,
-          email: userData.email,
-          username: userData.username,
-        },
-      };
+      dispatch(
+        login({
+          token: data.token,
+          refreshToken: data.refreshToken,
+          user: {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+          },
+        })
+      );
 
-      dispatch(login(loginData));
       navigate('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Користувач з таким email або паролем не знайдений');
+      const message = err.response?.data?.message || 'Користувач з таким email або паролем не знайдений';
+      setErrorMessage(message);
     }
   };
 
@@ -48,8 +54,9 @@ export default function Login() {
     <div className={css['auth-wrap']}>
       <div className={css['auth-container']}>
         <h2 className={css['auth-title']}>Вхід</h2>
-        <form onSubmit={handleSubmit}>
-          <label className={css['auth-label']} htmlFor="email">
+
+        <form onSubmit={handleSubmit} noValidate>
+          <label htmlFor="email" className={css['auth-label']}>
             Email
           </label>
           <input
@@ -58,10 +65,11 @@ export default function Login() {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             required
           />
-          <label className={css['auth-label']} htmlFor="password">
+
+          <label htmlFor="password" className={css['auth-label']}>
             Пароль
           </label>
           <input
@@ -70,17 +78,20 @@ export default function Login() {
             type="password"
             placeholder="Пароль"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             required
           />
-          {error && touched && <div className={css['auth-error']}>{error}</div>}
-          <button className={`${css['auth-button']} button blue`} type="submit">
+
+          {hasSubmitted && errorMessage && <div className={css['auth-error']}>{errorMessage}</div>}
+
+          <button type="submit" className={`${css['auth-button']} button blue`}>
             Увійти
           </button>
         </form>
+
         <div className={css['auth-link-row']}>
-          Вперше у нас?
-          <Link className={css['auth-link']} to="/auth/register">
+          Вперше у нас?{' '}
+          <Link to="/auth/register" className={css['auth-link']}>
             Зареєструватися
           </Link>
         </div>

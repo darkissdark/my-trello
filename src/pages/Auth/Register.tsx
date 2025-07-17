@@ -1,9 +1,9 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, FormEvent, ChangeEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../api/request';
 import css from './auth.module.scss';
 
-function getPasswordStrength(password: string): number {
+const getPasswordStrength = (password: string): number => {
   let score = 0;
   if (password.length >= 8) score++;
   if (/[A-Z]/.test(password)) score++;
@@ -11,38 +11,49 @@ function getPasswordStrength(password: string): number {
   if (/[^A-Za-z0-9]/.test(password)) score++;
   if (password.length >= 12) score++;
   return score;
-}
+};
+
+const PASSWORD_STRENGTH_CLASSES = ['', css.weak, css.fair, css.medium, css.good, css.strong];
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [touched, setTouched] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [hasTouchedConfirm, setHasTouchedConfirm] = useState(false);
 
-  const navigate = useNavigate();
   const passwordStrength = getPasswordStrength(password);
-  const bars = Array.from({ length: 5 }, (_, i) => i);
+  const passwordStrengthClass = PASSWORD_STRENGTH_CLASSES[passwordStrength] || '';
 
-  const barClass = ['', css.weak, css.fair, css.medium, css.good, css.strong][passwordStrength] || '';
+  const isPasswordMismatch = hasTouchedConfirm && password !== confirmPassword;
+
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
+  const handleConfirmChange = (e: ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value);
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
+    async (e: FormEvent) => {
       e.preventDefault();
-      setTouched(true);
-      setError('');
+      setHasTouchedConfirm(true);
+      setErrorMessage('');
 
       if (password !== confirmPassword) {
-        setError('Паролі не співпадають!');
+        setErrorMessage('Паролі не співпадають!');
         return;
       }
 
       try {
-        await api.post('/user', { email, password, username: email.split('@')[0] });
+        await api.post('/user', {
+          email,
+          password,
+          username: email.split('@')[0],
+        });
         navigate('/auth/login');
       } catch (err: any) {
         const message = err.response?.data?.message || 'Помилка реєстрації';
-        setError(message);
+        setErrorMessage(message);
       }
     },
     [email, password, confirmPassword, navigate]
@@ -63,7 +74,7 @@ export default function Register() {
             className={css['auth-input']}
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             required
           />
 
@@ -76,12 +87,12 @@ export default function Register() {
             className={css['auth-input']}
             placeholder="Пароль"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             required
           />
 
-          <div className={`${css['auth-password-strength']} ${barClass}`}>
-            {bars.map((i) => (
+          <div className={`${css['auth-password-strength']} ${passwordStrengthClass}`}>
+            {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className={`${css['auth-password-bar']} ${passwordStrength > i ? css.filled : ''}`} />
             ))}
           </div>
@@ -92,26 +103,25 @@ export default function Register() {
           <input
             id="confirm"
             type="password"
+            className={`${css['auth-input']} ${isPasswordMismatch ? css.error : ''}`}
             placeholder="Підтвердіть пароль"
-            className={`${css['auth-input']} ${touched && password !== confirmPassword ? css.error : ''}`}
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            onBlur={() => setTouched(true)}
+            onChange={handleConfirmChange}
+            onBlur={() => setHasTouchedConfirm(true)}
             required
           />
 
-          {touched && password !== confirmPassword && <div className={css['auth-error']}>Паролі не співпадають!</div>}
+          {isPasswordMismatch && <div className={css['auth-error']}>Паролі не співпадають!</div>}
+          {errorMessage && <div className={css['auth-error']}>{errorMessage}</div>}
 
-          {error && <div className={css['auth-error']}>{error}</div>}
-
-          <button className={`${css['auth-button']} button blue`} type="submit">
+          <button type="submit" className={`${css['auth-button']} button blue`}>
             Зареєструватися
           </button>
         </form>
 
         <div className={css['auth-link-row']}>
-          Вже є акаунт?
-          <Link className={css['auth-link']} to="/auth/login">
+          Вже є акаунт?{' '}
+          <Link to="/auth/login" className={css['auth-link']}>
             Увійти
           </Link>
         </div>
