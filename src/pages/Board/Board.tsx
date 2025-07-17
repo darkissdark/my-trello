@@ -81,7 +81,7 @@ export function Board() {
     } else if (!cardId && isOpen) {
       dispatch(closeModal());
     }
-  }, [cardId, lists, isOpen, selectedCard, dispatch]);
+  }, [cardId, card, lists, isOpen, selectedCard, dispatch]);
 
   const backgroundStyle = useMemo(() => {
     if (!board?.custom?.background) return {};

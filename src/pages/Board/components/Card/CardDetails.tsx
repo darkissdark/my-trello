@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ICard } from '../../../../common/interfaces/ICard';
@@ -18,81 +18,52 @@ interface CardDetailsProps {
 }
 
 export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardDetailsProps) {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const [title, setTitle] = useState(card.title);
   const [description, setDescription] = useState(card.description || '');
   const [cardUsers, setCardUsers] = useState<IUser[]>([]);
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const [showMoveCardDropdown, setShowMoveCardDropdown] = useState(false);
   const [lists, setLists] = useState<IList[]>([]);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const [showMoveCardDropdown, setShowMoveCardDropdown] = useState(false);
 
-  const currentUserId = currentUser?.id;
+  const isCurrentUserInCard = cardUsers.some((user) => user.id === currentUser?.id);
+
+  const handleClose = useCallback(() => {
+    dispatch(closeModal());
+    navigate(`/board/${boardId}`);
+  }, [dispatch, navigate, boardId]);
 
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (isEditingTitle) {
-          setTitle(card.title);
-          setIsEditingTitle(false);
-        }
-
-        if (isEditingDescription) {
-          setDescription(card.description || '');
-          setIsEditingDescription(false);
-        }
-
-        if (showMoveCardDropdown) {
-          setShowMoveCardDropdown(false);
-        }
-
-        if (!isEditingTitle && !isEditingDescription && !showMoveCardDropdown) {
-          dispatch(closeModal());
-          navigate(`/board/${boardId}`);
-        }
-      }
-    };
-
+    const handleEscape = (e: KeyboardEvent) => e.key === 'Escape' && handleClose();
     const handleClickOutside = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        dispatch(closeModal());
-        navigate(`/board/${boardId}`);
+        handleClose();
       }
     };
-
     document.addEventListener('keydown', handleEscape);
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [
-    boardId,
-    card.title,
-    card.description,
-    dispatch,
-    navigate,
-    isEditingTitle,
-    isEditingDescription,
-    showMoveCardDropdown,
-  ]);
+  }, [handleClose]);
 
   useEffect(() => {
     const fetchLists = async () => {
       try {
-        const response = await api.get(`/board/${boardId}`);
-        setLists(response.data.lists || []);
+        const res = await api.get(`/board/${boardId}`);
+        setLists(res.data.lists || []);
       } catch (error) {
         console.error('Error fetching lists:', error);
       }
     };
 
-    const fetchUsers = async () => {
-      if (card.users && card.users.length > 0 && currentUser) {
-        const usersData = card.users.map((userId) => ({
-          id: userId,
+    const fetchUsers = () => {
+      if (card.users?.length && currentUser) {
+        const usersData = card.users.map((id) => ({
+          id,
           email: currentUser.email || 'no email',
           username: currentUser.username || 'no username',
         }));
@@ -104,137 +75,49 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
     fetchUsers();
   }, [boardId, card.users, currentUser]);
 
-  const handleTitleUpdate = async () => {
-    if (title.trim() === card.title || !title.trim()) {
-      setTitle(card.title);
-      setIsEditingTitle(false);
-      return;
-    }
-
+  const updateCard = async (payload: Partial<ICard>) => {
     try {
-      const response = await api.put(`/board/${boardId}/card/${card.id}`, {
-        title: title.trim(),
-        description: card.description || '',
-        list_id: card.list_id,
+      const res = await api.put(`/board/${boardId}/card/${card.id}`, {
+        ...card,
+        ...payload,
       });
-
-      if (response.data.result === 'Updated') {
-        onCardUpdated();
-        setIsEditingTitle(false);
-      }
-    } catch (error) {
-      console.error('Error updating card title:', error);
-      setTitle(card.title);
-    }
-  };
-
-  const handleDescriptionUpdate = async () => {
-    if (description.trim() === card.description) {
-      setIsEditingDescription(false);
-      return;
-    }
-
-    try {
-      const response = await api.put(`/board/${boardId}/card/${card.id}`, {
-        title: card.title,
-        description: description.trim(),
-        list_id: card.list_id,
-      });
-
-      if (response.data.result === 'Updated') {
-        onCardUpdated();
-        setIsEditingDescription(false);
-      }
-    } catch (error) {
-      console.error('Error updating card description:', error);
-      setDescription(card.description || '');
-    }
-  };
-
-  const handleJoinCard = async () => {
-    if (!currentUser || cardUsers.some((user) => user.id === currentUser.id)) return;
-
-    try {
-      const response = await api.put(`/board/${boardId}/card/${card.id}/users`, {
-        add: [currentUser.id],
-        remove: [],
-      });
-
-      if (response.data.result === 'Updated') {
-        setCardUsers([...cardUsers, currentUser]);
+      if (res.data.result === 'Updated') {
         onCardUpdated();
       }
     } catch (error) {
-      console.error('Error joining card:', error);
-    }
-  };
-
-  const handleLeaveCard = async () => {
-    if (!currentUser || !cardUsers.some((user) => user.id === currentUser.id)) return;
-
-    try {
-      const response = await api.put(`/board/${boardId}/card/${card.id}/users`, {
-        add: [],
-        remove: [currentUser.id],
-      });
-
-      if (response.data.result === 'Updated') {
-        setCardUsers(cardUsers.filter((user) => user.id !== currentUser.id));
-        onCardUpdated();
-      }
-    } catch (error) {
-      console.error('Error leaving card:', error);
+      console.error('Error updating card:', error);
     }
   };
 
   const handleCopyCard = async () => {
-    console.log('Copying card:', card);
     try {
-      const response = await api.post(`/board/${boardId}/card`, {
+      const res = await api.post(`/board/${boardId}/card`, {
+        ...card,
         title: `${card.title} - Copy`,
-        list_id: card.list_id,
         position: card.position + 1,
-        description: card.description,
-        custom: card.custom,
       });
-
-      if (response.data.result === 'Created') {
+      if (res.data.result === 'Created') {
         onCardUpdated();
-        navigate(`/board/${boardId}`);
         iziToast.success({ title: 'Картку скопійовано', position: 'topRight' });
+        handleClose();
       }
     } catch (error) {
       console.error('Error copying card:', error);
     }
   };
 
-  const handleArchiveCard = async () => {
+  const handleMoveCard = async (listId: number) => {
     try {
-      const response = await api.delete(`/board/${boardId}/card/${card.id}`);
-
-      if (response.data.result === 'Deleted') {
-        onCardUpdated();
-        navigate(`/board/${boardId}`);
-        iziToast.success({ title: 'Картку архівовано', position: 'topRight' });
-      }
-    } catch (error) {
-      console.error('Error archiving card:', error);
-    }
-  };
-
-  const handleMoveCard = async (newListId: number) => {
-    try {
-      const response = await api.put(`/board/${boardId}/card`, [
+      const res = await api.put(`/board/${boardId}/card`, [
         {
           id: card.id,
-          list_id: newListId,
-          position: lists.find((list) => list.id === newListId)?.cards.length || 0,
+          list_id: listId,
+          position: lists.find((l) => l.id === listId)?.cards.length || 0,
         },
       ]);
-
-      if (response.data.result === 'Updated') {
+      if (res.data.result === 'Updated') {
         onCardUpdated();
-        dispatch(openModal({ ...card, list_id: newListId }));
+        dispatch(openModal({ ...card, list_id: listId }));
         iziToast.success({ title: 'Картку переміщено', position: 'topRight' });
       }
     } catch (error) {
@@ -243,9 +126,36 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
     setShowMoveCardDropdown(false);
   };
 
-  const handleClose = () => {
-    dispatch(closeModal());
-    navigate(`/board/${boardId}`);
+  const handleArchiveCard = async () => {
+    try {
+      const res = await api.delete(`/board/${boardId}/card/${card.id}`);
+      if (res.data.result === 'Deleted') {
+        onCardUpdated();
+        iziToast.success({ title: 'Картку архівовано', position: 'topRight' });
+        handleClose();
+      }
+    } catch (error) {
+      console.error('Error archiving card:', error);
+    }
+  };
+
+  const toggleCardMembership = async () => {
+    if (!currentUser) return;
+    const method = isCurrentUserInCard ? 'remove' : 'add';
+    try {
+      const res = await api.put(`/board/${boardId}/card/${card.id}/users`, {
+        add: method === 'add' ? [currentUser.id] : [],
+        remove: method === 'remove' ? [currentUser.id] : [],
+      });
+      if (res.data.result === 'Updated') {
+        setCardUsers((prev) =>
+          method === 'add' ? [...prev, currentUser] : prev.filter((user) => user.id !== currentUser.id)
+        );
+        onCardUpdated();
+      }
+    } catch (error) {
+      console.error(`Error ${method === 'add' ? 'joining' : 'leaving'} card:`, error);
+    }
   };
 
   return (
@@ -261,32 +171,26 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
                 as="textarea"
                 value={title}
                 onChange={setTitle}
-                onBlur={handleTitleUpdate}
-                onSubmit={handleTitleUpdate}
+                onBlur={() => updateCard({ title })}
+                onSubmit={() => updateCard({ title })}
                 placeholder="Назва картки"
-                autoFocus={false}
               />
             </div>
             <div className="card-details-scroll-wrapper">
               <div>
                 В колонці:{' '}
-                {lists.length === 0
-                  ? 'Завантаження...'
-                  : lists.find((list) => list.id === card.list_id)?.title || 'Невідомо'}
+                {lists.length ? lists.find((l) => l.id === card.list_id)?.title || 'Невідомо' : 'Завантаження...'}
               </div>
               <div className="card-details-participants">
                 <h3>Учасники</h3>
                 <div className="card-details-participant-list">
-                  {cardUsers.map((user) => (
-                    <div key={user.id} className="card-details-participant-avatar">
-                      {user.username.charAt(0).toUpperCase()}
+                  {cardUsers.map((u) => (
+                    <div key={u.id} className="card-details-participant-avatar">
+                      {u.username[0].toUpperCase()}
                     </div>
                   ))}
-                  <button
-                    className="card-details-join-button"
-                    onClick={cardUsers.some((user) => user.id === currentUserId) ? handleLeaveCard : handleJoinCard}
-                  >
-                    {cardUsers.some((user) => user.id === currentUserId) ? 'Покинути' : 'Приєднатися'}
+                  <button onClick={toggleCardMembership} className="card-details-join-button">
+                    {isCurrentUserInCard ? 'Покинути' : 'Приєднатися'}
                   </button>
                 </div>
               </div>
@@ -295,21 +199,20 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
                 <BoardNameInput
                   value={description}
                   onChange={setDescription}
-                  onBlur={handleDescriptionUpdate}
+                  onBlur={() => updateCard({ description })}
                   placeholder="Додайте опис..."
                   as="textarea"
-                  disableValidation={true}
+                  disableValidation
                 />
               </div>
             </div>
           </div>
-
           <div className="card-details-actions">
             <h3>Дії</h3>
             <button onClick={handleCopyCard} className="card-details-action-button">
               Копіювати
             </button>
-            {lists.filter((list) => list.id !== card.list_id).length > 0 && (
+            {lists.length > 1 && (
               <div className="card-details-move-button-wrapper">
                 <button
                   onClick={() => setShowMoveCardDropdown(!showMoveCardDropdown)}
@@ -320,10 +223,10 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
                 {showMoveCardDropdown && (
                   <div className="card-details-move-dropdown">
                     {lists
-                      .filter((list) => list.id !== card.list_id)
-                      .map((list) => (
-                        <button key={list.id} onClick={() => handleMoveCard(list.id)}>
-                          {list.title}
+                      .filter((l) => l.id !== card.list_id)
+                      .map((l) => (
+                        <button key={l.id} onClick={() => handleMoveCard(l.id)}>
+                          {l.title}
                         </button>
                       ))}
                   </div>
