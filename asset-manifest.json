@@ -1,35 +1,35 @@
 {
   "files": {
-    "main.css": "/my-trello/static/css/main.75446baa.css",
-    "main.js": "/my-trello/static/js/main.12f856f9.js",
+    "main.css": "/my-trello/static/css/main.d472e805.css",
+    "main.js": "/my-trello/static/js/main.2c193b5b.js",
     "static/css/571.5a911c7c.chunk.css": "/my-trello/static/css/571.5a911c7c.chunk.css",
     "static/js/571.9393a186.chunk.js": "/my-trello/static/js/571.9393a186.chunk.js",
     "static/css/213.5a911c7c.chunk.css": "/my-trello/static/css/213.5a911c7c.chunk.css",
     "static/js/213.35a2bc49.chunk.js": "/my-trello/static/js/213.35a2bc49.chunk.js",
     "static/js/499.e1975fde.chunk.js": "/my-trello/static/js/499.e1975fde.chunk.js",
     "static/css/193.2c57392a.chunk.css": "/my-trello/static/css/193.2c57392a.chunk.css",
-    "static/js/193.7cc5c276.chunk.js": "/my-trello/static/js/193.7cc5c276.chunk.js",
+    "static/js/193.f9746af1.chunk.js": "/my-trello/static/js/193.f9746af1.chunk.js",
     "static/js/668.e26dbe49.chunk.js": "/my-trello/static/js/668.e26dbe49.chunk.js",
     "static/js/903.5d2ee392.chunk.js": "/my-trello/static/js/903.5d2ee392.chunk.js",
     "static/js/654.6ce1ac27.chunk.js": "/my-trello/static/js/654.6ce1ac27.chunk.js",
     "static/js/453.ed3810f9.chunk.js": "/my-trello/static/js/453.ed3810f9.chunk.js",
     "index.html": "/my-trello/index.html",
-    "main.75446baa.css.map": "/my-trello/static/css/main.75446baa.css.map",
-    "main.12f856f9.js.map": "/my-trello/static/js/main.12f856f9.js.map",
+    "main.d472e805.css.map": "/my-trello/static/css/main.d472e805.css.map",
+    "main.2c193b5b.js.map": "/my-trello/static/js/main.2c193b5b.js.map",
     "571.5a911c7c.chunk.css.map": "/my-trello/static/css/571.5a911c7c.chunk.css.map",
     "571.9393a186.chunk.js.map": "/my-trello/static/js/571.9393a186.chunk.js.map",
     "213.5a911c7c.chunk.css.map": "/my-trello/static/css/213.5a911c7c.chunk.css.map",
     "213.35a2bc49.chunk.js.map": "/my-trello/static/js/213.35a2bc49.chunk.js.map",
     "499.e1975fde.chunk.js.map": "/my-trello/static/js/499.e1975fde.chunk.js.map",
     "193.2c57392a.chunk.css.map": "/my-trello/static/css/193.2c57392a.chunk.css.map",
-    "193.7cc5c276.chunk.js.map": "/my-trello/static/js/193.7cc5c276.chunk.js.map",
+    "193.f9746af1.chunk.js.map": "/my-trello/static/js/193.f9746af1.chunk.js.map",
     "668.e26dbe49.chunk.js.map": "/my-trello/static/js/668.e26dbe49.chunk.js.map",
     "903.5d2ee392.chunk.js.map": "/my-trello/static/js/903.5d2ee392.chunk.js.map",
     "654.6ce1ac27.chunk.js.map": "/my-trello/static/js/654.6ce1ac27.chunk.js.map",
     "453.ed3810f9.chunk.js.map": "/my-trello/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.75446baa.css",
-    "static/js/main.12f856f9.js"
+    "static/css/main.d472e805.css",
+    "static/js/main.2c193b5b.js"
   ]
 }
