@@ -66,9 +66,12 @@ export function Board() {
     fetchBoard(true);
   }, [fetchBoard]);
 
+  const card = useMemo(() => {
+    return lists.flatMap((list) => list.cards).find((card) => String(card.id) === String(cardId));
+  }, [lists, cardId]);
+
   useEffect(() => {
     if (cardId && lists.length > 0) {
-      const card = lists.flatMap((list) => list.cards).find((card) => String(card.id) === String(cardId));
       if (card && (!isOpen || !selectedCard || String(selectedCard.id) !== String(cardId))) {
         const listContainingCard = lists.find((list) => list.cards.some((c) => String(c.id) === String(cardId)));
         if (listContainingCard) {
@@ -108,7 +111,7 @@ export function Board() {
     try {
       const position = lists.length;
       await api.post(`/board/${boardId}/list`, { title: newListTitle, position });
-      fetchBoard();
+      await fetchBoard();
       setShowAddListModal(false);
       setNewListTitle('');
     } catch (error) {

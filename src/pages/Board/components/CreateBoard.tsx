@@ -18,9 +18,6 @@ export function CreateBoard({ onCardCreated }: CreateBoardProps) {
   const handleCreateBoard = async () => {
     const newBoard = {
       title: newBoardTitle,
-      custom: {
-        background: 'blue',
-      },
     };
 
     try {
