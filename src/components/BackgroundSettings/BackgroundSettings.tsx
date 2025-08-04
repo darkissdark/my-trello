@@ -57,7 +57,7 @@ export function BackgroundSettings({
         className={`${css.buttonAdditionalStyles} ${css.changeBackgroundButton}`}
         onClick={() => setShowModal(true)}
       >
-        Змінити фон
+        Change background
       </button>
 
       <LazyModal

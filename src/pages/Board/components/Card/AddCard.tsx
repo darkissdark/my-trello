@@ -37,7 +37,7 @@ export function AddCard({ listId, boardId, position, onCardAdded }: AddCardProps
   return (
     <>
       <button className={styles.listAddCard} onClick={() => setShowModal(true)}>
-        + Додати картку
+        + Add Card
       </button>
 
       <LazyModal

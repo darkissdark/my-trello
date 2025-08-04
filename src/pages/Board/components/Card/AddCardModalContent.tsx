@@ -20,11 +20,11 @@ export default function AddCardModalContent({
 }: AddCardModalContentProps) {
   return (
     <ModalActionContent
-      title="Нова картка"
-      primaryButtonText="Додати"
+      title="New Card"
+      primaryButtonText="Add"
       onPrimaryAction={handleAddCard}
       isPrimaryButtonDisabled={!isTitleValid}
-      secondaryButtonText="Скасувати"
+      secondaryButtonText="Cancel"
       onSecondaryAction={onClose}
     >
       <BoardNameInput
@@ -32,7 +32,7 @@ export default function AddCardModalContent({
         onChange={setCardTitle}
         onSubmit={handleAddCard}
         onValidationChange={setIsTitleValid}
-        placeholder="Назва картки"
+        placeholder="Card title"
         autoFocus
       />
     </ModalActionContent>

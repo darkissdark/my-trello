@@ -93,7 +93,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
         position: card.position + 1,
       });
       onCardUpdated();
-      iziToast.success({ title: 'Картку скопійовано', position: 'topRight' });
+      iziToast.success({ title: 'Card copied', position: 'topRight' });
       handleClose();
     } catch (error) {
       console.error('Error copying card:', error);
@@ -112,7 +112,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
       await boardService.moveCards(boardId, moveData);
       onCardUpdated();
       dispatch(openModal({ ...card, list_id: listId }));
-      iziToast.success({ title: 'Картку переміщено', position: 'topRight' });
+      iziToast.success({ title: 'Card moved', position: 'topRight' });
     } catch (error) {
       console.error('Error moving card:', error);
     }
@@ -123,7 +123,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
     try {
       await boardService.deleteCard(boardId, card.id);
       onCardUpdated();
-      iziToast.success({ title: 'Картку архівовано', position: 'topRight' });
+      iziToast.success({ title: 'Card archived', position: 'topRight' });
       handleClose();
     } catch (error) {
       console.error('Error archiving card:', error);
@@ -164,16 +164,16 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
                 onChange={setTitle}
                 onBlur={() => updateCard({ title })}
                 onSubmit={() => updateCard({ title })}
-                placeholder="Назва картки"
+                placeholder="Card title"
               />
             </div>
             <div className={styles.cardDetailsScrollWrapper}>
               <div>
-                В колонці:{' '}
-                {lists.length ? lists.find((l) => l.id === card.list_id)?.title || 'Невідомо' : 'Завантаження...'}
+                In column:{' '}
+                {lists.length ? lists.find((l) => l.id === card.list_id)?.title || 'Unknown' : 'Loading...'}
               </div>
               <div className={styles.cardDetailsParticipants}>
-                <h3>Учасники</h3>
+                <h3>Participants</h3>
                 <div className={styles.cardDetailsParticipantList}>
                   {cardUsers.map((u) => (
                     <div key={u.id} className={styles.cardDetailsParticipantAvatar}>
@@ -181,18 +181,18 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
                     </div>
                   ))}
                   <button onClick={toggleCardMembership} className={styles.cardDetailsJoinButton}>
-                    {isCurrentUserInCard ? 'Покинути' : 'Приєднатися'}
+                    {isCurrentUserInCard ? 'Leave' : 'Join'}
                   </button>
                 </div>
               </div>
               <div className={styles.cardDetailsDescription}>
-                <h3>Опис</h3>
+                <h3>Description</h3>
                 <BoardNameInput
                   value={description}
                   onChange={setDescription}
                   additionalClassName={styles.cardDetailsTitleInput}
                   onBlur={() => updateCard({ description })}
-                  placeholder="Додайте опис..."
+                  placeholder="Add a description..."
                   as="textarea"
                   disableValidation
                 />
@@ -200,9 +200,9 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
             </div>
           </div>
           <div className={styles.cardDetailsActions}>
-            <h3>Дії</h3>
+            <h3>Actions</h3>
             <button onClick={handleCopyCard} className={styles.cardDetailsActionButton}>
-              Копіювати
+              Copy
             </button>
             {lists.length > 1 && (
               <div className={styles.cardDetailsMoveButtonWrapper}>
@@ -210,7 +210,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
                   onClick={() => setShowMoveCardDropdown(!showMoveCardDropdown)}
                   className={styles.cardDetailsActionButton}
                 >
-                  Переміщення
+                  Move
                 </button>
                 {showMoveCardDropdown && (
                   <div className={styles.cardDetailsMoveDropdown}>
@@ -229,7 +229,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
               onClick={handleArchiveCard}
               className={`${styles.cardDetailsActionButton} ${styles.cardDetailsActionButtonArchive}`}
             >
-              Архівувати
+              Archive
             </button>
           </div>
         </div>

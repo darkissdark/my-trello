@@ -30,7 +30,7 @@ export const useAuth = () => {
         navigate('/');
         return { success: true };
       } catch (error: any) {
-        const message = error.response?.data?.message || 'Користувач з таким email або паролем не знайдений';
+        const message = error.response?.data?.message || 'User with this email or password not found';
         return { success: false, error: message };
       }
     },
@@ -59,7 +59,7 @@ export const useAuth = () => {
         navigate('/');
         return { success: true };
       } catch (error: any) {
-        const message = error.response?.data?.message || 'Помилка реєстрації';
+        const message = error.response?.data?.message || 'Registration error';
         return { success: false, error: message };
       }
     },

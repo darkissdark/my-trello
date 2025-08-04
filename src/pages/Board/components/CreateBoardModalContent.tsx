@@ -20,19 +20,19 @@ export default function CreateBoardModalContent({
 }: CreateBoardModalContentProps) {
   return (
     <ModalActionContent
-      title="Нова дошка"
-      primaryButtonText="Створити"
+      title="New Board"
+      primaryButtonText="Create"
       onPrimaryAction={handleCreateBoard}
       isPrimaryButtonDisabled={!isTitleValid}
-      secondaryButtonText="Скасувати"
+      secondaryButtonText="Cancel"
       onSecondaryAction={onClose}
     >
       <BoardNameInput
         value={newBoardTitle}
         onChange={setNewBoardTitle}
-        onValidationChange={setIsTitleValid}
         onSubmit={handleCreateBoard}
-        placeholder="Назва дошки"
+        onValidationChange={setIsTitleValid}
+        placeholder="Board title"
       />
     </ModalActionContent>
   );

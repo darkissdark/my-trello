@@ -15,7 +15,7 @@ const Loader = () => (
       color: '#333',
     }}
   >
-    Завантаження...
+    Loading...
   </div>
 );
 

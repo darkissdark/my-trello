@@ -28,7 +28,7 @@ export default function Register() {
     }
 
     const result = await handleRegister({ email, username, password });
-    
+
     if (!result.success) {
       setErrorMessage(result.error);
     }
@@ -37,7 +37,7 @@ export default function Register() {
   return (
     <div className={css.authWrap}>
       <div className={css.authContainer}>
-        <h1>Реєстрація</h1>
+        <h1>Register</h1>
         <form onSubmit={handleSubmit} className={css.authForm}>
           <div className={css.formGroup}>
             <label htmlFor="email">Email:</label>
@@ -51,7 +51,7 @@ export default function Register() {
             />
           </div>
           <div className={css.formGroup}>
-            <label htmlFor="username">Ім'я користувача:</label>
+            <label htmlFor="username">Username:</label>
             <input
               type="text"
               id="username"
@@ -62,7 +62,7 @@ export default function Register() {
             />
           </div>
           <div className={css.formGroup}>
-            <label htmlFor="password">Пароль:</label>
+            <label htmlFor="password">Password:</label>
             <input
               type="password"
               id="password"
@@ -85,11 +85,11 @@ export default function Register() {
           </div>
           {hasSubmitted && errorMessage && <div className={css.errorMessage}>{errorMessage}</div>}
           <button type="submit" className={css.submitButton}>
-            Зареєструватися
+            Register
           </button>
         </form>
         <p className={css.authLink}>
-          Вже є акаунт? <Link to="/auth/login">Увійти</Link>
+          Already have an account? <Link to="/auth/login">Login</Link>
         </p>
       </div>
     </div>

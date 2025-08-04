@@ -1,23 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
 
-export function useTitleValidation(value: string, onValidationChange?: (isValid: boolean) => void) {
+export function useTitleValidation(value: string | undefined, onValidationChange?: (isValid: boolean) => void) {
   const [error, setError] = useState('');
   const [touched, setTouched] = useState(false);
 
   const validate = useCallback(
-    (valueToValidate: string, force = false): boolean => {
-      if (!valueToValidate.trim()) {
+    (valueToValidate: string | undefined, force = false): boolean => {
+      if (!valueToValidate || !valueToValidate.trim()) {
         if (touched || force) {
-          setError('Назва не може бути порожньою');
+          setError('Title cannot be empty');
         } else {
           setError('');
         }
         return false;
       }
 
-      const regex = /^[a-zA-Zа-яА-ЯґҐєЄіІїЇ0-9 ._-]+$/;
+      const regex = /^[a-zA-Z0-9 ._-]+$/;
       if (!regex.test(valueToValidate)) {
-        setError('Назва може містити тільки літери, цифри, пробіли, тире, крапки та нижні підкреслення');
+        setError('Title can only contain letters, numbers, spaces, dashes, dots and underscores');
         return false;
       }
 

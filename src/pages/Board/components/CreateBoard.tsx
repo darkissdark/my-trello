@@ -33,7 +33,7 @@ export function CreateBoard({ onCardCreated }: CreateBoardProps) {
   return (
     <>
       <button className={`${styles.boardsCard} ${styles.boardsButton}`} onClick={() => setShowModal(true)}>
-        + Додати дошку
+        + Add Board
       </button>
 
       <LazyModal

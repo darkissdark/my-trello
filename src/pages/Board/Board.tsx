@@ -23,24 +23,20 @@ export function Board() {
   const isLoading = useSelector((state: RootState) => state.loading.isLoading);
   const { isOpen } = useSelector((state: RootState) => state.modal);
 
-  // Оновлюємо title коли board змінюється
   useEffect(() => {
     if (board) {
       setTitle(board.title);
     }
   }, [board]);
 
-  // Завантажуємо дошку при монтуванні
   useEffect(() => {
     fetchBoard(true);
   }, [fetchBoard]);
 
-  // Знаходимо картку за cardId
   const card = useMemo(() => {
     return lists.flatMap((list) => list.cards).find((card) => String(card.id) === String(cardId));
   }, [lists, cardId]);
 
-  // Відкриваємо модальне вікно картки якщо є cardId
   useEffect(() => {
     if (cardId && lists.length > 0) {
       if (card) {

@@ -21,7 +21,7 @@ export function Home() {
   return (
     <>
       <header>
-        <h1>Мої дошки</h1>
+        <h1>My Boards</h1>
       </header>
       {isLoading && !isOpen && <Loader />}
       {isAuthenticated && <LogoutButton />}

@@ -23,11 +23,11 @@ export default function BackgroundSettingsModalContent({
 }: BackgroundSettingsModalContentProps) {
   return (
     <ModalActionContent
-      title="Змінити фон"
-      primaryButtonText="Застосувати"
+      title="Change background"
+      primaryButtonText="Apply"
       onPrimaryAction={handleApplyBackground}
       isPrimaryButtonDisabled={!isUrlValid && !backgroundColor}
-      secondaryButtonText="Скасувати"
+      secondaryButtonText="Cancel"
       onSecondaryAction={onClose}
     >
       <ImageUrlInput imageUrl={imageUrl} isUrlValid={isUrlValid} onUrlChange={handleUrlChange} />

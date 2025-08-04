@@ -47,9 +47,9 @@ export const BoardContent = ({
             onListUpdated={onListUpdated}
           />
         ))}
-        
+
         <button className={styles.boardAddList} onClick={() => setShowAddListModal(true)}>
-          + Додати список
+          + Add List
         </button>
 
         <BackgroundSettings
@@ -57,9 +57,9 @@ export const BoardContent = ({
           currentImageUrl={currentBackgroundImage ?? ''}
           currentBackgroundColor={currentBackgroundColor ?? '#ffffff'}
         />
-        
-        <div 
-          className={styles.boardBackground} 
+
+        <div
+          className={styles.boardBackground}
           style={{
             backgroundImage: currentBackgroundImage ? `url(${currentBackgroundImage})` : undefined,
             backgroundSize: 'cover',
@@ -68,11 +68,7 @@ export const BoardContent = ({
         />
       </main>
 
-      <AddListModal
-        isOpen={showAddListModal}
-        onClose={() => setShowAddListModal(false)}
-        onAddList={handleAddList}
-      />
+      <AddListModal isOpen={showAddListModal} onClose={() => setShowAddListModal(false)} onAddList={handleAddList} />
     </>
   );
-}; 
+};

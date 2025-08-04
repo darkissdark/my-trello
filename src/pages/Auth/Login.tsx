@@ -19,7 +19,7 @@ export default function Login() {
     setErrorMessage('');
 
     const result = await handleLogin({ email, password });
-
+    
     if (!result.success) {
       setErrorMessage(result.error);
     }
@@ -28,7 +28,7 @@ export default function Login() {
   return (
     <div className={css.authWrap}>
       <div className={css.authContainer}>
-        <h1>Вхід</h1>
+        <h1>Login</h1>
         <form onSubmit={handleSubmit} className={css.authForm}>
           <div className={css.formGroup}>
             <label htmlFor="email">Email:</label>
@@ -42,7 +42,7 @@ export default function Login() {
             />
           </div>
           <div className={css.formGroup}>
-            <label htmlFor="password">Пароль:</label>
+            <label htmlFor="password">Password:</label>
             <input
               type="password"
               id="password"
@@ -54,11 +54,11 @@ export default function Login() {
           </div>
           {hasSubmitted && errorMessage && <div className={css.errorMessage}>{errorMessage}</div>}
           <button type="submit" className={css.submitButton}>
-            Увійти
+            Login
           </button>
         </form>
         <p className={css.authLink}>
-          Немає акаунту? <Link to="/auth/register">Зареєструватися</Link>
+          Don't have an account? <Link to="/auth/register">Register</Link>
         </p>
       </div>
     </div>
