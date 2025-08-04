@@ -77,7 +77,10 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
 
   const updateCard = async (payload: Partial<ICard>) => {
     try {
-      const cardData: UpdateCardData = payload;
+      const cardData: UpdateCardData = {
+        ...payload,
+        list_id: card.list_id,
+      };
       await boardService.updateCard(boardId, card.id, cardData);
       onCardUpdated();
     } catch (error) {
@@ -169,8 +172,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
             </div>
             <div className={styles.cardDetailsScrollWrapper}>
               <div>
-                In column:{' '}
-                {lists.length ? lists.find((l) => l.id === card.list_id)?.title || 'Unknown' : 'Loading...'}
+                In column: {lists.length ? lists.find((l) => l.id === card.list_id)?.title || 'Unknown' : 'Loading...'}
               </div>
               <div className={styles.cardDetailsParticipants}>
                 <h3>Participants</h3>
