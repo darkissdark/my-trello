@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.auth-container {
+.authContainer {
   background: #fff;
   border-radius: $border-radius-md;
   box-shadow: $shadow-card;
@@ -10,90 +10,75 @@
   margin: $spacing-lg;
 }
 
-.auth-wrap {
+.authWrap {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.auth-title {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: $spacing-lg;
+.authForm {
+  width: 100%;
+  margin-top: 15px;
 }
 
-.auth-label {
-  font-size: 1rem;
-  margin-bottom: $spacing-xs;
-  color: $color-text-secondary;
-  display: block;
-}
-
-.auth-input {
+.formGroup {
   margin-bottom: $spacing-md;
 }
 
-.auth-error {
+.formInput {
+  margin-top: 5px;
+  width: 100%;
+  padding: $spacing-sm;
+  border: 1px solid $color-border-light;
+  border-radius: $border-radius-sm;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.errorMessage {
   color: $color-error;
   font-size: 0.95rem;
   margin-bottom: $spacing-md;
   margin-top: -$spacing-sm;
 }
 
-.auth-password-strength {
-  display: flex;
-  gap: $spacing-xs;
-  margin-bottom: $spacing-md;
-  height: $spacing-sm;
-}
-
-.auth-password-bar {
-  flex: 1;
-  border-radius: 2px;
-  background: $color-border-light;
-  transition: background 0.3s;
-}
-
-.filled {
-  background: currentColor;
-}
-
-.auth-password-strength.weak {
-  color: rgb(229, 113, 113);
-}
-
-.auth-password-strength.fair {
-  color: #ffb74d;
-}
-
-.auth-password-strength.medium {
-  color: #fff176;
-}
-
-.auth-password-strength.good {
-  color: #81c784;
-}
-
-.auth-password-strength.strong {
-  color: #388e3c;
-}
-
-.auth-button {
+.submitButton {
   width: 100%;
+  padding: $spacing-sm;
+  background: $color-primary;
+  color: white;
+  border: none;
+  border-radius: $border-radius-sm;
+  font-size: 1rem;
   font-weight: 600;
-  margin-bottom: $spacing-md;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: darken($color-primary, 10%);
+  }
 }
 
-.auth-link-row {
+.authLink {
   text-align: center;
   color: $color-text-secondary;
   font-size: 1rem;
-}
+  margin-top: $spacing-md;
 
-.auth-link {
-  color: $color-primary;
-  text-decoration: underline;
-  font-weight: 500;
-  margin-left: $spacing-xs;
+  a {
+    color: $color-primary;
+    text-decoration: underline;
+    font-weight: 500;
+    margin-left: $spacing-xs;
+
+    &:hover {
+      color: darken($color-primary, 10%);
+    }
+  }
 }

@@ -1,0 +1,85 @@
+.addListModal {
+  h3 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    color: #333;
+  }
+}
+
+.formGroup {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #0079bf;
+    }
+
+    &.error {
+      border-color: #eb5a46;
+    }
+  }
+}
+
+.errorMessage {
+  color: #eb5a46;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  padding: 10px 16px;
+  background: #f4f5f7;
+  border: none;
+  border-radius: 6px;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+
+  &:hover {
+    background: #ebecf0;
+  }
+}
+
+.submitButton {
+  padding: 10px 16px;
+  background: #0079bf;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+
+  &:hover:not(:disabled) {
+    background: #026aa7;
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+}

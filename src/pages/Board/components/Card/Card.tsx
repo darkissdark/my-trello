@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import './card.scss';
+import styles from './Card.module.scss';
 import { ICard } from '../../../../common/interfaces/ICard';
 
 interface CardProps {
@@ -14,11 +14,11 @@ export function Card({ card, boardId, listId }: CardProps) {
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     const cardWithListId = { ...card, list_id: listId };
     e.dataTransfer.setData('text/plain', JSON.stringify(cardWithListId));
-    e.currentTarget.classList.add('card--dragging');
+    e.currentTarget.classList.add(styles.cardDragging);
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-    e.currentTarget.classList.remove('card--dragging');
+    e.currentTarget.classList.remove(styles.cardDragging);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -26,8 +26,8 @@ export function Card({ card, boardId, listId }: CardProps) {
   };
 
   return (
-    <div className="card" draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} onClick={handleCardClick}>
-      <p className="card__title">{card.title}</p>
+    <div className={styles.card} draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} onClick={handleCardClick}>
+      <p className={styles.cardTitle}>{card.title}</p>
     </div>
   );
 }

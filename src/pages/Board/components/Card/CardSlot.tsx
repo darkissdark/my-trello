@@ -1,4 +1,4 @@
-import './card.scss';
+import styles from './CardSlot.module.scss';
 
 interface CardSlotProps {
     position: number;
@@ -7,7 +7,7 @@ interface CardSlotProps {
 export function CardSlot({ position }: CardSlotProps) {
     return (
         <div
-            className="card card--slot"
+            className={styles.cardSlot}
             style={{ order: position }}
         />
     );

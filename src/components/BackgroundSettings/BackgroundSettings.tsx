@@ -53,7 +53,10 @@ export function BackgroundSettings({
 
   return (
     <>
-      <button className={`${css.buttonAdditionalStyles} button blue`} onClick={() => setShowModal(true)}>
+      <button
+        className={`${css.buttonAdditionalStyles} ${css.changeBackgroundButton}`}
+        onClick={() => setShowModal(true)}
+      >
         Змінити фон
       </button>
 

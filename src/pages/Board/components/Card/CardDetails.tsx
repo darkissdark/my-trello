@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ICard } from '../../../../common/interfaces/ICard';
-import api from '../../../../api/request';
-import './cardDetails.scss';
+import { boardService, UpdateCardData, MoveCardData, UpdateCardUsersData } from '../../../../api/services';
+import styles from './CardDetails.module.scss';
 import { IList } from '../../../../common/interfaces/IList';
 import { IUser } from '../../../../common/interfaces/IUser';
 import iziToast from 'izitoast';
@@ -53,8 +53,8 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
   useEffect(() => {
     const fetchLists = async () => {
       try {
-        const res = await api.get(`/board/${boardId}`);
-        setLists(res.data.lists || []);
+        const board = await boardService.getBoard(boardId);
+        setLists(board.lists || []);
       } catch (error) {
         console.error('Error fetching lists:', error);
       }
@@ -77,13 +77,9 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
 
   const updateCard = async (payload: Partial<ICard>) => {
     try {
-      const res = await api.put(`/board/${boardId}/card/${card.id}`, {
-        ...card,
-        ...payload,
-      });
-      if (res.data.result === 'Updated') {
-        onCardUpdated();
-      }
+      const cardData: UpdateCardData = payload;
+      await boardService.updateCard(boardId, card.id, cardData);
+      onCardUpdated();
     } catch (error) {
       console.error('Error updating card:', error);
     }
@@ -91,16 +87,14 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
 
   const handleCopyCard = async () => {
     try {
-      const res = await api.post(`/board/${boardId}/card`, {
+      await boardService.createCard(boardId, {
         ...card,
         title: `${card.title} - Copy`,
         position: card.position + 1,
       });
-      if (res.data.result === 'Created') {
-        onCardUpdated();
-        iziToast.success({ title: 'Картку скопійовано', position: 'topRight' });
-        handleClose();
-      }
+      onCardUpdated();
+      iziToast.success({ title: 'Картку скопійовано', position: 'topRight' });
+      handleClose();
     } catch (error) {
       console.error('Error copying card:', error);
     }
@@ -108,18 +102,17 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
 
   const handleMoveCard = async (listId: number) => {
     try {
-      const res = await api.put(`/board/${boardId}/card`, [
+      const moveData: MoveCardData[] = [
         {
           id: card.id,
           list_id: listId,
           position: lists.find((l) => l.id === listId)?.cards.length || 0,
         },
-      ]);
-      if (res.data.result === 'Updated') {
-        onCardUpdated();
-        dispatch(openModal({ ...card, list_id: listId }));
-        iziToast.success({ title: 'Картку переміщено', position: 'topRight' });
-      }
+      ];
+      await boardService.moveCards(boardId, moveData);
+      onCardUpdated();
+      dispatch(openModal({ ...card, list_id: listId }));
+      iziToast.success({ title: 'Картку переміщено', position: 'topRight' });
     } catch (error) {
       console.error('Error moving card:', error);
     }
@@ -128,12 +121,10 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
 
   const handleArchiveCard = async () => {
     try {
-      const res = await api.delete(`/board/${boardId}/card/${card.id}`);
-      if (res.data.result === 'Deleted') {
-        onCardUpdated();
-        iziToast.success({ title: 'Картку архівовано', position: 'topRight' });
-        handleClose();
-      }
+      await boardService.deleteCard(boardId, card.id);
+      onCardUpdated();
+      iziToast.success({ title: 'Картку архівовано', position: 'topRight' });
+      handleClose();
     } catch (error) {
       console.error('Error archiving card:', error);
     }
@@ -143,62 +134,63 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
     if (!currentUser) return;
     const method = isCurrentUserInCard ? 'remove' : 'add';
     try {
-      const res = await api.put(`/board/${boardId}/card/${card.id}/users`, {
+      const usersData: UpdateCardUsersData = {
         add: method === 'add' ? [currentUser.id] : [],
         remove: method === 'remove' ? [currentUser.id] : [],
-      });
-      if (res.data.result === 'Updated') {
-        setCardUsers((prev) =>
-          method === 'add' ? [...prev, currentUser] : prev.filter((user) => user.id !== currentUser.id)
-        );
-        onCardUpdated();
-      }
+      };
+      await boardService.updateCardUsers(boardId, card.id, usersData);
+      setCardUsers((prev) =>
+        method === 'add' ? [...prev, currentUser] : prev.filter((user) => user.id !== currentUser.id)
+      );
+      onCardUpdated();
     } catch (error) {
       console.error(`Error ${method === 'add' ? 'joining' : 'leaving'} card:`, error);
     }
   };
 
   return (
-    <div className="card-details-overlay">
-      <div className="card-details-modal" ref={modalRef}>
-        <button className="card-details-close" onClick={handleClose}>
+    <div className={styles.cardDetailsOverlay}>
+      <div className={styles.cardDetailsModal} ref={modalRef}>
+        <button className={styles.cardDetailsClose} onClick={handleClose}>
           ×
         </button>
-        <div className="mobile-scroll-wrapper">
-          <div className="card-details-content">
-            <div className="card-details-title">
+        <div className={styles.mobileScrollWrapper}>
+          <div className={styles.cardDetailsContent}>
+            <div className={styles.cardDetailsTitle}>
               <BoardNameInput
                 as="textarea"
                 value={title}
+                additionalClassName={styles.cardDetailsTitleInput}
                 onChange={setTitle}
                 onBlur={() => updateCard({ title })}
                 onSubmit={() => updateCard({ title })}
                 placeholder="Назва картки"
               />
             </div>
-            <div className="card-details-scroll-wrapper">
+            <div className={styles.cardDetailsScrollWrapper}>
               <div>
                 В колонці:{' '}
                 {lists.length ? lists.find((l) => l.id === card.list_id)?.title || 'Невідомо' : 'Завантаження...'}
               </div>
-              <div className="card-details-participants">
+              <div className={styles.cardDetailsParticipants}>
                 <h3>Учасники</h3>
-                <div className="card-details-participant-list">
+                <div className={styles.cardDetailsParticipantList}>
                   {cardUsers.map((u) => (
-                    <div key={u.id} className="card-details-participant-avatar">
+                    <div key={u.id} className={styles.cardDetailsParticipantAvatar}>
                       {u.username[0].toUpperCase()}
                     </div>
                   ))}
-                  <button onClick={toggleCardMembership} className="card-details-join-button">
+                  <button onClick={toggleCardMembership} className={styles.cardDetailsJoinButton}>
                     {isCurrentUserInCard ? 'Покинути' : 'Приєднатися'}
                   </button>
                 </div>
               </div>
-              <div className="card-details-description">
+              <div className={styles.cardDetailsDescription}>
                 <h3>Опис</h3>
                 <BoardNameInput
                   value={description}
                   onChange={setDescription}
+                  additionalClassName={styles.cardDetailsTitleInput}
                   onBlur={() => updateCard({ description })}
                   placeholder="Додайте опис..."
                   as="textarea"
@@ -207,21 +199,21 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
               </div>
             </div>
           </div>
-          <div className="card-details-actions">
+          <div className={styles.cardDetailsActions}>
             <h3>Дії</h3>
-            <button onClick={handleCopyCard} className="card-details-action-button">
+            <button onClick={handleCopyCard} className={styles.cardDetailsActionButton}>
               Копіювати
             </button>
             {lists.length > 1 && (
-              <div className="card-details-move-button-wrapper">
+              <div className={styles.cardDetailsMoveButtonWrapper}>
                 <button
                   onClick={() => setShowMoveCardDropdown(!showMoveCardDropdown)}
-                  className="card-details-action-button"
+                  className={styles.cardDetailsActionButton}
                 >
                   Переміщення
                 </button>
                 {showMoveCardDropdown && (
-                  <div className="card-details-move-dropdown">
+                  <div className={styles.cardDetailsMoveDropdown}>
                     {lists
                       .filter((l) => l.id !== card.list_id)
                       .map((l) => (
@@ -235,7 +227,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
             )}
             <button
               onClick={handleArchiveCard}
-              className="card-details-action-button card-details-action-button--archive"
+              className={`${styles.cardDetailsActionButton} ${styles.cardDetailsActionButtonArchive}`}
             >
               Архівувати
             </button>

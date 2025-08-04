@@ -1,0 +1,64 @@
+@import '../../../../styles/mixins';
+@import '../../../../styles/variables';
+
+.boardHeader {
+  display: flex;
+  background: linear-gradient(180deg, #fff9 0, #fff6 40%, #fff3 80%, #fff0);
+  padding: $spacing-xl $spacing-xl 0;
+
+  @include desktop {
+    padding-right: 220px;
+  }
+
+  @include large-desktop {
+    padding-right: 220px;
+  }
+
+  .boardBackLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-right: 16px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+      transform: translateX(-2px);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .headerTextAreaWrapper {
+    flex-grow: 1;
+  }
+  .headerTextArea:not(:focus):not(.error) {
+    border-color: #0000;
+  }
+  .headerTextArea {
+    background: none;
+    font-size: 2em;
+    font-weight: 600;
+    margin: -8px 0 0 -8px;
+    text-shadow: 1px 1px 5px #fff;
+    @include tablet {
+      margin: 50px 0 0 -56px;
+      width: calc(100% + 56px);
+      font-size: 1.5em;
+    }
+    @include mobile {
+      margin: 50px 0 0 -56px;
+      width: calc(100% + 56px);
+      font-size: 1.5em;
+    }
+  }
+}

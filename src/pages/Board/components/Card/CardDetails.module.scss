@@ -1,6 +1,6 @@
 @import '../../../../styles/mixins';
 
-.card-details-overlay {
+.cardDetailsOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,16 +13,19 @@
   padding-top: 5vh;
   z-index: 1000;
 
-  .input-board-name {
+  .cardDetailsTitleInput {
     margin: 0 10px 10px -10px;
+  }
+  .cardDetailsTitleInput:not(:focus):not(.error) {
+    border-color: #0000;
   }
 }
 
-.break-word {
+.breakWord {
   word-break: break-word;
 }
 
-.card-details-scroll-wrapper {
+.cardDetailsScrollWrapper {
   @include desktop {
     overflow-y: auto;
     padding: 0 10px;
@@ -35,7 +38,7 @@
   }
 }
 
-.card-details-modal {
+.cardDetailsModal {
   background: white;
   border-radius: 3px;
   width: 768px;
@@ -56,7 +59,7 @@
   }
 }
 
-.card-details-close {
+.cardDetailsClose {
   position: absolute;
   z-index: 1;
   top: 10px;
@@ -75,14 +78,14 @@
   }
 }
 
-.card-details-content {
+.cardDetailsContent {
   flex-grow: 1;
   font-size: 14px;
   display: flex;
   flex-direction: column;
 }
 
-.mobile-scroll-wrapper {
+.mobileScrollWrapper {
   flex-grow: 1;
   display: flex;
   @include tablet {
@@ -110,13 +113,13 @@
     margin-top: 40px;
   }
 }
-.input-board-element {
+
+.cardDetailsTitle {
   &:not(:focus):not(.error) {
     border-color: transparent;
   }
-}
-.card-details-title {
-  .input-board-element {
+
+  .cardDetailsTitleInput {
     font-weight: 600;
     font-size: 20px;
 
@@ -126,7 +129,7 @@
   }
 }
 
-.card-details-description {
+.cardDetailsDescription {
   h3 {
     font-size: 16px;
     color: #172b4d;
@@ -146,7 +149,7 @@
   }
 }
 
-.card-details-participants {
+.cardDetailsParticipants {
   margin-top: 15px;
   margin-bottom: 20px;
 
@@ -155,42 +158,42 @@
     color: #5e6c84;
     margin-bottom: 8px;
   }
+}
 
-  .card-details-participant-list {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.cardDetailsParticipantList {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-    .card-details-participant-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: #dfe1e6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: bold;
-      color: #172b4d;
-    }
+.cardDetailsParticipantAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #dfe1e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #172b4d;
+}
 
-    .card-details-join-button {
-      background-color: #0079bf;
-      color: #fff;
-      border: none;
-      border-radius: 3px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 14px;
+.cardDetailsJoinButton {
+  background-color: #0079bf;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
 
-      &:hover {
-        background-color: #026aa7;
-      }
-    }
+  &:hover {
+    background-color: #026aa7;
   }
 }
 
-.card-details-color-picker {
+.cardDetailsColorPicker {
   margin-bottom: 20px;
 
   h3 {
@@ -200,7 +203,7 @@
   }
 }
 
-.card-details-actions {
+.cardDetailsActions {
   min-width: 115px;
 
   @include desktop {
@@ -216,60 +219,61 @@
     color: #5e6c84;
     margin-bottom: 8px;
   }
+}
 
-  .card-details-action-button {
+.cardDetailsActionButton {
+  display: block;
+  width: 100%;
+  background-color: #dfe1e6;
+  color: #172b4d;
+  border-radius: 3px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #cdd2d7;
+  }
+}
+
+.cardDetailsActionButtonArchive {
+  background-color: #eb5a46;
+  color: #fff;
+
+  &:hover {
+    background-color: #d64736;
+  }
+}
+
+.cardDetailsMoveButtonWrapper {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.cardDetailsMoveDropdown {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #dfe1e6;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  width: 100%;
+  max-height: 110px;
+  overflow-y: auto;
+
+  button {
     display: block;
     width: 100%;
-    background-color: #dfe1e6;
-    color: #172b4d;
-    border-radius: 3px;
     padding: 8px 12px;
-    margin-bottom: 8px;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: #cdd2d7;
-    }
-
-    &--archive {
-      background-color: #eb5a46;
-      color: #fff;
-
-      &:hover {
-        background-color: #d64736;
-      }
-    }
-  }
-  .card-details-move-button-wrapper {
-    position: relative;
-    margin-bottom: 8px;
-
-    .card-details-move-dropdown {
-      position: absolute;
-      background-color: #fff;
-      border: 1px solid #dfe1e6;
-      border-radius: 3px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      z-index: 100;
-      width: 100%;
-      max-height: 110px;
-      overflow-y: auto;
-
-      button {
-        display: block;
-        width: 100%;
-        padding: 8px 12px;
-        background-color: transparent;
-        border: none;
-        text-align: left;
-        cursor: pointer;
-        font-size: 14px;
-
-        &:hover {
-          background-color: #f4f5f7;
-        }
-      }
+      background-color: #f4f5f7;
     }
   }
 }

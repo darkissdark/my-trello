@@ -1,14 +1,10 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { login } from '../../store/slices/authSlice';
-import api from '../../api/request';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import css from './auth.module.scss';
 
 export default function Login() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
+  const { handleLogin } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -22,79 +18,48 @@ export default function Login() {
     setHasSubmitted(true);
     setErrorMessage('');
 
-    try {
-      const { data } = await api.post('/login', { email, password });
+    const result = await handleLogin({ email, password });
 
-      const userRes = await api.get(`/user?emailOrUsername=${encodeURIComponent(email)}`, {
-        headers: { Authorization: `Bearer ${data.token}` },
-      });
-
-      const user = userRes.data[0];
-
-      dispatch(
-        login({
-          token: data.token,
-          refreshToken: data.refreshToken,
-          user: {
-            id: user.id,
-            email: user.email,
-            username: user.username,
-          },
-        })
-      );
-
-      navigate('/');
-    } catch (err: any) {
-      const message = err.response?.data?.message || 'Користувач з таким email або паролем не знайдений';
-      setErrorMessage(message);
+    if (!result.success) {
+      setErrorMessage(result.error);
     }
   };
 
   return (
-    <div className={css['auth-wrap']}>
-      <div className={css['auth-container']}>
-        <h2 className={css['auth-title']}>Вхід</h2>
-
-        <form onSubmit={handleSubmit} noValidate>
-          <label htmlFor="email" className={css['auth-label']}>
-            Email
-          </label>
-          <input
-            id="email"
-            className={css['auth-input']}
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={handleEmailChange}
-            required
-          />
-
-          <label htmlFor="password" className={css['auth-label']}>
-            Пароль
-          </label>
-          <input
-            id="password"
-            className={css['auth-input']}
-            type="password"
-            placeholder="Пароль"
-            value={password}
-            onChange={handlePasswordChange}
-            required
-          />
-
-          {hasSubmitted && errorMessage && <div className={css['auth-error']}>{errorMessage}</div>}
-
-          <button type="submit" className={`${css['auth-button']} button blue`}>
+    <div className={css.authWrap}>
+      <div className={css.authContainer}>
+        <h1>Вхід</h1>
+        <form onSubmit={handleSubmit} className={css.authForm}>
+          <div className={css.formGroup}>
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={handleEmailChange}
+              required
+              className={css.formInput}
+            />
+          </div>
+          <div className={css.formGroup}>
+            <label htmlFor="password">Пароль:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={handlePasswordChange}
+              required
+              className={css.formInput}
+            />
+          </div>
+          {hasSubmitted && errorMessage && <div className={css.errorMessage}>{errorMessage}</div>}
+          <button type="submit" className={css.submitButton}>
             Увійти
           </button>
         </form>
-
-        <div className={css['auth-link-row']}>
-          Вперше у нас?{' '}
-          <Link to="/auth/register" className={css['auth-link']}>
-            Зареєструватися
-          </Link>
-        </div>
+        <p className={css.authLink}>
+          Немає акаунту? <Link to="/auth/register">Зареєструватися</Link>
+        </p>
       </div>
     </div>
   );

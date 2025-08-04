@@ -1,0 +1,32 @@
+.card {
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 #091e4240;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.2s ease;
+  -webkit-user-select: none;
+  user-select: none;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.cardDragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #333;
+  word-wrap: break-word;
+}

@@ -1,0 +1,45 @@
+@import '../../../styles/mixins';
+@import '../../../styles/variables';
+
+.boardsCard {
+  background: $color-background;
+  border-radius: $border-radius-sm;
+  padding: $spacing-md;
+  display: flex;
+  align-items: center;
+  box-shadow: $shadow-card;
+  flex-shrink: 0;
+  width: calc((100% - $spacing-xl * 3) / 4);
+  position: relative;
+  overflow: hidden;
+  min-height: 62px;
+  word-break: break-all;
+  text-decoration: none;
+  color: inherit;
+
+  @include tablet {
+    width: calc((100% - $spacing-xl * 2) / 3);
+  }
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.boardsButton {
+  transition: $transition-default;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed $color-border-light;
+  background-color: $color-background-light;
+  box-shadow: none;
+
+  &:hover {
+    background-color: $color-background-light-hover;
+    border-color: $color-border-light-hover;
+  }
+
+  &:not(:hover) {
+    color: $color-text-secondary;
+  }
+}

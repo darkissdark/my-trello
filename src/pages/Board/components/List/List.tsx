@@ -4,8 +4,8 @@ import { Card } from '../Card/Card';
 import { CardSlot } from '../Card/CardSlot';
 import { AddCard } from '../Card/AddCard';
 import { BoardNameInput } from '../common/BoardNameInput';
-import api from '../../../../api/request';
-import './list.scss';
+import { boardService, UpdateListData, MoveCardData } from '../../../../api/services';
+import styles from './List.module.scss';
 
 interface ListProps {
   id: number;
@@ -25,7 +25,8 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
     if (listTitle.trim() === title) return;
 
     try {
-      await api.put(`/board/${boardId}/list/${id}`, { title: listTitle });
+      const listData: UpdateListData = { title: listTitle };
+      await boardService.updateList(boardId, id, listData);
       onListUpdated();
     } catch (error) {
       console.error('Error updating list title:', error);
@@ -42,7 +43,7 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
       return;
     }
 
-    const cardElements = container.getElementsByClassName('card');
+    const cardElements = container.getElementsByClassName(styles.card);
     for (let i = 0; i < cardElements.length; i++) {
       const cardMiddle = cardElements[i].getBoundingClientRect().top + cardElements[i].clientHeight / 2;
       if (e.clientY < cardMiddle) {
@@ -62,7 +63,7 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
       return;
     }
 
-    const updates = [
+    const updates: MoveCardData[] = [
       {
         id: cardData.id,
         list_id: id,
@@ -87,7 +88,7 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
     }
 
     try {
-      await api.put(`/board/${boardId}/card`, updates);
+      await boardService.moveCards(boardId, updates);
       onListUpdated();
     } catch (error) {
       console.error('Error updating card position:', error);
@@ -97,8 +98,9 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
   };
 
   return (
-    <section className="list">
+    <section className={styles.list}>
       <BoardNameInput
+        additionalClassName={styles.listTitle}
         as="textarea"
         value={listTitle}
         onChange={setListTitle}
@@ -107,7 +109,7 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
         onCancel={() => setListTitle(title)}
       />
 
-      <div className="list__cards" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+      <div className={styles.listCards} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
         {sortedCards.map((card, index) => (
           <div key={`card-container-${card.id}`}>
             {dragOverCardId === index && <CardSlot key={`slot-${index}`} position={index} />}

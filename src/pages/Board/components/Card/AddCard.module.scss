@@ -1,0 +1,12 @@
+.listAddCard {
+  align-self: flex-start;
+  border-radius: 3px;
+  color: #6b778c;
+  margin: 12px 0 0;
+  padding: 8px;
+  transition: all 0.2s ease;
+  &:hover {
+    background-color: rgba(9, 30, 66, 0.078);
+    color: #172b4d;
+  }
+}

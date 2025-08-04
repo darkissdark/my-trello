@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import api from '../../../api/request';
+import { boardService, CreateBoardData } from '../../../api/services';
 import { LazyModal } from '../../../components/Modal/LazyModal';
+import styles from './CreateBoard.module.scss';
 import React from 'react';
 
 const CreateBoardModalContent = React.lazy(() => import('./CreateBoardModalContent'));
@@ -13,15 +14,14 @@ export function CreateBoard({ onCardCreated }: CreateBoardProps) {
   const [showModal, setShowModal] = useState(false);
   const [newBoardTitle, setNewBoardTitle] = useState('');
   const [isTitleValid, setIsTitleValid] = useState(false);
-  const boardEndpoint = '/board';
 
   const handleCreateBoard = async () => {
-    const newBoard = {
+    const boardData: CreateBoardData = {
       title: newBoardTitle,
     };
 
     try {
-      await api.post(boardEndpoint, newBoard);
+      await boardService.createBoard(boardData);
       onCardCreated();
       setNewBoardTitle('');
       setShowModal(false);
@@ -32,7 +32,7 @@ export function CreateBoard({ onCardCreated }: CreateBoardProps) {
 
   return (
     <>
-      <button className="boards__button boards__card" onClick={() => setShowModal(true)}>
+      <button className={`${styles.boardsCard} ${styles.boardsButton}`} onClick={() => setShowModal(true)}>
         + Додати дошку
       </button>
 

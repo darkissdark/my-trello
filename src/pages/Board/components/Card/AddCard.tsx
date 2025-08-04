@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import api from '../../../../api/request';
+import { boardService, CreateCardData } from '../../../../api/services';
 import { LazyModal } from '../../../../components/Modal/LazyModal';
-import './card.scss';
+import styles from './AddCard.module.scss';
 import React from 'react';
 
 const AddCardModalContent = React.lazy(() => import('./AddCardModalContent'));
@@ -20,11 +20,12 @@ export function AddCard({ listId, boardId, position, onCardAdded }: AddCardProps
 
   const handleAddCard = async () => {
     try {
-      await api.post(`/board/${boardId}/card`, {
+      const cardData: CreateCardData = {
         title: cardTitle,
         list_id: listId,
         position,
-      });
+      };
+      await boardService.createCard(boardId, cardData);
       setCardTitle('');
       setShowModal(false);
       onCardAdded();
@@ -35,7 +36,7 @@ export function AddCard({ listId, boardId, position, onCardAdded }: AddCardProps
 
   return (
     <>
-      <button className="list__add-card" onClick={() => setShowModal(true)}>
+      <button className={styles.listAddCard} onClick={() => setShowModal(true)}>
         + Додати картку
       </button>
 

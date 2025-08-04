@@ -13,6 +13,8 @@ interface BoardNameInputProps {
   autoFocus?: boolean;
   as?: 'input' | 'textarea';
   disableValidation?: boolean;
+  additionalClassName?: string;
+  additionalClassNameWrapper?: string;
 }
 
 export function BoardNameInput({
@@ -26,6 +28,8 @@ export function BoardNameInput({
   autoFocus,
   as = 'input',
   disableValidation = false,
+  additionalClassName,
+  additionalClassNameWrapper,
 }: BoardNameInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const validation = useTitleValidation(value, onValidationChange);
@@ -76,7 +80,7 @@ export function BoardNameInput({
   };
 
   return (
-    <div className="input-board-name">
+    <div className={additionalClassNameWrapper}>
       {as === 'textarea' ? (
         <textarea
           ref={textareaRef}
@@ -84,10 +88,11 @@ export function BoardNameInput({
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
-          className={`${error ? 'error' : ''} input-board-element`}
+          className={`${error ? 'error' : ''} ${additionalClassName}`}
           placeholder={placeholder}
           autoFocus={autoFocus}
           rows={1}
+          name="textarea"
         />
       ) : (
         <input
@@ -96,9 +101,10 @@ export function BoardNameInput({
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
-          className={`${error ? 'error' : ''} input-board-element`}
+          className={`${error ? 'error' : ''} input-board-element ${additionalClassName}`}
           placeholder={placeholder}
           autoFocus={autoFocus}
+          name="input"
         />
       )}
       {!disableValidation && error && <div className={css.error}>{error}</div>}
