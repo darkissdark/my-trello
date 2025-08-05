@@ -46,7 +46,6 @@ textarea {
   resize: none;
   overflow: hidden;
 }
-
 input,
 textarea {
   width: 100%;
@@ -60,8 +59,12 @@ textarea {
     outline: none;
     border-color: $color-primary;
   }
+}
 
-  &.error {
+#root input,
+#root textarea {
+  &.error,
+  &.error:not(:focus) {
     border-color: $color-error;
 
     &:focus {

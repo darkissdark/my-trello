@@ -20,7 +20,7 @@ export function Home() {
 
   return (
     <>
-      <header>
+      <header className={styles.boardsHeader}>
         <h1>My Boards</h1>
       </header>
       {isLoading && !isOpen && <Loader />}
