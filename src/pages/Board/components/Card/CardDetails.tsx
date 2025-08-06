@@ -27,19 +27,46 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
   const [cardUsers, setCardUsers] = useState<IUser[]>([]);
   const [lists, setLists] = useState<IList[]>([]);
   const [showMoveCardDropdown, setShowMoveCardDropdown] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const isCurrentUserInCard = cardUsers.some((user) => user.id === currentUser?.id);
+
+  useEffect(() => {
+    const hasChanges = title !== card.title || description !== (card.description || '');
+    setHasUnsavedChanges(hasChanges);
+  }, [title, description, card.title, card.description]);
 
   const handleClose = useCallback(() => {
     dispatch(closeModal());
     navigate(`/board/${boardId}`);
   }, [dispatch, navigate, boardId]);
 
+  const handleCancelChanges = useCallback(() => {
+    setTitle(card.title);
+    setDescription(card.description || '');
+    setHasUnsavedChanges(false);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }, [card.title, card.description]);
+
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => e.key === 'Escape' && handleClose();
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (hasUnsavedChanges) {
+          handleCancelChanges();
+        } else {
+          handleClose();
+        }
+      }
+    };
     const handleClickOutside = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        handleClose();
+        if (hasUnsavedChanges) {
+          handleCancelChanges();
+        } else {
+          handleClose();
+        }
       }
     };
     document.addEventListener('keydown', handleEscape);
@@ -48,7 +75,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [handleClose]);
+  }, [handleClose, hasUnsavedChanges, handleCancelChanges]);
 
   useEffect(() => {
     const fetchLists = async () => {
@@ -83,6 +110,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
       };
       await boardService.updateCard(boardId, card.id, cardData);
       onCardUpdated();
+      setHasUnsavedChanges(false);
     } catch (error) {
       console.error('Error updating card:', error);
     }
