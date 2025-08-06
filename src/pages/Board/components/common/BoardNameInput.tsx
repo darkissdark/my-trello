@@ -58,11 +58,16 @@ export function BoardNameInput({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
-      if (as === 'input' && validate(value, true)) {
+      const trimmedValue = value.trim();
+      if (trimmedValue !== value) {
+        onChange(trimmedValue);
+      }
+      
+      if (as === 'input' && validate(trimmedValue, true)) {
         onSubmit?.();
       } else if (as === 'textarea' && !e.shiftKey) {
         e.preventDefault();
-        if (disableValidation || validate(value, true)) {
+        if (disableValidation || validate(trimmedValue, true)) {
           if (textareaRef.current) {
             textareaRef.current.blur();
           }
@@ -74,7 +79,11 @@ export function BoardNameInput({
   };
 
   const handleBlur = () => {
-    if (disableValidation || validate(value, true)) {
+    const trimmedValue = value.trim();
+    if (trimmedValue !== value) {
+      onChange(trimmedValue);
+    }
+    if (disableValidation || validate(trimmedValue, true)) {
       onBlur?.();
     }
   };
