@@ -30,14 +30,23 @@ export const useBoard = (boardId: string) => {
     async (boardData: UpdateBoardData) => {
       try {
         const updatedBoard = await boardService.updateBoard(boardId, boardData);
-        setBoard(updatedBoard);
-        return updatedBoard;
+
+        const finalBoard = {
+          ...updatedBoard,
+          custom: {
+            ...updatedBoard.custom,
+            background: updatedBoard.custom?.background || board?.custom?.background,
+          },
+        };
+
+        setBoard(finalBoard);
+        return finalBoard;
       } catch (error) {
         console.error('Error updating board:', error);
         throw error;
       }
     },
-    [boardId]
+    [boardId, board?.custom?.background]
   );
 
   const updateBoardTitle = useCallback(
@@ -54,8 +63,7 @@ export const useBoard = (boardId: string) => {
   const updateBoardBackground = useCallback(
     async (background: string[]) => {
       if (!board) return;
-      const updatedBoard = { ...board, custom: { ...board.custom, background } };
-      await updateBoard({ custom: updatedBoard.custom });
+      await updateBoard({ custom: { ...board.custom, background } });
     },
     [board, updateBoard]
   );
