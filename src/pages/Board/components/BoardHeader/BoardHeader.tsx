@@ -8,10 +8,11 @@ interface BoardHeaderProps {
   title: string;
   onTitleChange: (title: string) => void;
   onTitleUpdate: () => void;
+  onTitleCancel?: () => void;
   onValidationChange?: (isValid: boolean) => void;
 }
 
-export const BoardHeader = ({ title, onTitleChange, onTitleUpdate, onValidationChange }: BoardHeaderProps) => {
+export const BoardHeader = ({ title, onTitleChange, onTitleUpdate, onTitleCancel, onValidationChange }: BoardHeaderProps) => {
   return (
     <header className={styles.boardHeader}>
       <div>
@@ -27,6 +28,7 @@ export const BoardHeader = ({ title, onTitleChange, onTitleUpdate, onValidationC
         onChange={onTitleChange}
         onSubmit={onTitleUpdate}
         onBlur={onTitleUpdate}
+        onCancel={onTitleCancel}
         onValidationChange={onValidationChange}
       />
     </header>

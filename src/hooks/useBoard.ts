@@ -42,10 +42,11 @@ export const useBoard = (boardId: string) => {
 
   const updateBoardTitle = useCallback(
     async (title: string) => {
-      if (title.trim() === '' || board?.title === title.trim()) {
+      const trimmedTitle = title.trim();
+      if (trimmedTitle === '' || board?.title === trimmedTitle) {
         return;
       }
-      await updateBoard({ title });
+      await updateBoard({ title: trimmedTitle });
     },
     [board?.title, updateBoard]
   );
@@ -81,4 +82,4 @@ export const useBoard = (boardId: string) => {
     updateBoardBackground,
     createList,
   };
-}; 
+};

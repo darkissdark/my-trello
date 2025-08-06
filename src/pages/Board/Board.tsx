@@ -18,6 +18,7 @@ export function Board() {
   const { board, lists, fetchBoard, updateBoardTitle, updateBoardBackground, createList } = useBoard(boardId!);
 
   const [title, setTitle] = useState('');
+  const [originalTitle, setOriginalTitle] = useState('');
   const [isTitleValid, setIsTitleValid] = useState(true);
 
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -27,6 +28,7 @@ export function Board() {
   useEffect(() => {
     if (board && board.title) {
       setTitle(board.title);
+      setOriginalTitle(board.title);
     }
   }, [board]);
 
@@ -52,8 +54,19 @@ export function Board() {
   }, [cardId, card, lists, dispatch]);
 
   const handleTitleUpdate = async () => {
-    if (title.trim() && isTitleValid) {
-      await updateBoardTitle(title);
+    const trimmedTitle = title.trim();
+    if (trimmedTitle && isTitleValid) {
+      await updateBoardTitle(trimmedTitle);
+      setOriginalTitle(trimmedTitle);
+    } else if (!trimmedTitle) {
+      setTitle(originalTitle);
+    }
+  };
+
+  const handleTitleCancel = () => {
+    setTitle(originalTitle);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
     }
   };
 
@@ -69,10 +82,11 @@ export function Board() {
     <>
       {isLoading && !isOpen && <Loader />}
       {isAuthenticated && <LogoutButton />}
-      <BoardHeader 
-        title={title} 
-        onTitleChange={setTitle} 
+      <BoardHeader
+        title={title}
+        onTitleChange={setTitle}
         onTitleUpdate={handleTitleUpdate}
+        onTitleCancel={handleTitleCancel}
         onValidationChange={setIsTitleValid}
       />
 
