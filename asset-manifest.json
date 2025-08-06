@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/my-trello/static/css/main.1eca03e3.css",
-    "main.js": "/my-trello/static/js/main.b61acd59.js",
+    "main.js": "/my-trello/static/js/main.d8b38df8.js",
     "static/css/571.ec963323.chunk.css": "/my-trello/static/css/571.ec963323.chunk.css",
     "static/js/571.73a850c5.chunk.js": "/my-trello/static/js/571.73a850c5.chunk.js",
     "static/css/213.ec963323.chunk.css": "/my-trello/static/css/213.ec963323.chunk.css",
@@ -12,7 +12,7 @@
     "static/js/453.ed3810f9.chunk.js": "/my-trello/static/js/453.ed3810f9.chunk.js",
     "index.html": "/my-trello/index.html",
     "main.1eca03e3.css.map": "/my-trello/static/css/main.1eca03e3.css.map",
-    "main.b61acd59.js.map": "/my-trello/static/js/main.b61acd59.js.map",
+    "main.d8b38df8.js.map": "/my-trello/static/js/main.d8b38df8.js.map",
     "571.ec963323.chunk.css.map": "/my-trello/static/css/571.ec963323.chunk.css.map",
     "571.73a850c5.chunk.js.map": "/my-trello/static/js/571.73a850c5.chunk.js.map",
     "213.ec963323.chunk.css.map": "/my-trello/static/css/213.ec963323.chunk.css.map",
@@ -24,6 +24,6 @@
   },
   "entrypoints": [
     "static/css/main.1eca03e3.css",
-    "static/js/main.b61acd59.js"
+    "static/js/main.d8b38df8.js"
   ]
 }
