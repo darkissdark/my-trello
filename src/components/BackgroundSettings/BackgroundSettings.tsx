@@ -19,7 +19,7 @@ export function BackgroundSettings({
   const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [isUrlValid, setIsUrlValid] = useState(true);
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
+  const [backgroundColor, setBackgroundColor] = useState('');
 
   const validateUrl = (url: string): boolean => {
     try {

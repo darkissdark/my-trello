@@ -55,7 +55,7 @@ export const BoardContent = ({
         <BackgroundSettings
           onBackgroundChange={onBackgroundChange}
           currentImageUrl={currentBackgroundImage ?? ''}
-          currentBackgroundColor={currentBackgroundColor ?? '#ffffff'}
+          currentBackgroundColor={currentBackgroundColor ?? ''}
         />
 
         <div
@@ -64,6 +64,7 @@ export const BoardContent = ({
             backgroundImage: currentBackgroundImage ? `url(${currentBackgroundImage})` : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            backgroundColor: currentBackgroundColor,
           }}
         />
       </main>
