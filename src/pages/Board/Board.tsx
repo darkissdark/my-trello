@@ -72,6 +72,7 @@ export function Board() {
 
   const handleBackgroundChange = async (imageUrl: string[]) => {
     await updateBoardBackground(imageUrl);
+    await fetchBoard();
   };
 
   const handleAddList = async (listTitle: string) => {

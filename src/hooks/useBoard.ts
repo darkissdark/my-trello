@@ -35,7 +35,7 @@ export const useBoard = (boardId: string) => {
           ...updatedBoard,
           custom: {
             ...updatedBoard.custom,
-            background: updatedBoard.custom?.background || board?.custom?.background,
+            background: boardData.custom?.background || updatedBoard.custom?.background || board?.custom?.background,
           },
         };
 
@@ -63,7 +63,11 @@ export const useBoard = (boardId: string) => {
   const updateBoardBackground = useCallback(
     async (background: string[]) => {
       if (!board) return;
-      await updateBoard({ custom: { ...board.custom, background } });
+      const updatedBoard = await updateBoard({ custom: { ...board.custom, background } });
+      // Ensure the board state is updated with the new background
+      if (updatedBoard) {
+        setBoard(updatedBoard);
+      }
     },
     [board, updateBoard]
   );

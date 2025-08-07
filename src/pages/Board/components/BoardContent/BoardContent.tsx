@@ -59,13 +59,18 @@ export const BoardContent = ({
         />
 
         <div
+          key={`${currentBackgroundImage}-${currentBackgroundColor}`}
           className={styles.boardBackground}
           style={{
-            backgroundImage: currentBackgroundImage ? `url(${currentBackgroundImage})` : undefined,
+            backgroundImage: currentBackgroundImage
+              ? `url(${currentBackgroundImage})`
+              : `linear-gradient(180deg, #fff9 0, ${currentBackgroundColor} 40%, ${currentBackgroundColor} 80%, ${currentBackgroundColor})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            backgroundColor: currentBackgroundColor,
+            backgroundRepeat: 'no-repeat',
           }}
+
+          // background: linear-gradient(180deg, #fff9 0, #fff6 40%, #fff3 80%, #fff0);
         />
       </main>
 

@@ -4,7 +4,7 @@
 .boardHeader {
   display: flex;
   background: linear-gradient(180deg, #fff9 0, #fff6 40%, #fff3 80%, #fff0);
-  padding: $spacing-xl $spacing-xl 0;
+  padding: $spacing-xl;
 
   @include desktop {
     padding-right: 270px;
@@ -40,6 +40,7 @@
 
   .headerTextAreaWrapper {
     flex-grow: 1;
+    padding-top: 5px;
   }
   .headerTextArea:not(:focus):not(.error) {
     border-color: #0000;

@@ -26,7 +26,7 @@ export default function BackgroundSettingsModalContent({
       title="Change background"
       primaryButtonText="Apply"
       onPrimaryAction={handleApplyBackground}
-      isPrimaryButtonDisabled={!isUrlValid && !backgroundColor}
+      isPrimaryButtonDisabled={Boolean(imageUrl && !isUrlValid)}
       secondaryButtonText="Cancel"
       onSecondaryAction={onClose}
     >
