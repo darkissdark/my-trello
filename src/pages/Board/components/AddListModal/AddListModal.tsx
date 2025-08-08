@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { LazyModal } from '../../../../components/Modal/LazyModal';
 import { BoardNameInput } from '../common/BoardNameInput';
 import ModalActionContent from '../../../../components/Modal/ModalActionContent';
-import styles from './AddListModal.module.scss';
 
 interface AddListModalProps {
   isOpen: boolean;

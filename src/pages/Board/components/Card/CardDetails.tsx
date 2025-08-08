@@ -98,7 +98,7 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser, onClose
 
     fetchLists();
     fetchUsers();
-  }, [boardId, card.users]);
+  }, [boardId, card.users, currentUser]);
 
   // Update cardUsers when currentUser changes
   useEffect(() => {
