@@ -13,9 +13,10 @@ interface ListProps {
   title: string;
   cards: ICard[];
   onListUpdated: () => void;
+  onOpenCard: (card: ICard) => void;
 }
 
-export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) => {
+export const List = ({ id, boardId, title, cards, onListUpdated, onOpenCard }: ListProps) => {
   const [listTitle, setListTitle] = useState(title);
   const [dragOverCardId, setDragOverCardId] = useState<number | null>(null);
 
@@ -113,7 +114,7 @@ export const List = ({ id, boardId, title, cards, onListUpdated }: ListProps) =>
         {sortedCards.map((card, index) => (
           <div key={`card-container-${card.id}`}>
             {dragOverCardId === index && <CardSlot key={`slot-${index}`} position={index} />}
-            <Card key={card.id} card={card} boardId={boardId} listId={id} />
+            <Card key={card.id} card={card} boardId={boardId} listId={id} onOpenCard={onOpenCard} />
           </div>
         ))}
         {dragOverCardId === cards.length && <CardSlot key={`slot-${cards.length}`} position={cards.length} />}

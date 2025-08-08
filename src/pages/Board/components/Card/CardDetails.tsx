@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { ICard } from '../../../../common/interfaces/ICard';
 import { boardService, UpdateCardData, MoveCardData, UpdateCardUsersData } from '../../../../api/services';
 import styles from './CardDetails.module.scss';
 import { IList } from '../../../../common/interfaces/IList';
 import { IUser } from '../../../../common/interfaces/IUser';
 import iziToast from 'izitoast';
-import { closeModal, openModal } from '../../../../store/slices/modalSlice';
 import { BoardNameInput } from '../common/BoardNameInput';
 
 interface CardDetailsProps {
@@ -15,10 +13,10 @@ interface CardDetailsProps {
   boardId: string;
   onCardUpdated: () => void;
   currentUser: IUser | null;
+  onClose: () => void;
 }
 
-export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardDetailsProps) {
-  const dispatch = useDispatch();
+export function CardDetails({ card, boardId, onCardUpdated, currentUser, onClose }: CardDetailsProps) {
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -37,9 +35,9 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
   }, [title, description, card.title, card.description]);
 
   const handleClose = useCallback(() => {
-    dispatch(closeModal());
+    onClose();
     navigate(`/board/${boardId}`);
-  }, [dispatch, navigate, boardId]);
+  }, [onClose, navigate, boardId]);
 
   const handleCancelChanges = useCallback(() => {
     setTitle(card.title);
@@ -100,7 +98,20 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
 
     fetchLists();
     fetchUsers();
-  }, [boardId, card.users, currentUser]);
+  }, [boardId, card.users]);
+
+  // Update cardUsers when currentUser changes
+  useEffect(() => {
+    if (currentUser && card.users?.length) {
+      setCardUsers((prev) =>
+        prev.map((user) =>
+          user.id === currentUser.id
+            ? { ...user, email: currentUser.email || 'no email', username: currentUser.username || 'no username' }
+            : user
+        )
+      );
+    }
+  }, [currentUser, card.users]);
 
   const updateCard = async (payload: Partial<ICard>) => {
     try {
@@ -142,7 +153,6 @@ export function CardDetails({ card, boardId, onCardUpdated, currentUser }: CardD
       ];
       await boardService.moveCards(boardId, moveData);
       onCardUpdated();
-      dispatch(openModal({ ...card, list_id: listId }));
       iziToast.success({ title: 'Card moved', position: 'topRight' });
     } catch (error) {
       console.error('Error moving card:', error);

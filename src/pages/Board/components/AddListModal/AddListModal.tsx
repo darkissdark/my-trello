@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { LazyModal } from '../../../../components/Modal/LazyModal';
-import { useTitleValidation } from '../../../../hooks/useTitleValidation';
+import { BoardNameInput } from '../common/BoardNameInput';
+import ModalActionContent from '../../../../components/Modal/ModalActionContent';
 import styles from './AddListModal.module.scss';
 
 interface AddListModalProps {
@@ -12,11 +13,8 @@ interface AddListModalProps {
 export const AddListModal = ({ isOpen, onClose, onAddList }: AddListModalProps) => {
   const [listTitle, setListTitle] = useState('');
   const [isTitleValid, setIsTitleValid] = useState(false);
-  const { error, validate } = useTitleValidation(listTitle, setIsTitleValid);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleSubmit = async () => {
     if (!isTitleValid || listTitle.trim() === '') {
       return;
     }
@@ -40,34 +38,24 @@ export const AddListModal = ({ isOpen, onClose, onAddList }: AddListModalProps) 
       isOpen={isOpen}
       onClose={handleCancel}
       component={() => (
-        <div className={styles.addListModal}>
-          <h3>Додати новий список</h3>
-          <form onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-              <label htmlFor="listTitle">Назва списку:</label>
-              <input
-                type="text"
-                id="listTitle"
-                value={listTitle}
-                onChange={(e) => setListTitle(e.target.value)}
-                onBlur={() => validate(listTitle, true)}
-                className={error ? styles.error : ''}
-                placeholder="Введіть назву списку"
-                required
-              />
-              {error && <div className={styles.errorMessage}>{error}</div>}
-            </div>
-            <div className={styles.actions}>
-              <button type="button" onClick={handleCancel} className={styles.cancelButton}>
-                Скасувати
-              </button>
-              <button type="submit" disabled={!isTitleValid} className={styles.submitButton}>
-                Додати
-              </button>
-            </div>
-          </form>
-        </div>
+        <ModalActionContent
+          title="Add New List"
+          primaryButtonText="Add"
+          onPrimaryAction={handleSubmit}
+          isPrimaryButtonDisabled={!isTitleValid}
+          secondaryButtonText="Cancel"
+          onSecondaryAction={handleCancel}
+        >
+          <BoardNameInput
+            value={listTitle}
+            onChange={setListTitle}
+            onSubmit={handleSubmit}
+            onValidationChange={setIsTitleValid}
+            placeholder="Enter list name"
+            autoFocus
+          />
+        </ModalActionContent>
       )}
     />
   );
-}; 
+};

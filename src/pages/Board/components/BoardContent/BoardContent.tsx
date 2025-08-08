@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IList } from '../../../../common/interfaces/IList';
+import { ICard } from '../../../../common/interfaces/ICard';
 import { List } from '../List/List';
 import { BackgroundSettings } from '../../../../components/BackgroundSettings/BackgroundSettings';
 import { AddListModal } from '../AddListModal/AddListModal';
@@ -13,6 +14,7 @@ interface BoardContentProps {
   currentBackgroundImage?: string;
   currentBackgroundColor?: string;
   onAddList: (listTitle: string) => void;
+  onOpenCard: (card: ICard) => void;
 }
 
 export const BoardContent = ({
@@ -23,6 +25,7 @@ export const BoardContent = ({
   currentBackgroundImage,
   currentBackgroundColor,
   onAddList,
+  onOpenCard,
 }: BoardContentProps) => {
   const [showAddListModal, setShowAddListModal] = useState(false);
 
@@ -45,6 +48,7 @@ export const BoardContent = ({
             title={list.title}
             cards={list.cards}
             onListUpdated={onListUpdated}
+            onOpenCard={onOpenCard}
           />
         ))}
 

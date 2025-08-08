@@ -1,29 +1,29 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { openModal, closeModal } from '../../store/slices/modalSlice';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useBoard } from '../../hooks/useBoard';
 import { BoardHeader } from './components/BoardHeader/BoardHeader';
 import { BoardContent } from './components/BoardContent/BoardContent';
 import { CardModal } from './components/CardModal/CardModal';
 import Loader from '../../components/Loader';
 import { LogoutButton } from '../../components/LogoutButton/LogoutButton';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { ICard } from '../../common/interfaces/ICard';
 
 export function Board() {
   const { boardId, cardId } = useParams();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { board, lists, fetchBoard, updateBoardTitle, updateBoardBackground, createList } = useBoard(boardId!);
 
   const [title, setTitle] = useState('');
   const [originalTitle, setOriginalTitle] = useState('');
   const [isTitleValid, setIsTitleValid] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<ICard | null>(null);
 
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const isLoading = useSelector((state: RootState) => state.loading.isLoading);
-  const { isOpen } = useSelector((state: RootState) => state.modal);
 
   useEffect(() => {
     if (board && board.title) {
@@ -45,13 +45,15 @@ export function Board() {
       if (card) {
         const listContainingCard = lists.find((list) => list.cards.some((c) => String(c.id) === String(cardId)));
         if (listContainingCard) {
-          dispatch(openModal({ ...card, list_id: listContainingCard.id }));
+          setSelectedCard({ ...card, list_id: listContainingCard.id });
+          setIsModalOpen(true);
         }
       }
     } else {
-      dispatch(closeModal());
+      setIsModalOpen(false);
+      setSelectedCard(null);
     }
-  }, [cardId, card, lists, dispatch]);
+  }, [cardId, card, lists]);
 
   const handleTitleUpdate = async () => {
     const trimmedTitle = title.trim();
@@ -81,7 +83,7 @@ export function Board() {
 
   return (
     <>
-      {isLoading && !isOpen && <Loader />}
+      {isLoading && !isModalOpen && <Loader />}
       {isAuthenticated && <LogoutButton />}
       <BoardHeader
         title={title}
@@ -99,9 +101,24 @@ export function Board() {
         currentBackgroundImage={board?.custom?.background?.[0]}
         currentBackgroundColor={board?.custom?.background?.[1]}
         onAddList={handleAddList}
+        onOpenCard={(card) => {
+          setSelectedCard(card);
+          setIsModalOpen(true);
+          navigate(`/board/${boardId}/card/${card.id}`);
+        }}
       />
 
-      <CardModal boardId={boardId!} onCardUpdated={fetchBoard} />
+      <CardModal
+        boardId={boardId!}
+        onCardUpdated={fetchBoard}
+        isOpen={isModalOpen}
+        selectedCard={selectedCard}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedCard(null);
+          navigate(`/board/${boardId}`);
+        }}
+      />
     </>
   );
 }

@@ -12,7 +12,6 @@ export function Home() {
   const { boards, fetchBoards } = useBoards();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const isLoading = useSelector((state: RootState) => state.loading.isLoading);
-  const { isOpen } = useSelector((state: RootState) => state.modal);
 
   useEffect(() => {
     fetchBoards(true);
@@ -23,7 +22,7 @@ export function Home() {
       <header className={styles.boardsHeader}>
         <h1>My Boards</h1>
       </header>
-      {isLoading && !isOpen && <Loader />}
+      {isLoading && <Loader />}
       {isAuthenticated && <LogoutButton />}
       <main className={styles.boards}>
         {boards?.length > 0 &&
