@@ -29,8 +29,11 @@ export function SortableList({
   const isTargetList = dragOverInfo?.targetListId === listId;
   const targetPosition = dragOverInfo?.position ?? -1;
 
+  const shouldShowPreview =
+    isTargetList && dragOverInfo && dragOverInfo.cardId && !cards.some((card) => card.id === dragOverInfo.cardId);
+
   const renderCards = () => {
-    if (!isTargetList || targetPosition === -1) {
+    if (!shouldShowPreview) {
       return sortedCards.map((card) => (
         <Card
           key={card.id}
