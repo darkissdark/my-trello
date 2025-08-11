@@ -32,11 +32,7 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
     const target = findTarget(lists, overId);
     if (!target) return;
 
-    if (activeCard.list_id !== target.listId) {
-      await moveCardBetweenLists(activeId, target.listId, target.position, lists, boardId, onListUpdated);
-    } else {
-      await reorderCardsInList(activeId, overId, activeCard.list_id, lists, boardId, onListUpdated);
-    }
+    await moveCard(activeId, target.listId, target.position, lists, boardId, onListUpdated);
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -65,10 +61,7 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
       return;
     }
 
-    if (activeCard.list_id !== target.listId) {
-      await moveCardBetweenLists(activeId, target.listId, target.position, lists, boardId, onListUpdated);
-    }
-
+    await moveCard(activeId, target.listId, target.position, lists, boardId, onListUpdated);
     setActiveCard(null);
   };
 
@@ -106,7 +99,7 @@ const findTarget = (lists: IList[], overId: number | string): { listId: number; 
   return null;
 };
 
-const moveCardBetweenLists = async (
+const moveCard = async (
   cardId: number,
   targetListId: number,
   position: number,
@@ -117,59 +110,60 @@ const moveCardBetweenLists = async (
   const targetList = lists.find((l) => l.id === targetListId);
   if (!targetList) return;
 
-  try {
-    const updates: MoveCardData[] = [{ id: cardId, list_id: targetListId, position }];
+  let currentListId: number | undefined;
+  let currentPosition: number | undefined;
 
-    targetList.cards.forEach((card, index) => {
-      if (index >= position) {
-        updates.push({ id: card.id, list_id: targetListId, position: index + 1 });
-      }
-    });
-
-    await boardService.moveCards(boardId, updates);
-    onListUpdated();
-  } catch (error) {
-    console.error('Error moving card to new list:', error);
+  for (const list of lists) {
+    const cardIndex = list.cards.findIndex((c) => c.id === cardId);
+    if (cardIndex !== -1) {
+      currentListId = list.id;
+      currentPosition = cardIndex;
+      break;
+    }
   }
-};
 
-const reorderCardsInList = async (
-  activeId: number,
-  overId: number,
-  listId: number,
-  lists: IList[],
-  boardId: string,
-  onListUpdated: () => void
-) => {
-  const currentList = lists.find((l) => l.id === listId);
-  if (!currentList) return;
-
-  const oldIndex = currentList.cards.findIndex((c) => c.id === activeId);
-  const newIndex = currentList.cards.findIndex((c) => c.id === overId);
-
-  if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
+  if (currentListId === undefined || currentPosition === undefined) return;
 
   try {
-    const updates: MoveCardData[] = [{ id: activeId, list_id: listId, position: newIndex }];
+    const updates: MoveCardData[] = [];
 
-    currentList.cards.forEach((card, index) => {
-      if (card.id !== activeId) {
-        let newPosition = index;
-        if (oldIndex < newIndex && index > oldIndex && index <= newIndex) {
-          newPosition = index - 1;
-        } else if (oldIndex > newIndex && index >= newIndex && index < oldIndex) {
-          newPosition = index + 1;
-        }
+    if (currentListId === targetListId) {
+      const oldIndex = currentPosition;
+      const newIndex = position;
 
-        if (newPosition !== index) {
-          updates.push({ id: card.id, list_id: listId, position: newPosition });
-        }
+      if (oldIndex !== newIndex) {
+        updates.push({ id: cardId, list_id: targetListId, position: newIndex });
+
+        targetList.cards.forEach((card, index) => {
+          if (card.id !== cardId) {
+            let newPosition = index;
+            if (oldIndex < newIndex && index > oldIndex && index <= newIndex) {
+              newPosition = index - 1;
+            } else if (oldIndex > newIndex && index >= newIndex && index < oldIndex) {
+              newPosition = index + 1;
+            }
+
+            if (newPosition !== index) {
+              updates.push({ id: card.id, list_id: targetListId, position: newPosition });
+            }
+          }
+        });
       }
-    });
+    } else {
+      updates.push({ id: cardId, list_id: targetListId, position });
 
-    await boardService.moveCards(boardId, updates);
-    onListUpdated();
+      targetList.cards.forEach((card, index) => {
+        if (index >= position) {
+          updates.push({ id: card.id, list_id: targetListId, position: index + 1 });
+        }
+      });
+    }
+
+    if (updates.length > 0) {
+      await boardService.moveCards(boardId, updates);
+      onListUpdated();
+    }
   } catch (error) {
-    console.error('Error reordering cards:', error);
+    console.error('Error moving card:', error);
   }
 };
