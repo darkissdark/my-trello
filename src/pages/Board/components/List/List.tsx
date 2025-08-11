@@ -12,11 +12,16 @@ interface ListProps {
   boardId: string;
   title: string;
   cards: ICard[];
+  dragOverInfo: {
+    cardId: number;
+    targetListId: number;
+    position: number;
+  } | null;
   onListUpdated: () => void;
   onOpenCard: (card: ICard) => void;
 }
 
-export const List = ({ id, boardId, title, cards, onListUpdated, onOpenCard }: ListProps) => {
+export const List = ({ id, boardId, title, cards, dragOverInfo, onListUpdated, onOpenCard }: ListProps) => {
   const [listTitle, setListTitle] = useState(title);
   const { setNodeRef } = useDroppable({
     id: `list-${id}`,
@@ -52,6 +57,7 @@ export const List = ({ id, boardId, title, cards, onListUpdated, onOpenCard }: L
         cards={sortedCards}
         listId={id}
         boardId={boardId}
+        dragOverInfo={dragOverInfo}
         onOpenCard={onOpenCard}
         onCardsReordered={onListUpdated}
       />

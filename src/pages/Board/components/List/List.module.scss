@@ -23,6 +23,36 @@
   padding: 12px 4px 0;
 }
 
+.cardPreview {
+  margin: 4px 0;
+  min-height: 60px;
+  border: 2px dashed #0079bf;
+  border-radius: 6px;
+  background: rgba(0, 121, 191, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0.8;
+  
+  &:hover {
+    opacity: 1;
+    background: rgba(0, 121, 191, 0.1);
+    border-color: #005a8b;
+  }
+}
+
+.cardPreviewContent {
+  text-align: center;
+  color: #0079bf;
+  font-size: 0.875rem;
+  font-weight: 500;
+  
+  p {
+    margin: 0;
+  }
+}
+
 .listTitle {
   font-size: 16px;
   font-weight: 600;

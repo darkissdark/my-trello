@@ -61,6 +61,7 @@ export const BoardContent = ({
               boardId={boardId}
               title={list.title}
               cards={list.cards}
+              dragOverInfo={dragOverInfo}
               onListUpdated={onListUpdated}
               onOpenCard={onOpenCard}
             />
