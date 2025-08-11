@@ -12,14 +12,7 @@ interface CardProps {
 }
 
 export function Card({ card, boardId, listId, onOpenCard, onCardMoved }: CardProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card.id,
     data: {
       type: 'card',
@@ -49,4 +42,4 @@ export function Card({ card, boardId, listId, onOpenCard, onCardMoved }: CardPro
       <p className={styles.cardTitle}>{card.title}</p>
     </div>
   );
-} 
+}

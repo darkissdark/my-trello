@@ -18,7 +18,7 @@ const instance = axios.create({
   baseURL: api.baseURL,
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    Accept: 'application/json',
   },
 });
 

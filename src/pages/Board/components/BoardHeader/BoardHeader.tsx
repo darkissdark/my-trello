@@ -12,7 +12,13 @@ interface BoardHeaderProps {
   onValidationChange?: (isValid: boolean) => void;
 }
 
-export const BoardHeader = ({ title, onTitleChange, onTitleUpdate, onTitleCancel, onValidationChange }: BoardHeaderProps) => {
+export const BoardHeader = ({
+  title,
+  onTitleChange,
+  onTitleUpdate,
+  onTitleCancel,
+  onValidationChange,
+}: BoardHeaderProps) => {
   return (
     <header className={styles.boardHeader}>
       <div>

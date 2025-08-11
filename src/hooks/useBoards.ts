@@ -23,23 +23,20 @@ export const useBoards = () => {
     [dispatch]
   );
 
-  const createBoard = useCallback(
-    async (boardData: CreateBoardData) => {
-      try {
-        const newBoard = await boardService.createBoard(boardData);
-        setBoards((prev) => [...prev, newBoard]);
-        return newBoard;
-      } catch (error) {
-        console.error('Error creating board:', error);
-        throw error;
-      }
-    },
-    []
-  );
+  const createBoard = useCallback(async (boardData: CreateBoardData) => {
+    try {
+      const newBoard = await boardService.createBoard(boardData);
+      setBoards((prev) => [...prev, newBoard]);
+      return newBoard;
+    } catch (error) {
+      console.error('Error creating board:', error);
+      throw error;
+    }
+  }, []);
 
   return {
     boards,
     fetchBoards,
     createBoard,
   };
-}; 
+};

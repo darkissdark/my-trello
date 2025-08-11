@@ -10,9 +10,4 @@ export type {
   MoveCardData,
   UpdateCardUsersData,
 } from './boardService';
-export type {
-  LoginData,
-  RegisterData,
-  AuthResponse,
-  UserResponse,
-} from './authService'; 
+export type { LoginData, RegisterData, AuthResponse, UserResponse } from './authService';

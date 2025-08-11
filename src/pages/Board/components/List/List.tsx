@@ -5,7 +5,7 @@ import { SortableList } from './SortableList';
 import { AddCard } from '../Card/AddCard';
 import { BoardNameInput } from '../common/BoardNameInput';
 import { boardService, UpdateListData } from '../../../../api/services';
-import styles from './List.module.scss';  
+import styles from './List.module.scss';
 
 interface ListProps {
   id: number;
@@ -48,14 +48,13 @@ export const List = ({ id, boardId, title, cards, onListUpdated, onOpenCard }: L
         onCancel={() => setListTitle(title)}
       />
 
-      
       <SortableList
-          cards={sortedCards}
-          listId={id}
-          boardId={boardId}
-          onOpenCard={onOpenCard}
-          onCardsReordered={onListUpdated}
-        />
+        cards={sortedCards}
+        listId={id}
+        boardId={boardId}
+        onOpenCard={onOpenCard}
+        onCardsReordered={onListUpdated}
+      />
 
       <AddCard listId={id} boardId={boardId} position={cards.length} onCardAdded={onListUpdated} />
     </section>

@@ -62,7 +62,7 @@ export function BoardNameInput({
       if (trimmedValue !== value) {
         onChange(trimmedValue);
       }
-      
+
       if (as === 'input' && validate(trimmedValue, true)) {
         onSubmit?.();
       } else if (as === 'textarea' && !e.shiftKey) {

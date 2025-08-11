@@ -6,25 +6,25 @@ $breakpoint-xl: 1200px;
 
 // Media queries
 @mixin mobile {
-    @media (max-width: #{$breakpoint-sm - 1px}) {
-        @content;
-    }
+  @media (max-width: #{$breakpoint-sm - 1px}) {
+    @content;
+  }
 }
 
 @mixin tablet {
-    @media (min-width: #{$breakpoint-sm}) and (max-width: #{$breakpoint-md - 1px}) {
-        @content;
-    }
+  @media (min-width: #{$breakpoint-sm}) and (max-width: #{$breakpoint-md - 1px}) {
+    @content;
+  }
 }
 
 @mixin desktop {
-    @media (min-width: #{$breakpoint-md}) and (max-width: #{$breakpoint-lg - 1px}) {
-        @content;
-    }
+  @media (min-width: #{$breakpoint-md}) and (max-width: #{$breakpoint-lg - 1px}) {
+    @content;
+  }
 }
 
 @mixin large-desktop {
-    @media (min-width: #{$breakpoint-lg}) {
-        @content;
-    }
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
 }

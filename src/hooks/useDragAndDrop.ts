@@ -10,7 +10,7 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     for (const list of lists) {
-      const card = list.cards.find(c => c.id === active.id);
+      const card = list.cards.find((c) => c.id === active.id);
       if (card) {
         setActiveCard(card);
         break;
@@ -82,7 +82,7 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
 
 const findCardInLists = (lists: IList[], cardId: number): ICard | undefined => {
   for (const list of lists) {
-    const card = list.cards.find(c => c.id === cardId);
+    const card = list.cards.find((c) => c.id === cardId);
     if (card) return card;
   }
   return undefined;
@@ -91,15 +91,15 @@ const findCardInLists = (lists: IList[], cardId: number): ICard | undefined => {
 const findTarget = (lists: IList[], overId: number | string): { listId: number; position: number } | null => {
   if (overId.toString().startsWith('list-')) {
     const listId = parseInt(overId.toString().replace('list-', ''));
-    const list = lists.find(l => l.id === listId);
+    const list = lists.find((l) => l.id === listId);
     if (list) {
       return { listId, position: list.cards.length };
     }
   } else {
     for (const list of lists) {
-      const card = list.cards.find(c => c.id === overId);
+      const card = list.cards.find((c) => c.id === overId);
       if (card) {
-        return { listId: list.id, position: list.cards.findIndex(c => c.id === overId) };
+        return { listId: list.id, position: list.cards.findIndex((c) => c.id === overId) };
       }
     }
   }
@@ -114,13 +114,11 @@ const moveCardBetweenLists = async (
   boardId: string,
   onListUpdated: () => void
 ) => {
-  const targetList = lists.find(l => l.id === targetListId);
+  const targetList = lists.find((l) => l.id === targetListId);
   if (!targetList) return;
 
   try {
-    const updates: MoveCardData[] = [
-      { id: cardId, list_id: targetListId, position },
-    ];
+    const updates: MoveCardData[] = [{ id: cardId, list_id: targetListId, position }];
 
     targetList.cards.forEach((card, index) => {
       if (index >= position) {
@@ -143,18 +141,16 @@ const reorderCardsInList = async (
   boardId: string,
   onListUpdated: () => void
 ) => {
-  const currentList = lists.find(l => l.id === listId);
+  const currentList = lists.find((l) => l.id === listId);
   if (!currentList) return;
 
-  const oldIndex = currentList.cards.findIndex(c => c.id === activeId);
-  const newIndex = currentList.cards.findIndex(c => c.id === overId);
+  const oldIndex = currentList.cards.findIndex((c) => c.id === activeId);
+  const newIndex = currentList.cards.findIndex((c) => c.id === overId);
 
   if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
 
   try {
-    const updates: MoveCardData[] = [
-      { id: activeId, list_id: listId, position: newIndex },
-    ];
+    const updates: MoveCardData[] = [{ id: activeId, list_id: listId, position: newIndex }];
 
     currentList.cards.forEach((card, index) => {
       if (card.id !== activeId) {
@@ -164,7 +160,7 @@ const reorderCardsInList = async (
         } else if (oldIndex > newIndex && index >= newIndex && index < oldIndex) {
           newPosition = index + 1;
         }
-        
+
         if (newPosition !== index) {
           updates.push({ id: card.id, list_id: listId, position: newPosition });
         }
@@ -176,4 +172,4 @@ const reorderCardsInList = async (
   } catch (error) {
     console.error('Error reordering cards:', error);
   }
-}; 
+};
