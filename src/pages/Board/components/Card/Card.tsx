@@ -5,13 +5,11 @@ import { ICard } from '../../../../common/interfaces/ICard';
 
 interface CardProps {
   card: ICard;
-  boardId: string;
   listId: number;
   onOpenCard: (card: ICard) => void;
-  onCardMoved?: () => void;
 }
 
-export function Card({ card, boardId, listId, onOpenCard, onCardMoved }: CardProps) {
+export function Card({ card, listId, onOpenCard }: CardProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card.id,
     data: {

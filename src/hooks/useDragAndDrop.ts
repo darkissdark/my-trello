@@ -30,14 +30,13 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
       return;
     }
 
-    const activeId = active.id as number;
-    const overId = over.id as number;
+    const activeId = +active.id;
+    const overId = +over.id;
     if (activeId === overId) return;
 
     const target = findTarget(lists, overId);
     if (!target) return;
 
-    // Зберігаємо інформацію про перетягування для оптимістичного оновлення
     setDragOverInfo({
       cardId: activeId,
       targetListId: target.listId,
@@ -48,7 +47,6 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
-    // Очищаємо стан перетягування
     setDragOverInfo(null);
 
     if (!over) {
@@ -56,8 +54,8 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
       return;
     }
 
-    const activeId = active.id as number;
-    const overId = over.id as number;
+    const activeId = +active.id;
+    const overId = +over.id;
     if (activeId === overId) {
       setActiveCard(null);
       return;
@@ -75,7 +73,6 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
       return;
     }
 
-    // Виконуємо запит тільки коли перетягування закінчено
     await moveCard(activeId, target.listId, target.position, lists, boardId, onListUpdated);
     setActiveCard(null);
   };

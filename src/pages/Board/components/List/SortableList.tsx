@@ -6,24 +6,15 @@ import styles from './List.module.scss';
 interface SortableListProps {
   cards: ICard[];
   listId: number;
-  boardId: string;
   dragOverInfo: {
     cardId: number;
     targetListId: number;
     position: number;
   } | null;
   onOpenCard: (card: ICard) => void;
-  onCardsReordered: () => void;
 }
 
-export function SortableList({
-  cards,
-  listId,
-  boardId,
-  dragOverInfo,
-  onOpenCard,
-  onCardsReordered,
-}: SortableListProps) {
+export function SortableList({ cards, listId, dragOverInfo, onOpenCard }: SortableListProps) {
   const sortedCards = cards.toSorted((a, b) => a.position - b.position);
 
   const isTargetList = dragOverInfo?.targetListId === listId;
@@ -34,32 +25,14 @@ export function SortableList({
 
   const renderCards = () => {
     if (!shouldShowPreview) {
-      return sortedCards.map((card) => (
-        <Card
-          key={card.id}
-          card={card}
-          boardId={boardId}
-          listId={listId}
-          onOpenCard={onOpenCard}
-          onCardMoved={onCardsReordered}
-        />
-      ));
+      return sortedCards.map((card) => <Card key={card.id} card={card} listId={listId} onOpenCard={onOpenCard} />);
     }
 
     const result = [];
 
     for (let i = 0; i < targetPosition && i < sortedCards.length; i++) {
       const card = sortedCards[i];
-      result.push(
-        <Card
-          key={card.id}
-          card={card}
-          boardId={boardId}
-          listId={listId}
-          onOpenCard={onOpenCard}
-          onCardMoved={onCardsReordered}
-        />
-      );
+      result.push(<Card key={card.id} card={card} listId={listId} onOpenCard={onOpenCard} />);
     }
 
     result.push(
@@ -72,16 +45,7 @@ export function SortableList({
 
     for (let i = targetPosition; i < sortedCards.length; i++) {
       const card = sortedCards[i];
-      result.push(
-        <Card
-          key={card.id}
-          card={card}
-          boardId={boardId}
-          listId={listId}
-          onOpenCard={onOpenCard}
-          onCardMoved={onCardsReordered}
-        />
-      );
+      result.push(<Card key={card.id} card={card} listId={listId} onOpenCard={onOpenCard} />);
     }
 
     return result;

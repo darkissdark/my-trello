@@ -53,14 +53,7 @@ export const List = ({ id, boardId, title, cards, dragOverInfo, onListUpdated, o
         onCancel={() => setListTitle(title)}
       />
 
-      <SortableList
-        cards={sortedCards}
-        listId={id}
-        boardId={boardId}
-        dragOverInfo={dragOverInfo}
-        onOpenCard={onOpenCard}
-        onCardsReordered={onListUpdated}
-      />
+      <SortableList cards={sortedCards} listId={id} dragOverInfo={dragOverInfo} onOpenCard={onOpenCard} />
 
       <AddCard listId={id} boardId={boardId} position={cards.length} onCardAdded={onListUpdated} />
     </section>
