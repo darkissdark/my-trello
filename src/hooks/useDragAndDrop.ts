@@ -6,6 +6,11 @@ import { boardService, MoveCardData } from '../api/services';
 
 export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: () => void) => {
   const [activeCard, setActiveCard] = useState<ICard | null>(null);
+  const [dragOverInfo, setDragOverInfo] = useState<{
+    cardId: number;
+    targetListId: number;
+    position: number;
+  } | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -20,23 +25,32 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
 
   const handleDragOver = async (event: DragOverEvent) => {
     const { active, over } = event;
-    if (!over) return;
+    if (!over) {
+      setDragOverInfo(null);
+      return;
+    }
 
     const activeId = active.id as number;
     const overId = over.id as number;
     if (activeId === overId) return;
 
-    const activeCard = findCardInLists(lists, activeId);
-    if (!activeCard) return;
-
     const target = findTarget(lists, overId);
     if (!target) return;
 
-    await moveCard(activeId, target.listId, target.position, lists, boardId, onListUpdated);
+    // Зберігаємо інформацію про перетягування для оптимістичного оновлення
+    setDragOverInfo({
+      cardId: activeId,
+      targetListId: target.listId,
+      position: target.position,
+    });
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
+
+    // Очищаємо стан перетягування
+    setDragOverInfo(null);
+
     if (!over) {
       setActiveCard(null);
       return;
@@ -61,12 +75,14 @@ export const useDragAndDrop = (lists: IList[], boardId: string, onListUpdated: (
       return;
     }
 
+    // Виконуємо запит тільки коли перетягування закінчено
     await moveCard(activeId, target.listId, target.position, lists, boardId, onListUpdated);
     setActiveCard(null);
   };
 
   return {
     activeCard,
+    dragOverInfo,
     handleDragStart,
     handleDragOver,
     handleDragEnd,

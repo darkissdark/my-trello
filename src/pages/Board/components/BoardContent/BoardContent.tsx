@@ -30,7 +30,11 @@ export const BoardContent = ({
   onOpenCard,
 }: BoardContentProps) => {
   const [showAddListModal, setShowAddListModal] = useState(false);
-  const { activeCard, handleDragStart, handleDragOver, handleDragEnd } = useDragAndDrop(lists, boardId, onListUpdated);
+  const { activeCard, dragOverInfo, handleDragStart, handleDragOver, handleDragEnd } = useDragAndDrop(
+    lists,
+    boardId,
+    onListUpdated
+  );
 
   const handleAddList = async (listTitle: string) => {
     try {
@@ -44,6 +48,7 @@ export const BoardContent = ({
     <>
       <DragDropContext
         activeCard={activeCard}
+        dragOverInfo={dragOverInfo}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}

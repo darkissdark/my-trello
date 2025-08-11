@@ -6,12 +6,24 @@ import styles from './BoardContent.module.scss';
 interface DragDropContextProps {
   children: React.ReactNode;
   activeCard: ICard | null;
+  dragOverInfo: {
+    cardId: number;
+    targetListId: number;
+    position: number;
+  } | null;
   onDragStart: (event: any) => void;
   onDragOver: (event: any) => void;
   onDragEnd: (event: any) => void;
 }
 
-export const DragDropContext = ({ children, activeCard, onDragStart, onDragOver, onDragEnd }: DragDropContextProps) => {
+export const DragDropContext = ({
+  children,
+  activeCard,
+  dragOverInfo,
+  onDragStart,
+  onDragOver,
+  onDragEnd,
+}: DragDropContextProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
