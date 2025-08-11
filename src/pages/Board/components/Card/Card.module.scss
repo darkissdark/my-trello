@@ -7,6 +7,7 @@
   transition: all 0.2s ease;
   -webkit-user-select: none;
   user-select: none;
+  position: relative;
 
   &:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -20,7 +21,6 @@
 
 .cardDragging {
   opacity: 0.5;
-  transform: rotate(5deg);
 }
 
 .cardTitle {

@@ -1,11 +1,11 @@
 import { useState, useCallback } from 'react';
+import { useDroppable } from '@dnd-kit/core';
 import { ICard } from '../../../../common/interfaces/ICard';
-import { Card } from '../Card/Card';
-import { CardSlot } from '../Card/CardSlot';
+import { SortableList } from './SortableList';
 import { AddCard } from '../Card/AddCard';
 import { BoardNameInput } from '../common/BoardNameInput';
-import { boardService, UpdateListData, MoveCardData } from '../../../../api/services';
-import styles from './List.module.scss';
+import { boardService, UpdateListData } from '../../../../api/services';
+import styles from './List.module.scss';  
 
 interface ListProps {
   id: number;
@@ -18,7 +18,9 @@ interface ListProps {
 
 export const List = ({ id, boardId, title, cards, onListUpdated, onOpenCard }: ListProps) => {
   const [listTitle, setListTitle] = useState(title);
-  const [dragOverCardId, setDragOverCardId] = useState<number | null>(null);
+  const { setNodeRef } = useDroppable({
+    id: `list-${id}`,
+  });
 
   const sortedCards = cards.toSorted((a, b) => a.position - b.position);
 
@@ -34,72 +36,8 @@ export const List = ({ id, boardId, title, cards, onListUpdated, onOpenCard }: L
     }
   }, [listTitle, title, boardId, id, onListUpdated]);
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const container = e.currentTarget;
-    const y = e.clientY - container.getBoundingClientRect().top;
-
-    if (y > container.clientHeight - 50) {
-      setDragOverCardId(cards.length);
-      return;
-    }
-
-    const cardElements = container.getElementsByClassName(styles.card);
-    for (let i = 0; i < cardElements.length; i++) {
-      const cardMiddle = cardElements[i].getBoundingClientRect().top + cardElements[i].clientHeight / 2;
-      if (e.clientY < cardMiddle) {
-        setDragOverCardId(i);
-        break;
-      }
-    }
-  };
-
-  const handleDragLeave = () => setDragOverCardId(null);
-
-  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const cardData = JSON.parse(e.dataTransfer.getData('text/plain')) as ICard;
-
-    if (cardData.list_id === id && dragOverCardId === null) {
-      return;
-    }
-
-    const updates: MoveCardData[] = [
-      {
-        id: cardData.id,
-        list_id: id,
-        position: dragOverCardId ?? cards.length,
-      },
-    ];
-
-    if (cardData.list_id === id) {
-      const oldPos = cardData.position;
-      const newPos = dragOverCardId ?? cards.length;
-
-      cards.forEach((card) => {
-        if (card.id !== cardData.id) {
-          const pos = card.position;
-          if (oldPos < newPos && pos > oldPos && pos <= newPos) {
-            updates.push({ id: card.id, list_id: id, position: pos - 1 });
-          } else if (oldPos > newPos && pos >= newPos && pos < oldPos) {
-            updates.push({ id: card.id, list_id: id, position: pos + 1 });
-          }
-        }
-      });
-    }
-
-    try {
-      await boardService.moveCards(boardId, updates);
-      onListUpdated();
-    } catch (error) {
-      console.error('Error updating card position:', error);
-    } finally {
-      setDragOverCardId(null);
-    }
-  };
-
   return (
-    <section className={styles.list}>
+    <section ref={setNodeRef} className={styles.list}>
       <BoardNameInput
         additionalClassName={styles.listTitle}
         as="textarea"
@@ -110,15 +48,14 @@ export const List = ({ id, boardId, title, cards, onListUpdated, onOpenCard }: L
         onCancel={() => setListTitle(title)}
       />
 
-      <div className={styles.listCards} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
-        {sortedCards.map((card, index) => (
-          <div key={`card-container-${card.id}`}>
-            {dragOverCardId === index && <CardSlot key={`slot-${index}`} position={index} />}
-            <Card key={card.id} card={card} boardId={boardId} listId={id} onOpenCard={onOpenCard} />
-          </div>
-        ))}
-        {dragOverCardId === cards.length && <CardSlot key={`slot-${cards.length}`} position={cards.length} />}
-      </div>
+      
+      <SortableList
+          cards={sortedCards}
+          listId={id}
+          boardId={boardId}
+          onOpenCard={onOpenCard}
+          onCardsReordered={onListUpdated}
+        />
 
       <AddCard listId={id} boardId={boardId} position={cards.length} onCardAdded={onListUpdated} />
     </section>

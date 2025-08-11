@@ -1,3 +1,5 @@
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import styles from './Card.module.scss';
 import { ICard } from '../../../../common/interfaces/ICard';
 
@@ -6,17 +8,29 @@ interface CardProps {
   boardId: string;
   listId: number;
   onOpenCard: (card: ICard) => void;
+  onCardMoved?: () => void;
 }
 
-export function Card({ card, boardId, listId, onOpenCard }: CardProps) {
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    const cardWithListId = { ...card, list_id: listId };
-    e.dataTransfer.setData('text/plain', JSON.stringify(cardWithListId));
-    e.currentTarget.classList.add(styles.cardDragging);
-  };
+export function Card({ card, boardId, listId, onOpenCard, onCardMoved }: CardProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: card.id,
+    data: {
+      type: 'card',
+      card,
+      listId,
+    },
+  });
 
-  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-    e.currentTarget.classList.remove(styles.cardDragging);
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -25,13 +39,14 @@ export function Card({ card, boardId, listId, onOpenCard }: CardProps) {
 
   return (
     <div
-      className={styles.card}
-      draggable
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
+      ref={setNodeRef}
+      style={style}
+      className={`${styles.card} ${isDragging ? styles.cardDragging : ''}`}
       onClick={handleCardClick}
+      {...attributes}
+      {...listeners}
     >
       <p className={styles.cardTitle}>{card.title}</p>
     </div>
   );
-}
+} 

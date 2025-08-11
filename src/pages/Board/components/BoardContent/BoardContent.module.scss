@@ -38,3 +38,14 @@
   z-index: -1;
   pointer-events: none;
 }
+
+.cardOverlay {
+  background: white;
+  border: 2px solid #0079bf;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  pointer-events: none;
+  transform: rotate(3deg);
+}
